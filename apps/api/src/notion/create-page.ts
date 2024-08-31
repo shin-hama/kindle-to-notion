@@ -1,6 +1,5 @@
 import { Client } from '@notionhq/client';
 
-
 export const createPage = async (notion: Client, database_id: string) => {
   const response = await notion.pages.create({
     parent: {
@@ -63,5 +62,5 @@ export const createPage = async (notion: Client, database_id: string) => {
         },
       },
     ],
-  })
-}
+  });
+};

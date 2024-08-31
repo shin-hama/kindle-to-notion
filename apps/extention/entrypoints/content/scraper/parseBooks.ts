@@ -1,5 +1,5 @@
 import { hash } from '@/lib'
-import { AmazonAccountRegion, Book } from '@/types'
+import { AmazonAccountRegion, Book } from '@kino/shared/types'
 import dayjs from 'dayjs'
 
 /**

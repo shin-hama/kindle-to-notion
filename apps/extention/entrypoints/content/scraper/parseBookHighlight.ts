@@ -1,5 +1,5 @@
 import { currentAmazonRegion } from '@/amazon/region'
-import type { Book, Highlight } from '@/types'
+import type { Book, Highlight } from '@kino/shared/types'
 import { br2ln, hash } from '@/lib'
 
 type NextPageState = {
