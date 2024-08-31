@@ -1,4 +1,4 @@
-import { hash } from '@/lib/hash'
+import { hash } from '@/lib'
 import { AmazonAccountRegion, Book } from '@/types'
 import dayjs from 'dayjs'
 
@@ -43,13 +43,13 @@ export const parseBooks = (): Array<Book> => {
       }
 
       const book: Book = {
-        // id: hash(title),
+        id: hash(title),
         asin: elm.getAttribute('id') ?? undefined,
         title: title,
         author: parseAuthor(author),
         url: `https://www.amazon.co.jp/dp/${elm.getAttribute('id')}`,
         imageUrl: elm.querySelector('.kp-notebook-cover-image')?.getAttribute('src') ?? undefined,
-        // updatedAt: parseToDateString(updatedAt, 'japan'),
+        updatedAt: parseToDateString(updatedAt, 'japan'),
       }
       return book
     })

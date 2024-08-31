@@ -1,6 +1,11 @@
-export type HighlightContent = {
-  comment: string
-  originalText: string
+export type Highlight = {
+  id: string
+  text: string
+  location?: string | null
+  page?: string | null
+  note?: string | null
+  color?: 'pink' | 'blue' | 'yellow' | 'orange'
+  createdDate?: Date | null
 }
 
 export type Book = {
@@ -22,3 +27,10 @@ export type AmazonAccountRegion =
   | 'italy'
   | 'UK'
   | 'france'
+
+export type AmazonAccount = {
+  name: string
+  hostname: string
+  kindleReaderUrl: string
+  notebookUrl: string
+}
