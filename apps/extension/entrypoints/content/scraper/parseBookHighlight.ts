@@ -31,7 +31,7 @@ const parseNextPageState = (doc: Document): NextPageState | null => {
 }
 
 const parseHighlights = (doc: Document): Highlight[] => {
-  const highlightsEl = Array.from(doc.querySelectorAll('.a-row .a-spacing-base'))
+  const highlightsEl = Array.from(doc.querySelectorAll('.a-row.a-spacing-base'))
 
   return highlightsEl
     .map((highlightEl): Highlight | null => {
@@ -64,10 +64,14 @@ const parseHighlights = (doc: Document): Highlight[] => {
 }
 
 const loadAndScrapeHighlights = async (book: Book, url: string) => {
-  const nextPageState = parseNextPageState(document)
+  // Load the highlights page and parse it
+  const text = await (await fetch(url)).text()
+  const htmlDocument = new DOMParser().parseFromString(text, 'text/html')
+
+  const nextPageState = parseNextPageState(htmlDocument)
 
   return {
-    highlights: parseHighlights(document),
+    highlights: parseHighlights(htmlDocument),
     nextPageUrl: highlightsUrl(book, nextPageState),
     hasNextPage: nextPageState !== null,
   }

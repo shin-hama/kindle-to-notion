@@ -26,8 +26,8 @@ export const parseAuthor = (scrapedAuthor: string): string => {
   return scrapedAuthor.replace(/.*: /, '')?.trim()
 }
 
-export const parseBooks = (): Array<Book> => {
-  const booksElm = document.querySelectorAll('.kp-notebook-library-each-book')
+export const parseBooks = (doc: Document): Array<Book> => {
+  const booksElm = doc.querySelectorAll('.kp-notebook-library-each-book')
 
   return Array.from(booksElm.values())
     .map((elm) => {
@@ -55,3 +55,9 @@ export const parseBooks = (): Array<Book> => {
     })
     .filter((book): book is Book => book !== null)
 }
+
+const scrapeBooks = (): Array<Book> => {
+  return parseBooks(document)
+}
+
+export default scrapeBooks
