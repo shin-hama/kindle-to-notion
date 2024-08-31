@@ -10,6 +10,9 @@ importers:
 
   apps/api:
     dependencies:
+      '@kino/shared':
+        specifier: workspace:*
+        version: link:../../packages/shared
       '@nestjs/common':
         specifier: ^10.0.0
         version: 10.4.1(reflect-metadata@0.2.2)(rxjs@7.8.1)
