@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Client } from '@notionhq/client';
-import { Book } from '@kino/shared/types';
+import { Book } from '../models/book.model';
 
 @Injectable()
 export class BookRepository {
@@ -13,7 +13,7 @@ export class BookRepository {
     });
   }
 
-  async saveBook(databaseId: string, book: Book): Promise<void> {
+  async save(databaseId: string, book: Book): Promise<Book> {
     try {
       this.notion.pages.create({
         parent: {
@@ -24,12 +24,14 @@ export class BookRepository {
           type: 'emoji',
           emoji: '📕',
         },
-        cover: {
-          type: 'external',
-          external: {
-            url: book.imageUrl,
-          },
-        },
+        cover: book.imageUrl
+          ? {
+              type: 'external',
+              external: {
+                url: book.imageUrl,
+              },
+            }
+          : undefined,
         properties: {
           Name: {
             title: [
@@ -72,12 +74,14 @@ export class BookRepository {
           },
           lastAnnotatedAt: {
             date: {
-              start: book.updatedAt.toISOString(),
+              start:
+                book.lastAnnotatedAt?.toISOString() ?? new Date().toISOString(),
             },
           },
         },
       });
-      console.log('Book saved:', book);
+
+      return book;
     } catch (e) {
       console.log(e);
     }

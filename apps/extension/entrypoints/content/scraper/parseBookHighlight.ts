@@ -1,18 +1,18 @@
 import { currentAmazonRegion } from '@/amazon/region'
-import type { Book, Highlight } from '@kino/shared/types'
-import { br2ln, hash } from '@/lib'
+import type { BookInput, HighlightInput } from '@kino/shared/types'
+import { br2ln } from '@/lib'
 
 type NextPageState = {
   token: string
   contentLimitState: string
 }
 
-export const mapTextToColor = (highlightClasses: string): Highlight['color'] => {
+export const mapTextToColor = (highlightClasses: string): HighlightInput['color'] => {
   const matches = /kp-notebook-highlight-(.*)/.exec(highlightClasses)
-  return matches ? (matches[1] as Highlight['color']) : undefined
+  return matches ? (matches[1] as HighlightInput['color']) : undefined
 }
 
-const highlightsUrl = (book: Book, state?: NextPageState | null): string => {
+const highlightsUrl = (book: BookInput, state?: NextPageState | null): string => {
   const region = currentAmazonRegion()
   return `${region.notebookUrl}?asin=${book.asin}&contentLimitState=${
     state?.contentLimitState ?? ''
@@ -30,11 +30,11 @@ const parseNextPageState = (doc: Document): NextPageState | null => {
     : ({ contentLimitState, token } satisfies NextPageState)
 }
 
-const parseHighlights = (doc: Document): Highlight[] => {
+const parseHighlights = (doc: Document): HighlightInput[] => {
   const highlightsEl = Array.from(doc.querySelectorAll('.a-row.a-spacing-base'))
 
   return highlightsEl
-    .map((highlightEl): Highlight | null => {
+    .map((highlightEl): HighlightInput | null => {
       const pageMatch = /\d+$/.exec(
         highlightEl.querySelector('#annotationNoteHeader')?.textContent ?? '',
       )
@@ -52,18 +52,17 @@ const parseHighlights = (doc: Document): Highlight[] => {
       const noteHtml = highlightEl.querySelector('#note')?.innerHTML
 
       return {
-        id: hash(text),
         text,
         color,
         location: highlightEl.querySelector('#kp-annotation-location')?.getAttribute('value'),
         page: pageMatch ? pageMatch[0] : null,
         note: noteHtml && br2ln(noteHtml),
-      } satisfies Highlight
+      } satisfies HighlightInput
     })
-    .filter((highlight): highlight is Highlight => highlight !== null)
+    .filter((highlight): highlight is HighlightInput => highlight !== null)
 }
 
-const loadAndScrapeHighlights = async (book: Book, url: string) => {
+const loadAndScrapeHighlights = async (book: BookInput, url: string) => {
   // Load the highlights page and parse it
   const text = await (await fetch(url)).text()
   const htmlDocument = new DOMParser().parseFromString(text, 'text/html')
@@ -77,8 +76,8 @@ const loadAndScrapeHighlights = async (book: Book, url: string) => {
   }
 }
 
-const scrapeBookHighlights = async (book: Book): Promise<Highlight[]> => {
-  let results: Highlight[] = []
+const scrapeBookHighlights = async (book: BookInput): Promise<HighlightInput[]> => {
+  let results: HighlightInput[] = []
 
   let url = highlightsUrl(book)
 

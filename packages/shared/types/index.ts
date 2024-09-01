@@ -1,5 +1,4 @@
-export type Highlight = {
-  id: string
+export type HighlightInput = {
   text: string
   location?: string | null
   page?: string | null
@@ -8,14 +7,13 @@ export type Highlight = {
   createdDate?: Date | null
 }
 
-export type Book = {
-  id: string
+export type BookInput = {
   asin?: string
   title: string
   author: string
   url?: string
   imageUrl?: string
-  updatedAt?: Date
+  lastAnnotatedAt?: Date
 }
 
 export type AmazonAccountRegion =

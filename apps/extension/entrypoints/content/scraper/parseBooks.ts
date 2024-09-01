@@ -1,5 +1,4 @@
-import { hash } from '@/lib'
-import { AmazonAccountRegion, Book } from '@kino/shared/types'
+import { AmazonAccountRegion, BookInput } from '@kino/shared/types'
 import dayjs from 'dayjs'
 
 /**
@@ -26,7 +25,7 @@ export const parseAuthor = (scrapedAuthor: string): string => {
   return scrapedAuthor.replace(/.*: /, '')?.trim()
 }
 
-export const parseBooks = (doc: Document): Array<Book> => {
+export const parseBooks = (doc: Document): Array<BookInput> => {
   const booksElm = doc.querySelectorAll('.kp-notebook-library-each-book')
 
   return Array.from(booksElm.values())
@@ -42,21 +41,20 @@ export const parseBooks = (doc: Document): Array<Book> => {
         return null
       }
 
-      const book: Book = {
-        id: hash(title),
+      const book: BookInput = {
         asin: elm.getAttribute('id') ?? undefined,
         title: title,
         author: parseAuthor(author),
         url: `https://www.amazon.co.jp/dp/${elm.getAttribute('id')}`,
         imageUrl: elm.querySelector('.kp-notebook-cover-image')?.getAttribute('src') ?? undefined,
-        updatedAt: parseToDateString(updatedAt, 'japan'),
+        lastAnnotatedAt: parseToDateString(updatedAt, 'japan'),
       }
       return book
     })
-    .filter((book): book is Book => book !== null)
+    .filter((book): book is BookInput => book !== null)
 }
 
-const scrapeBooks = (): Array<Book> => {
+const scrapeBooks = (): Array<BookInput> => {
   return parseBooks(document)
 }
 
