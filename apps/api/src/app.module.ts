@@ -5,6 +5,7 @@ import { ConfigModule } from '@nestjs/config';
 import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { BooksModule } from './books/books.module';
+import { HighlightsModule } from './highlights/highlights.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { BooksModule } from './books/books.module';
       sortSchema: true,
     }),
     BooksModule,
+    HighlightsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

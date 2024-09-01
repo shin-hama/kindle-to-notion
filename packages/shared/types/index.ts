@@ -3,7 +3,7 @@ export type HighlightInput = {
   location?: string | null
   page?: string | null
   note?: string | null
-  color?: 'pink' | 'blue' | 'yellow' | 'orange'
+  color: 'pink' | 'blue' | 'yellow' | 'orange'
   createdDate?: Date | null
 }
 

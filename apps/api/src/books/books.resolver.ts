@@ -19,7 +19,7 @@ export class BooksResolver {
   }
 
   @Mutation(() => Book)
-  async addBook(@Args('newBookData') newBookData: NewBookInput): Promise<Book> {
-    return this.booksService.create(newBookData);
+  async addBook(@Args('newBookData') data: NewBookInput): Promise<Book> {
+    return this.booksService.create(data);
   }
 }
