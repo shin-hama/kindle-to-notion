@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { BookRepository } from './repository/bookRepository';
 import { Book } from './models/book.model';
 import { NewBookInput } from './dto/new-book.input';
@@ -25,8 +25,17 @@ export class BooksService {
   }
 
   async create(data: NewBookInput): Promise<Book> {
+    const bookId = hash(data.title);
+    const existsBook = await this.bookRepository.exists(
+      '54977274208942b487b5408a85357e9e',
+      bookId,
+    );
+    if (existsBook) {
+      throw new BadRequestException('Book already exists');
+    }
+
     const book: Book = {
-      id: hash(data.title),
+      id: bookId,
       title: data.title,
       author: data.author,
       asin: data.asin,
