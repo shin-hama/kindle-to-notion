@@ -1,6 +1,6 @@
-import { currentAmazonRegion } from '@/amazon/region'
+import { currentAmazonRegion } from '~/amazon/region'
 import type { BookInput, HighlightInput } from '@kino/shared/types'
-import { br2ln } from '@/lib'
+import { br2ln } from '~/lib'
 
 type NextPageState = {
   token: string

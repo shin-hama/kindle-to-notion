@@ -1,6 +1,10 @@
-import { currentAmazonRegion } from '@/amazon/region'
+import { currentAmazonRegion } from '~/amazon/region'
 import { AmazonAccountRegion, BookInput } from '@kino/shared/types'
 import dayjs from 'dayjs'
+import customParseFormat from 'dayjs/plugin/customParseFormat'
+import 'dayjs/locale/fr'
+
+dayjs.extend(customParseFormat)
 
 type NextPageState = {
   token: string
@@ -21,18 +25,20 @@ const parseNextPageState = (doc: Document): NextPageState | null => {
  * Amazon dates in the Kindle notebook looks like "Sunday October 24, 2021"
  * This method will parse this string and return a valid Date object
  */
-export const parseToDateString = (kindleDate: string, region: AmazonAccountRegion): Date => {
+export const parseToDate = (kindleDate: string, region: AmazonAccountRegion): Date => {
   switch (region) {
     case 'japan': {
       const amazonDateString = kindleDate.substring(0, kindleDate.indexOf(' '))
       return dayjs(amazonDateString, 'YYYY MM DD', 'ja').toDate()
     }
     case 'france': {
-      return dayjs(kindleDate, 'MMMM D, YYYY', 'fr').toDate()
+      // 曜日 月 日, 年 になっているので、曜日を削除してからパースする
+      const amazonDateString = kindleDate.substring(kindleDate.indexOf(' ') + 1)
+      return dayjs(amazonDateString, 'MMMM D, YYYY', 'fr').toDate()
     }
     default: {
       const amazonDateString = kindleDate.substring(kindleDate.indexOf(' ') + 1)
-      return dayjs(amazonDateString, 'MMM DD, YYYY').toDate()
+      return dayjs(amazonDateString, 'MMMM DD, YYYY').toDate()
     }
   }
 }
@@ -63,7 +69,7 @@ export const parseBooks = (doc: Document): Array<BookInput> => {
         author: parseAuthor(author),
         url: `https://www.amazon.co.jp/dp/${elm.getAttribute('id')}`,
         imageUrl: elm.querySelector('.kp-notebook-cover-image')?.getAttribute('src') ?? undefined,
-        lastAnnotatedAt: parseToDateString(updatedAt, 'japan'),
+        lastAnnotatedAt: parseToDate(updatedAt, 'japan'),
       }
       return book
     })
