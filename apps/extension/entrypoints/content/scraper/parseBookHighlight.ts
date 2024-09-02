@@ -9,7 +9,7 @@ type NextPageState = {
 
 export const mapTextToColor = (highlightClasses: string): HighlightInput['color'] => {
   const matches = /kp-notebook-highlight-(.*)/.exec(highlightClasses)
-  return matches ? (matches[1] as HighlightInput['color']) : undefined
+  return matches ? (matches[1] as HighlightInput['color']) : 'yellow'
 }
 
 const highlightsUrl = (book: BookInput, state?: NextPageState | null): string => {
@@ -42,7 +42,7 @@ const parseHighlights = (doc: Document): HighlightInput[] => {
       const highlightClasses = highlightEl
         .querySelector('.kp-notebook-highlight')
         ?.getAttribute('class')
-      const color = !!highlightClasses ? mapTextToColor(highlightClasses) : undefined
+      const color = !!highlightClasses ? mapTextToColor(highlightClasses) : 'yellow'
 
       const text = highlightEl.querySelector('#highlight')?.textContent?.trim()
       if (!text) {
@@ -62,35 +62,27 @@ const parseHighlights = (doc: Document): HighlightInput[] => {
     .filter((highlight): highlight is HighlightInput => highlight !== null)
 }
 
-const loadAndScrapeHighlights = async (book: BookInput, url: string) => {
+const loadAndScrapeHighlights = async (book: BookInput, url: string): Promise<HighlightInput[]> => {
   // Load the highlights page and parse it
   const text = await (await fetch(url)).text()
   const htmlDocument = new DOMParser().parseFromString(text, 'text/html')
 
   const nextPageState = parseNextPageState(htmlDocument)
 
-  return {
-    highlights: parseHighlights(htmlDocument),
-    nextPageUrl: highlightsUrl(book, nextPageState),
-    hasNextPage: nextPageState !== null,
+  if (!nextPageState) {
+    return parseHighlights(htmlDocument)
+  } else {
+    const highlights = parseHighlights(htmlDocument)
+
+    return highlights.concat(
+      await loadAndScrapeHighlights(book, highlightsUrl(book, nextPageState)),
+    )
   }
 }
 
 const scrapeBookHighlights = async (book: BookInput): Promise<HighlightInput[]> => {
-  let results: HighlightInput[] = []
-
-  let url = highlightsUrl(book)
-
-  do {
-    const data = await loadAndScrapeHighlights(book, url)
-
-    results = [...results, ...data.highlights]
-
-    url = data.nextPageUrl
-    var hasNextPage = data.hasNextPage
-  } while (hasNextPage)
-
-  return results.filter((h) => h.text)
+  const url = highlightsUrl(book)
+  return loadAndScrapeHighlights(book, url)
 }
 
 export default scrapeBookHighlights

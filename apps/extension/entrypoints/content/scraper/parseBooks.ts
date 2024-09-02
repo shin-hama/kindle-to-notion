@@ -1,5 +1,21 @@
+import { currentAmazonRegion } from '@/amazon/region'
 import { AmazonAccountRegion, BookInput } from '@kino/shared/types'
 import dayjs from 'dayjs'
+
+type NextPageState = {
+  token: string
+}
+
+const booksUrl = (state?: NextPageState | null): string => {
+  const region = currentAmazonRegion()
+  return `${region.notebookUrl}?library=list&token=${state?.token ?? ''}`
+}
+
+const parseNextPageState = (doc: Document): NextPageState | null => {
+  const token = doc.querySelector('.kp-notebook-library-next-page-start')?.getAttribute('value')
+
+  return !token ? null : ({ token } satisfies NextPageState)
+}
 
 /**
  * Amazon dates in the Kindle notebook looks like "Sunday October 24, 2021"
@@ -54,8 +70,24 @@ export const parseBooks = (doc: Document): Array<BookInput> => {
     .filter((book): book is BookInput => book !== null)
 }
 
-const scrapeBooks = (): Array<BookInput> => {
-  return parseBooks(document)
+const loadAndScrapeBooks = async (url: string): Promise<Array<BookInput>> => {
+  // Load the highlights page and parse it
+  const text = await (await fetch(url)).text()
+  const doc = new DOMParser().parseFromString(text, 'text/html')
+
+  const nextPageState = parseNextPageState(doc)
+
+  if (!nextPageState) {
+    return parseBooks(doc)
+  } else {
+    const books = parseBooks(doc)
+    return books.concat(await loadAndScrapeBooks(booksUrl(nextPageState)))
+  }
+}
+
+const scrapeBooks = async (): Promise<Array<BookInput>> => {
+  const url = booksUrl()
+  return loadAndScrapeBooks(url)
 }
 
 export default scrapeBooks
