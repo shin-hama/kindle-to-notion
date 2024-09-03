@@ -1,6 +1,6 @@
 import { currentAmazonRegion } from '~/amazon/region'
 import type { BookInput, HighlightInput } from '@kino/shared/types'
-import { br2ln } from '~/lib'
+import { br2ln } from '~/utils'
 
 type NextPageState = {
   token: string
@@ -50,13 +50,15 @@ const parseHighlights = (doc: Document): HighlightInput[] => {
       }
 
       const noteHtml = highlightEl.querySelector('#note')?.innerHTML
+      const location = highlightEl.querySelector('#kp-annotation-location')?.getAttribute('value')
 
       return {
         text,
         color,
-        location: highlightEl.querySelector('#kp-annotation-location')?.getAttribute('value'),
+        location: location ?? null,
         page: pageMatch ? pageMatch[0] : null,
-        note: noteHtml && br2ln(noteHtml),
+        note: !!noteHtml ? br2ln(noteHtml) : null,
+        createdDate: null,
       } satisfies HighlightInput
     })
     .filter((highlight): highlight is HighlightInput => highlight !== null)

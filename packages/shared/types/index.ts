@@ -1,20 +1,29 @@
-export type HighlightInput = {
-  text: string
-  location?: string | null
-  page?: string | null
-  note?: string | null
-  color: 'pink' | 'blue' | 'yellow' | 'orange'
-  createdDate?: Date | null
-}
+import z from 'zod'
 
-export type BookInput = {
-  asin?: string
-  title: string
-  author: string
-  url?: string
-  imageUrl?: string
-  lastAnnotatedAt?: Date
-}
+export const HighlightColors = ['pink', 'blue', 'yellow', 'orange'] as const
+export const HighlightColorSchema = z.enum(HighlightColors)
+export type HighlightColor = z.infer<typeof HighlightColorSchema>
+
+export const HighlightInputSchema = z.object({
+  text: z.string(),
+  color: HighlightColorSchema,
+  location: z.string().nullable(),
+  page: z.string().nullable(),
+  note: z.string().nullable(),
+  createdDate: z.date().nullable(),
+})
+export type HighlightInput = z.infer<typeof HighlightInputSchema>
+
+export const BookInputSchema = z.object({
+  asin: z.string().optional(),
+  title: z.string(),
+  author: z.string(),
+  url: z.string().optional(),
+  imageUrl: z.string().optional(),
+  lastAnnotatedAt: z.date().optional(),
+})
+
+export type BookInput = z.infer<typeof BookInputSchema>
 
 export type AmazonAccountRegion =
   | 'global'
