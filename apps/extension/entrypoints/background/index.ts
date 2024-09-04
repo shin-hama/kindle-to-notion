@@ -1,12 +1,11 @@
-import { Client, cacheExchange, fetchExchange, gql } from '@urql/core'
 import { MessageSchema } from '../types/messaging'
+import { createBook } from './handlers/create-books'
 
 export default defineBackground(async () => {
   console.log('Hello background!', { id: browser.runtime.id })
 
-  const client = new Client({
-    url: 'https://flyby-router-demo.herokuapp.com/',
-    exchanges: [cacheExchange, fetchExchange],
+  fetch('http://127.0.0.1:3000/').then((res) => {
+    console.log('fetch', res)
   })
 
   browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
@@ -15,6 +14,7 @@ export default defineBackground(async () => {
 
       if (msg.type === 'CreateBook') {
         console.log('CreateBook', msg.book)
+        createBook(msg.book)
         sendResponse()
         return
       } else if (msg.type === 'CreateHighlight') {
@@ -29,21 +29,4 @@ export default defineBackground(async () => {
       return
     }
   })
-
-  const document = gql`
-    query GetLocations {
-      locations {
-        id
-        name
-        description
-        photo
-      }
-    }
-  `
-  client
-    .query(document, {})
-    .toPromise()
-    .then((result) => {
-      console.log(result)
-    })
 })

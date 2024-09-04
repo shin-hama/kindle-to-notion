@@ -10,7 +10,7 @@ export const CreateBookSchema = z.object({
   type: z.literal(MESSAGE_TYPES.CreateBook),
   book: BookInputSchema,
 })
-export type CreateBook = z.infer<typeof CreateBookSchema>
+export type CreateBookMessage = z.infer<typeof CreateBookSchema>
 
 export const CreateHighlightSchema = z.object({
   type: z.literal(MESSAGE_TYPES.CreateHighlight),

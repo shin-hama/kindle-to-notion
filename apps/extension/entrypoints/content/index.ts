@@ -1,3 +1,4 @@
+import { CreateBookMessage } from '../types/messaging'
 import scrapeBookHighlights from './scraper/parseBookHighlight'
 import scrapeBooks from './scraper/parseBooks'
 
@@ -10,6 +11,11 @@ export default defineContentScript({
       console.log(books)
       const highlights = await scrapeBookHighlights(books[0])
       console.log(highlights)
+
+      browser.runtime.sendMessage({
+        type: 'CreateBook',
+        book: books[0],
+      } satisfies CreateBookMessage)
     })
   },
 })

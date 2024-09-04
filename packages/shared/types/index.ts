@@ -18,9 +18,9 @@ export const BookInputSchema = z.object({
   asin: z.string().optional(),
   title: z.string(),
   author: z.string(),
-  url: z.string().optional(),
-  imageUrl: z.string().optional(),
-  lastAnnotatedAt: z.date().optional(),
+  url: z.string().nullable().optional(),
+  imageUrl: z.string().nullable().optional(),
+  lastAnnotatedAt: z.date().nullable().optional(),
 })
 
 export type BookInput = z.infer<typeof BookInputSchema>
