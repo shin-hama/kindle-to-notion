@@ -2,7 +2,10 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import { HighlightRepository } from './repository/highlightRepository';
 import { Highlight, HighlightColor } from './models/highlight.model';
 import { hash } from 'src/utils/hash';
-import { NewHighlightInput } from './dto/new-highlight.input';
+import {
+  NewHighlightInput,
+  NewHighlightsInput,
+} from './dto/new-highlight.input';
 
 @Injectable()
 export class HighlightsService {
@@ -38,5 +41,12 @@ export class HighlightsService {
       'b08e0db3e6584e6887fed9786c62c153',
       highlight,
     );
+  }
+
+  async createBulk(data: NewHighlightsInput): Promise<Array<Highlight>> {
+    const highlightPromises = data.highlights.map((highlight) =>
+      this.create(highlight),
+    );
+    return Promise.all(highlightPromises);
   }
 }

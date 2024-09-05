@@ -39,6 +39,7 @@ enum HighlightColor {
 type Mutation {
   addBook(newBookData: NewBookInput!): Book!
   addHighlight(newHighlight: NewHighlightInput!): Highlight!
+  addHighlights(newHighlights: NewHighlightsInput!): [Highlight!]!
 }
 
 input NewBookInput {
@@ -52,11 +53,15 @@ input NewBookInput {
 
 input NewHighlightInput {
   color: HighlightColor!
-  createdDate: DateTime = "2024-09-05T00:33:41.819Z"
+  createdDate: DateTime = "2024-09-05T00:56:15.548Z"
   location: String = ""
   note: String = null
   page: String = ""
   text: String!
+}
+
+input NewHighlightsInput {
+  highlights: [NewHighlightInput!]!
 }
 
 type Query {

@@ -21,3 +21,9 @@ export class NewHighlightInput {
   @Field({ nullable: true, defaultValue: new Date() })
   createdDate?: Date;
 }
+
+@InputType()
+export class NewHighlightsInput {
+  @Field(() => [NewHighlightInput])
+  highlights: Array<NewHighlightInput>;
+}
