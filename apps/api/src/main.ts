@@ -3,9 +3,9 @@ import { AppModule } from './app.module';
 
 const corsOptionsDelegate = function (req, callback) {
   let corsOptions;
-  const origin: string = req.header('Origin');
+  const origin = req.header('Origin');
   // TODO: CORS のために拡張機能の ID が必要だが、リリースまで決まらないので一旦すべて許可する
-  if (origin.startsWith('chrome-extension://')) {
+  if (origin?.startsWith('chrome-extension://')) {
     corsOptions = { origin: true }; // reflect (enable) the requested origin in the CORS response
   } else {
     corsOptions = { origin: false }; // disable CORS for this request

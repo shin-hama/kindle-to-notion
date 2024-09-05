@@ -13,7 +13,7 @@ const mutation = gql`
 
 export const createBook = async (book: NewBookInput) => {
   const client = new Client({
-    url: 'https://musical-space-umbrella-7w7j7qw6q4whwrr-3000.app.github.dev/',
+    url: 'http://127.0.0.1:3000/graphql',
     exchanges: [cacheExchange, fetchExchange],
   })
 
@@ -22,5 +22,8 @@ export const createBook = async (book: NewBookInput) => {
     .toPromise()
     .then((result) => {
       console.log(result)
+    })
+    .catch((error) => {
+      console.error(error)
     })
 }

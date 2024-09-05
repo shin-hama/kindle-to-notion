@@ -11,7 +11,7 @@ export default defineBackground(async () => {
   browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
     try {
       const msg = MessageSchema.parse(message)
-
+      console.log(message)
       if (msg.type === 'CreateBook') {
         console.log('CreateBook', msg.book)
         createBook(msg.book)

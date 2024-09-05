@@ -2,15 +2,20 @@ import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Client, isFullPage } from '@notionhq/client';
 import { Book } from '../models/book.model';
+import { Logger } from '@nestjs/common';
 
 @Injectable()
 export class BookRepository {
   private notion: Client;
 
   constructor(private configService: ConfigService) {
-    this.notion = new Client({
-      auth: this.configService.get<string>('NOTION_TOKEN'),
-    });
+    try {
+      this.notion = new Client({
+        auth: this.configService.get<string>('NOTION_TOKEN'),
+      });
+    } catch (e) {
+      Logger.error(e);
+    }
   }
 
   async exists(databaseId: string, bookId: string): Promise<boolean> {
@@ -33,7 +38,7 @@ export class BookRepository {
       // Check if the book is a full page, if it is, it means a book is already saved
       return isFullPage(book);
     } catch (e) {
-      console.log(e);
+      Logger.error(e);
     }
   }
 
@@ -107,7 +112,7 @@ export class BookRepository {
 
       return book;
     } catch (e) {
-      console.log(e);
+      Logger.error(e);
     }
   }
 }

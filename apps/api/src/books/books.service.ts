@@ -3,6 +3,7 @@ import { BookRepository } from './repository/bookRepository';
 import { Book } from './models/book.model';
 import { NewBookInput } from './dto/new-book.input';
 import { hash } from 'src/utils/hash';
+import { Logger } from '@nestjs/common';
 
 @Injectable()
 export class BooksService {
@@ -31,7 +32,10 @@ export class BooksService {
       bookId,
     );
     if (existsBook) {
-      throw new BadRequestException('Book already exists');
+      Logger.warn('Cannot create new book because it is already existed.');
+      throw new BadRequestException(
+        'Cannot create new book because it is already existed.',
+      );
     }
 
     const book: Book = {
