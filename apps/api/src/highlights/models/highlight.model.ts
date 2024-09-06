@@ -1,4 +1,5 @@
 import { Field, ID, ObjectType, registerEnumType } from '@nestjs/graphql';
+import { Book } from 'src/books/models/book.model';
 
 export enum HighlightColor {
   BLUE = 'blue',
@@ -33,4 +34,7 @@ export class Highlight {
 
   @Field({ nullable: true, defaultValue: null })
   createdDate?: Date;
+
+  @Field(() => Book)
+  book: Book;
 }

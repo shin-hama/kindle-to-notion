@@ -1,5 +1,6 @@
 import { currentAmazonRegion } from '~/amazon/region'
-import type { BookInput, HighlightInput } from '@kino/shared/types'
+import { HighlightColor } from '~/gql/graphql'
+import type { BookInput, HighlightInput } from '~/types'
 import { br2ln } from '~/utils'
 
 type NextPageState = {
@@ -9,7 +10,7 @@ type NextPageState = {
 
 export const mapTextToColor = (highlightClasses: string): HighlightInput['color'] => {
   const matches = /kp-notebook-highlight-(.*)/.exec(highlightClasses)
-  return matches ? (matches[1] as HighlightInput['color']) : 'yellow'
+  return matches ? (matches[1] as HighlightInput['color']) : HighlightColor.Yellow
 }
 
 const highlightsUrl = (book: BookInput, state?: NextPageState | null): string => {
@@ -42,7 +43,7 @@ const parseHighlights = (doc: Document): HighlightInput[] => {
       const highlightClasses = highlightEl
         .querySelector('.kp-notebook-highlight')
         ?.getAttribute('class')
-      const color = !!highlightClasses ? mapTextToColor(highlightClasses) : 'yellow'
+      const color = !!highlightClasses ? mapTextToColor(highlightClasses) : HighlightColor.Yellow
 
       const text = highlightEl.querySelector('#highlight')?.textContent?.trim()
       if (!text) {

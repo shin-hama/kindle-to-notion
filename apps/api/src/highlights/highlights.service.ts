@@ -16,6 +16,11 @@ export class HighlightsService {
       id: id,
       text: 'Hello World',
       color: HighlightColor.YELLOW,
+      book: {
+        id: '1',
+        title: 'Hello World',
+        author: 'John Doe',
+      },
     } satisfies Highlight;
   }
 
@@ -33,13 +38,14 @@ export class HighlightsService {
       throw new BadRequestException('Highlight already exists');
     }
 
-    const highlight: Highlight = {
-      id: id,
-      ...data,
-    };
+    const { bookId, ...highlightData } = data;
     return this.highlightRepository.save(
       'b08e0db3e6584e6887fed9786c62c153',
-      highlight,
+      bookId,
+      {
+        id: id,
+        ...highlightData,
+      },
     );
   }
 

@@ -18,7 +18,7 @@ export class BookRepository {
     }
   }
 
-  async exists(databaseId: string, bookId: string): Promise<boolean> {
+  async exists(databaseId: string, bookId: string): Promise<Book | null> {
     try {
       const response = await this.notion.databases.query({
         database_id: databaseId,
@@ -30,13 +30,25 @@ export class BookRepository {
         },
       });
       if (response.results.length === 0) {
-        return false;
+        return null;
       }
 
       const book = response.results[0];
 
       // Check if the book is a full page, if it is, it means a book is already saved
-      return isFullPage(book);
+      return isFullPage(book)
+        ? {
+            id: book.id,
+            title:
+              book.properties.Name.type === 'title'
+                ? book.properties.Name.title[0].plain_text
+                : '',
+            author:
+              book.properties.author.type === 'rich_text'
+                ? book.properties.author.rich_text[0].plain_text
+                : '',
+          }
+        : null;
     } catch (e) {
       Logger.error(e);
     }
@@ -44,7 +56,7 @@ export class BookRepository {
 
   async save(databaseId: string, book: Book): Promise<Book> {
     try {
-      this.notion.pages.create({
+      const result = await this.notion.pages.create({
         parent: {
           type: 'database_id',
           database_id: databaseId,
@@ -110,7 +122,10 @@ export class BookRepository {
         },
       });
 
-      return book;
+      return {
+        ...book,
+        id: result.id,
+      };
     } catch (e) {
       Logger.error(e);
     }

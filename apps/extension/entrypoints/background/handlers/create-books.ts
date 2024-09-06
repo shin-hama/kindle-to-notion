@@ -17,11 +17,12 @@ export const createBook = async (book: NewBookInput) => {
     exchanges: [cacheExchange, fetchExchange],
   })
 
-  client
+  return client
     .mutation(mutation, { book })
     .toPromise()
     .then((result) => {
       console.log(result)
+      return result.data
     })
     .catch((error) => {
       console.error(error)

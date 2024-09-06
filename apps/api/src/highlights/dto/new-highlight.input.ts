@@ -20,6 +20,9 @@ export class NewHighlightInput {
 
   @Field({ nullable: true, defaultValue: new Date() })
   createdDate?: Date;
+
+  @Field()
+  bookId: string;
 }
 
 @InputType()

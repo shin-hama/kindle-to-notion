@@ -33,6 +33,7 @@ export type Book = {
 /** The Highlight model */
 export type Highlight = {
   __typename?: 'Highlight';
+  book: Book;
   color: HighlightColor;
   createdDate?: Maybe<Scalars['DateTime']['output']>;
   id: Scalars['ID']['output'];
@@ -53,6 +54,7 @@ export type Mutation = {
   __typename?: 'Mutation';
   addBook: Book;
   addHighlight: Highlight;
+  addHighlights: Array<Highlight>;
 };
 
 
@@ -65,6 +67,11 @@ export type MutationAddHighlightArgs = {
   newHighlight: NewHighlightInput;
 };
 
+
+export type MutationAddHighlightsArgs = {
+  newHighlights: NewHighlightsInput;
+};
+
 export type NewBookInput = {
   asin?: InputMaybe<Scalars['String']['input']>;
   author: Scalars['String']['input'];
@@ -75,12 +82,17 @@ export type NewBookInput = {
 };
 
 export type NewHighlightInput = {
+  bookId: Scalars['String']['input'];
   color: HighlightColor;
   createdDate?: InputMaybe<Scalars['DateTime']['input']>;
   location?: InputMaybe<Scalars['String']['input']>;
   note?: InputMaybe<Scalars['String']['input']>;
   page?: InputMaybe<Scalars['String']['input']>;
   text: Scalars['String']['input'];
+};
+
+export type NewHighlightsInput = {
+  highlights: Array<NewHighlightInput>;
 };
 
 export type Query = {
@@ -107,5 +119,13 @@ export type CreateBookMutationVariables = Exact<{
 
 export type CreateBookMutation = { __typename?: 'Mutation', addBook: { __typename?: 'Book', id: string, title: string, author: string } };
 
+export type CreateHighlightsMutationVariables = Exact<{
+  highlights: NewHighlightsInput;
+}>;
+
+
+export type CreateHighlightsMutation = { __typename?: 'Mutation', addHighlights: Array<{ __typename?: 'Highlight', id: string }> };
+
 
 export const CreateBookDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"CreateBook"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"book"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"NewBookInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"addBook"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"newBookData"},"value":{"kind":"Variable","name":{"kind":"Name","value":"book"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"author"}}]}}]}}]} as unknown as DocumentNode<CreateBookMutation, CreateBookMutationVariables>;
+export const CreateHighlightsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"CreateHighlights"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"highlights"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"NewHighlightsInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"addHighlights"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"newHighlights"},"value":{"kind":"Variable","name":{"kind":"Name","value":"highlights"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}}]}}]} as unknown as DocumentNode<CreateHighlightsMutation, CreateHighlightsMutationVariables>;

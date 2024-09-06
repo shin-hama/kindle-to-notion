@@ -1,12 +1,12 @@
 import z from 'zod'
+import { HighlightColor } from '~/gql/graphql'
 
-export const HighlightColors = ['pink', 'blue', 'yellow', 'orange'] as const
-export const HighlightColorSchema = z.enum(HighlightColors)
-export type HighlightColor = z.infer<typeof HighlightColorSchema>
+export const HighlightColorsSchema = z.nativeEnum(HighlightColor)
+export type HighlightColors = z.infer<typeof HighlightColorsSchema>
 
 export const HighlightInputSchema = z.object({
   text: z.string(),
-  color: HighlightColorSchema,
+  color: HighlightColorsSchema,
   location: z.string().nullable(),
   page: z.string().nullable(),
   note: z.string().nullable(),

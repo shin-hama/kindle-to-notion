@@ -3,6 +3,8 @@ import { ConfigService } from '@nestjs/config';
 import { Client, isFullPage } from '@notionhq/client';
 import { Highlight, HighlightColor } from '../models/highlight.model';
 
+export type CreateHighlightDTO = Omit<Highlight, 'book'>;
+
 @Injectable()
 export class HighlightRepository {
   private notion: Client;
@@ -52,9 +54,13 @@ export class HighlightRepository {
     }
   }
 
-  async save(databaseId: string, highlight: Highlight): Promise<Highlight> {
+  async save(
+    databaseId: string,
+    bookId: string,
+    highlight: CreateHighlightDTO,
+  ): Promise<Highlight> {
     try {
-      this.notion.pages.create({
+      const result = await this.notion.pages.create({
         parent: {
           type: 'database_id',
           database_id: databaseId,
@@ -112,6 +118,13 @@ export class HighlightRepository {
                 new Date().toISOString(),
             },
           },
+          book: {
+            relation: [
+              {
+                id: bookId,
+              },
+            ],
+          },
         },
         children: [
           {
@@ -142,7 +155,15 @@ export class HighlightRepository {
         ],
       });
 
-      return highlight;
+      return {
+        ...highlight,
+        id: result.id,
+        book: {
+          id: bookId,
+          title: 'Hello World',
+          author: 'John Doe',
+        },
+      };
     } catch (e) {
       console.log(e);
     }

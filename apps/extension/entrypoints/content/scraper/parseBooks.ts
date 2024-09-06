@@ -1,5 +1,5 @@
 import { currentAmazonRegion } from '~/amazon/region'
-import { AmazonAccountRegion, BookInput } from '@kino/shared/types'
+import { AmazonAccountRegion, BookInput } from '~/types'
 import dayjs from 'dayjs'
 import customParseFormat from 'dayjs/plugin/customParseFormat'
 import 'dayjs/locale/fr'
