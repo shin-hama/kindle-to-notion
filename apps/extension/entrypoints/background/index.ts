@@ -2,7 +2,7 @@ import { MessageSchema } from '../types/messaging'
 import { createBook } from './handlers/create-books'
 import { createHighlights } from './handlers/create-highlight'
 
-export default defineBackground(async () => {
+export default defineBackground(() => {
   console.log('Hello background!', { id: browser.runtime.id })
 
   fetch('http://127.0.0.1:3000/').then((res) => {
@@ -15,9 +15,10 @@ export default defineBackground(async () => {
       console.log(message)
       if (msg.type === 'CreateBookWithHighlights') {
         console.log('CreateBookWithHighlights', msg.data)
-        const result = await createBook(msg.data.book)
-        // createHighlights(msg.data.bookId, msg.data.highlights)
+        const result = await createBook({ book: msg.data.book })
         console.log(result)
+        console.log(msg.data.highlights[0])
+        createHighlights(result.id, msg.data.highlights)
         sendResponse()
         return
       } else if (msg.type === 'CreateHighlights') {

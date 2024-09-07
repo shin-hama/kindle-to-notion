@@ -1,11 +1,8 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { HighlightRepository } from './repository/highlightRepository';
 import { Highlight, HighlightColor } from './models/highlight.model';
 import { hash } from 'src/utils/hash';
-import {
-  NewHighlightInput,
-  NewHighlightsInput,
-} from './dto/new-highlight.input';
+import { NewHighlightInput } from './dto/new-highlight.input';
 
 @Injectable()
 export class HighlightsService {
@@ -30,12 +27,14 @@ export class HighlightsService {
 
   async create(data: NewHighlightInput) {
     const id = hash(data.text);
-    const existsHighlight = await this.highlightRepository.exists(
+    const existedHighlight = await this.highlightRepository.exists(
       'b08e0db3e6584e6887fed9786c62c153',
       id,
     );
-    if (existsHighlight) {
-      throw new BadRequestException('Highlight already exists');
+    if (existedHighlight) {
+      Logger.warn('Cannot create new highlight because it is already existed.');
+
+      return existedHighlight;
     }
 
     const { bookId, ...highlightData } = data;
@@ -49,10 +48,8 @@ export class HighlightsService {
     );
   }
 
-  async createBulk(data: NewHighlightsInput): Promise<Array<Highlight>> {
-    const highlightPromises = data.highlights.map((highlight) =>
-      this.create(highlight),
-    );
+  async createBulk(data: Array<NewHighlightInput>): Promise<Array<Highlight>> {
+    const highlightPromises = data.map((highlight) => this.create(highlight));
     return Promise.all(highlightPromises);
   }
 }

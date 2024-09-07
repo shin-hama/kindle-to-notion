@@ -1,9 +1,9 @@
 import { Client, cacheExchange, fetchExchange, gql } from '@urql/core'
-import { NewHighlightInput } from '~/gql/graphql'
+import { CreateHighlightsMutationVariables, NewHighlightInput } from '~/gql/graphql'
 import { HighlightInput } from '~/types'
 
 const mutation = gql`
-  mutation CreateHighlights($highlights: NewHighlightsInput!) {
+  mutation CreateHighlights($highlights: [NewHighlightInput!]!) {
     addHighlights(newHighlights: $highlights) {
       id
     }
@@ -18,11 +18,14 @@ export const createHighlights = async (bookId: string, highlights: Array<Highlig
 
   client
     .mutation(mutation, {
-      highlights: highlights.map((h) => ({
-        bookId,
-        ...h,
-      })),
-    })
+      highlights: highlights.map(
+        (h) =>
+          ({
+            bookId,
+            ...h,
+          }) satisfies NewHighlightInput,
+      ),
+    } satisfies CreateHighlightsMutationVariables)
     .toPromise()
     .then((result) => {
       console.log(result)

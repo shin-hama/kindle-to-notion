@@ -30,7 +30,10 @@ export class HighlightRepository {
     }
   }
 
-  async exists(databaseId: string, highlightId: string): Promise<boolean> {
+  async exists(
+    databaseId: string,
+    highlightId: string,
+  ): Promise<Highlight | null> {
     try {
       const response = await this.notion.databases.query({
         database_id: databaseId,
@@ -42,13 +45,45 @@ export class HighlightRepository {
         },
       });
       if (response.results.length === 0) {
-        return false;
+        return null;
       }
 
       const highlight = response.results[0];
 
       // Check if it is a full page, if it is, it means a highlight is already saved
-      return isFullPage(highlight);
+      return isFullPage(highlight)
+        ? ({
+            id: highlight.id,
+            text:
+              highlight.properties.Name.type === 'title'
+                ? highlight.properties.Name.title[0].plain_text
+                : '',
+            color:
+              highlight.properties.color.type === 'select'
+                ? (highlight.properties.color.select.name as HighlightColor)
+                : HighlightColor.YELLOW,
+            location:
+              highlight.properties.location.type === 'rich_text'
+                ? highlight.properties.location.rich_text[0].plain_text
+                : '',
+            page:
+              highlight.properties.page.type === 'rich_text'
+                ? highlight.properties.page.rich_text[0].plain_text
+                : '',
+            createdDate:
+              highlight.properties.createdDate.type === 'date'
+                ? new Date(highlight.properties.createdDate.date.start)
+                : new Date(),
+            book: {
+              id:
+                highlight.properties.book.type === 'relation'
+                  ? highlight.properties.book.relation[0].id
+                  : '',
+              title: 'Hello World',
+              author: 'John Doe',
+            },
+          } satisfies Highlight)
+        : null;
     } catch (e) {
       console.log(e);
     }

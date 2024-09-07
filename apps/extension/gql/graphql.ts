@@ -69,7 +69,7 @@ export type MutationAddHighlightArgs = {
 
 
 export type MutationAddHighlightsArgs = {
-  newHighlights: NewHighlightsInput;
+  newHighlights: Array<NewHighlightInput>;
 };
 
 export type NewBookInput = {
@@ -89,10 +89,6 @@ export type NewHighlightInput = {
   note?: InputMaybe<Scalars['String']['input']>;
   page?: InputMaybe<Scalars['String']['input']>;
   text: Scalars['String']['input'];
-};
-
-export type NewHighlightsInput = {
-  highlights: Array<NewHighlightInput>;
 };
 
 export type Query = {
@@ -120,7 +116,7 @@ export type CreateBookMutationVariables = Exact<{
 export type CreateBookMutation = { __typename?: 'Mutation', addBook: { __typename?: 'Book', id: string, title: string, author: string } };
 
 export type CreateHighlightsMutationVariables = Exact<{
-  highlights: NewHighlightsInput;
+  highlights: Array<NewHighlightInput> | NewHighlightInput;
 }>;
 
 
@@ -128,4 +124,4 @@ export type CreateHighlightsMutation = { __typename?: 'Mutation', addHighlights:
 
 
 export const CreateBookDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"CreateBook"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"book"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"NewBookInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"addBook"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"newBookData"},"value":{"kind":"Variable","name":{"kind":"Name","value":"book"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"author"}}]}}]}}]} as unknown as DocumentNode<CreateBookMutation, CreateBookMutationVariables>;
-export const CreateHighlightsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"CreateHighlights"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"highlights"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"NewHighlightsInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"addHighlights"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"newHighlights"},"value":{"kind":"Variable","name":{"kind":"Name","value":"highlights"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}}]}}]} as unknown as DocumentNode<CreateHighlightsMutation, CreateHighlightsMutationVariables>;
+export const CreateHighlightsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"CreateHighlights"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"highlights"}},"type":{"kind":"NonNullType","type":{"kind":"ListType","type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"NewHighlightInput"}}}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"addHighlights"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"newHighlights"},"value":{"kind":"Variable","name":{"kind":"Name","value":"highlights"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}}]}}]} as unknown as DocumentNode<CreateHighlightsMutation, CreateHighlightsMutationVariables>;

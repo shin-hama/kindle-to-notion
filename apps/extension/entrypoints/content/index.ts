@@ -13,8 +13,11 @@ export default defineContentScript({
       console.log(highlights)
 
       browser.runtime.sendMessage({
-        type: 'CreateBook',
-        book: books[0],
+        type: 'CreateBookWithHighlights',
+        data: {
+          book: books[0],
+          highlights,
+        },
       } satisfies CreateBookMessage)
     })
   },

@@ -1,10 +1,7 @@
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { Highlight } from './models/highlight.model';
 import { HighlightsService } from './highlights.service';
-import {
-  NewHighlightInput,
-  NewHighlightsInput,
-} from './dto/new-highlight.input';
+import { NewHighlightInput } from './dto/new-highlight.input';
 
 @Resolver(() => Highlight)
 export class HighlightsResolver {
@@ -24,7 +21,10 @@ export class HighlightsResolver {
 
   @Mutation(() => [Highlight])
   async addHighlights(
-    @Args('newHighlights') data: NewHighlightsInput,
+    @Args('newHighlights', {
+      type: () => [NewHighlightInput],
+    })
+    data: Array<NewHighlightInput>,
   ): Promise<Array<Highlight>> {
     return this.highlightService.createBulk(data);
   }
