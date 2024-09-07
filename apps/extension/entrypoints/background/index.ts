@@ -12,17 +12,12 @@ export default defineBackground(() => {
   browser.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
     try {
       const msg = MessageSchema.parse(message)
-      console.log(message)
       if (msg.type === 'CreateBookWithHighlights') {
-        console.log('CreateBookWithHighlights', msg.data)
         const result = await createBook({ book: msg.data.book })
-        console.log(result)
-        console.log(msg.data.highlights[0])
         createHighlights(result.id, msg.data.highlights)
         sendResponse()
         return
       } else if (msg.type === 'CreateHighlights') {
-        console.log('CreateHighlights', msg.data)
         console.error('Not implemented')
         sendResponse()
         return

@@ -29,7 +29,7 @@ export const parseToDate = (kindleDate: string, region: AmazonAccountRegion): Da
   switch (region) {
     case 'japan': {
       const amazonDateString = kindleDate.substring(0, kindleDate.indexOf(' '))
-      return dayjs(amazonDateString, 'YYYY MM DD', 'ja').toDate()
+      return dayjs(amazonDateString, 'YYYY M D', 'ja').toDate()
     }
     case 'france': {
       // 曜日 月 日, 年 になっているので、曜日を削除してからパースする
@@ -38,7 +38,7 @@ export const parseToDate = (kindleDate: string, region: AmazonAccountRegion): Da
     }
     default: {
       const amazonDateString = kindleDate.substring(kindleDate.indexOf(' ') + 1)
-      return dayjs(amazonDateString, 'MMMM DD, YYYY').toDate()
+      return dayjs(amazonDateString, 'MMMM D, YYYY').toDate()
     }
   }
 }
