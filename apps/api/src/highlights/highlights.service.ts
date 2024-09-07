@@ -1,7 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { HighlightRepository } from './repository/highlightRepository';
 import { Highlight, HighlightColor } from './models/highlight.model';
-import { hash } from 'src/utils/hash';
+import { hash } from '~/utils/hash';
 import { NewHighlightInput } from './dto/new-highlight.input';
 
 @Injectable()

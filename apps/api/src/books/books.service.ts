@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { BookRepository } from './repository/bookRepository';
 import { Book } from './models/book.model';
 import { NewBookInput } from './dto/new-book.input';
-import { hash } from 'src/utils/hash';
+import { hash } from '~/utils/hash';
 import { Logger } from '@nestjs/common';
 
 @Injectable()
