@@ -1,5 +1,5 @@
-import { str as fromStr } from 'adler-32';
+import { Xxh32 } from '@node-rs/xxhash';
 
 export const hash = (data: string): string => {
-  return fromStr(data).toString(16);
+  return new Xxh32().update(data).digest().toString(16);
 };
