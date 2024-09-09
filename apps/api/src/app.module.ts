@@ -7,6 +7,7 @@ import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { BooksModule } from './books/books.module';
 import { HighlightsModule } from './highlights/highlights.module';
 import { join } from 'path';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -21,6 +22,7 @@ import { join } from 'path';
     }),
     BooksModule,
     HighlightsModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],

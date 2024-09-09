@@ -55,7 +55,7 @@ input NewBookInput {
 input NewHighlightInput {
   bookId: String!
   color: HighlightColor!
-  createdDate: DateTime = "2024-09-07T06:55:27.700Z"
+  createdDate: DateTime = "2024-09-09T01:20:19.571Z"
   location: String = ""
   note: String = null
   page: String = ""
