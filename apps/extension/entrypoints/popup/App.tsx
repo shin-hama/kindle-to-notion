@@ -18,14 +18,11 @@ function App() {
       </div>
       <h1>WXT + React</h1>
       <div className="card">
+        <button onClick={() => console.log('clicked')}>Click me</button>
         <button onClick={() => setCount((count) => count + 1)}>count is {count}</button>
-        <button
-          onClick={async () => {
-            const res = await browser.runtime.sendMessage('test')
-          }}
-        >
-          create page
-        </button>
+        <a href="https://api.notion.com/v1/oauth/authorize?client_id=f61e350d-3e1d-4ffa-a100-41c318a7c36f&response_type=code&owner=user&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2Fauth%2Fcallback%2Fnotion">
+          Login with Notion
+        </a>
         <p>
           Edit <code>src/App.tsx</code> and save to test HMR
         </p>

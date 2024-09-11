@@ -26,5 +26,7 @@ export class NotionService {
     });
 
     Logger.log(response);
+
+    return response;
   }
 }

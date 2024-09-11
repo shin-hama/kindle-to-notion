@@ -29,4 +29,20 @@ export default defineBackground(() => {
       return
     }
   })
+
+  browser.webRequest.onHeadersReceived.addListener(
+    (details) => {
+      console.log('onHeadersReceived', details)
+
+      fetch('http://localhost:3000/test', {
+        credentials: 'include',
+      }).then((res) => {
+        console.log('fetch', res)
+      })
+
+      return { responseHeaders: details.responseHeaders }
+    },
+    { urls: ['http://localhost:3000/auth/callback/notion'] },
+    ['responseHeaders'],
+  )
 })
