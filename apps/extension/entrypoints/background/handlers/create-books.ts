@@ -1,5 +1,6 @@
-import { Client, cacheExchange, fetchExchange, gql } from '@urql/core'
-import { CreateBookMutation, CreateBookMutationVariables, NewBookInput } from '~/gql/graphql'
+import { gql } from '@urql/core'
+import { CreateBookMutation, CreateBookMutationVariables } from '~/gql/graphql'
+import { createGqlClient } from './gqlClient'
 
 const mutation = gql`
   mutation CreateBook($book: NewBookInput!) {
@@ -14,10 +15,7 @@ const mutation = gql`
 export const createBook = async (
   args: CreateBookMutationVariables,
 ): Promise<CreateBookMutation['addBook']> => {
-  const client = new Client({
-    url: 'http://127.0.0.1:3000/graphql',
-    exchanges: [cacheExchange, fetchExchange],
-  })
+  const client = createGqlClient()
 
   return client
     .mutation(mutation, args)

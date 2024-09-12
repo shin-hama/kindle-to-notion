@@ -1,3 +1,4 @@
+import { isSessionValid } from '~/utils/is-session-valid'
 import { MessageSchema } from '../types/messaging'
 import { createBook } from './handlers/create-books'
 import { createHighlights } from './handlers/create-highlight'
@@ -11,6 +12,11 @@ export default defineBackground(() => {
 
   browser.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
     try {
+      if ((await isSessionValid()) === false) {
+        console.error('Session is invalid')
+        return
+      }
+
       const msg = MessageSchema.parse(message)
       if (msg.type === 'CreateBookWithHighlights') {
         const result = await createBook({ book: msg.data.book })
@@ -29,20 +35,4 @@ export default defineBackground(() => {
       return
     }
   })
-
-  browser.webRequest.onHeadersReceived.addListener(
-    (details) => {
-      console.log('onHeadersReceived', details)
-
-      fetch('http://localhost:3000/test', {
-        credentials: 'include',
-      }).then((res) => {
-        console.log('fetch', res)
-      })
-
-      return { responseHeaders: details.responseHeaders }
-    },
-    { urls: ['http://localhost:3000/auth/callback/notion'] },
-    ['responseHeaders'],
-  )
 })

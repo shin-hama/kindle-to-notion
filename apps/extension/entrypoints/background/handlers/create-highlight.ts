@@ -1,6 +1,7 @@
-import { Client, cacheExchange, fetchExchange, gql } from '@urql/core'
+import { gql } from '@urql/core'
 import { CreateHighlightsMutationVariables, NewHighlightInput } from '~/gql/graphql'
 import { HighlightInput } from '~/types'
+import { createGqlClient } from './gqlClient'
 
 const mutation = gql`
   mutation CreateHighlights($highlights: [NewHighlightInput!]!) {
@@ -11,10 +12,7 @@ const mutation = gql`
 `
 
 export const createHighlights = async (bookId: string, highlights: Array<HighlightInput>) => {
-  const client = new Client({
-    url: 'http://127.0.0.1:3000/graphql',
-    exchanges: [cacheExchange, fetchExchange],
-  })
+  const client = createGqlClient()
 
   client
     .mutation(mutation, {
@@ -23,7 +21,7 @@ export const createHighlights = async (bookId: string, highlights: Array<Highlig
           ({
             bookId,
             ...h,
-          }) satisfies NewHighlightInput,
+          } satisfies NewHighlightInput),
       ),
     } satisfies CreateHighlightsMutationVariables)
     .toPromise()
