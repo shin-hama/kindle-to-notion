@@ -8,6 +8,7 @@ import { BooksModule } from './books/books.module';
 import { HighlightsModule } from './highlights/highlights.module';
 import { join } from 'path';
 import { AuthModule } from './auth/auth.module';
+import { UsersService } from './users/users.service';
 
 @Module({
   imports: [
@@ -25,6 +26,6 @@ import { AuthModule } from './auth/auth.module';
     AuthModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, UsersService],
 })
 export class AppModule {}
