@@ -15,12 +15,16 @@ export class AuthController {
     Logger.log(query);
     try {
       const result = await this.notionService.authCallbackHandler(query.code);
-      res.cookie(SESSION_TOKEN_KEY, result.bot_id, {
+      if (result.error) {
+        return res.status(500).send(`${result.error}, please try again`);
+      }
+
+      res.cookie(SESSION_TOKEN_KEY, result.session_token, {
         httpOnly: true,
         secure: true,
         sameSite: 'strict',
       });
-      return res.send("You're logged in!");
+      return res.send("You're logged in!").redirect(result.redirect_url);
     } catch {
       return res
         .status(500)

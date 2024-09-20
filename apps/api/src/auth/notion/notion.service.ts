@@ -1,6 +1,11 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { Client, isFullUser } from '@notionhq/client';
+import { Client, isFullBlock, isFullPage, isFullUser } from '@notionhq/client';
+import {
+  ChildDatabaseBlockObjectResponse,
+  OauthTokenResponse,
+} from '@notionhq/client/build/src/api-endpoints';
+import { Database } from '~/types/database.types';
 import { UsersService } from '~/users/users.service';
 
 @Injectable()
@@ -33,8 +38,11 @@ export class NotionService {
 
     Logger.log(response);
     if (response.owner.type !== 'user' || !isFullUser(response.owner.user)) {
-      return response;
+      return {
+        error: 'Invalid user',
+      };
     }
+
     this.usersService.createUser({
       user: {
         id: response.bot_id,
@@ -42,20 +50,59 @@ export class NotionService {
         avatar_url: response.owner.user.avatar_url,
         bot_id: response.bot_id,
         name: response.owner.user.name,
-      },
-      page: {
-        user_id: response.bot_id,
-        page_id: response.duplicated_template_id,
         workspace_id: response.workspace_id,
         workspace_name: response.workspace_name,
         workspace_icon: response.workspace_icon,
       },
+      page: await this.buildPage(response),
       secret: {
         access_token: response.access_token,
         user_id: response.bot_id,
       },
     });
 
-    return response;
+    const url = await this.notion.pages
+      .retrieve({
+        page_id: response.duplicated_template_id,
+      })
+      .then((page) => (isFullPage(page) ? page.url : 'https://www.notion.so/'))
+      .catch(() => 'https://www.notion.so/');
+
+    return {
+      session_token: response.bot_id,
+      redirect_url: url,
+    };
+  }
+
+  private async buildPage(
+    response: OauthTokenResponse,
+  ): Promise<Database['public']['Tables']['NotionPage']['Insert']> {
+    if (!response.duplicated_template_id) {
+      return {
+        user_id: response.bot_id,
+      };
+    }
+
+    const children = await this.notion.blocks.children.list({
+      block_id: response.duplicated_template_id,
+    });
+
+    const databases = children.results
+      .filter(isFullBlock)
+      .filter(
+        (block): block is ChildDatabaseBlockObjectResponse =>
+          block.type === 'child_database',
+      )
+      .map((block) => ({
+        title: block.child_database.title,
+        id: block.id,
+      }));
+
+    return {
+      user_id: response.bot_id,
+      page_id: response.duplicated_template_id,
+      books_db_id: databases.find((db) => db.title === 'Books')?.id,
+      highlights_db_id: databases.find((db) => db.title === 'Highlights')?.id,
+    };
   }
 }

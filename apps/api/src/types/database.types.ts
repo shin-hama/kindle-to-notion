@@ -11,28 +11,25 @@ export type Database = {
     Tables: {
       NotionPage: {
         Row: {
+          books_db_id: string;
           created_at: string;
+          highlights_db_id: string;
           page_id: string;
           user_id: string;
-          workspace_icon: string;
-          workspace_id: string;
-          workspace_name: string;
         };
         Insert: {
+          books_db_id?: string;
           created_at?: string;
+          highlights_db_id?: string;
           page_id?: string;
           user_id: string;
-          workspace_icon?: string;
-          workspace_id?: string;
-          workspace_name?: string;
         };
         Update: {
+          books_db_id?: string;
           created_at?: string;
+          highlights_db_id?: string;
           page_id?: string;
           user_id?: string;
-          workspace_icon?: string;
-          workspace_id?: string;
-          workspace_name?: string;
         };
         Relationships: [
           {
@@ -48,16 +45,19 @@ export type Database = {
         Row: {
           access_token: string;
           created_at: string;
+          iv: string;
           user_id: string;
         };
         Insert: {
-          access_token: string;
+          access_token?: string;
           created_at?: string;
+          iv?: string;
           user_id: string;
         };
         Update: {
           access_token?: string;
           created_at?: string;
+          iv?: string;
           user_id?: string;
         };
         Relationships: [
@@ -72,28 +72,37 @@ export type Database = {
       };
       NotionUser: {
         Row: {
-          avatar_url: string | null;
+          avatar_url: string;
           bot_id: string;
           created_at: string;
           id: string;
-          name: string | null;
+          name: string;
           notion_uid: string;
+          workspace_icon: string;
+          workspace_id: string;
+          workspace_name: string;
         };
         Insert: {
-          avatar_url?: string | null;
+          avatar_url?: string;
           bot_id?: string;
           created_at?: string;
           id?: string;
-          name?: string | null;
+          name?: string;
           notion_uid?: string;
+          workspace_icon?: string;
+          workspace_id?: string;
+          workspace_name?: string;
         };
         Update: {
-          avatar_url?: string | null;
+          avatar_url?: string;
           bot_id?: string;
           created_at?: string;
           id?: string;
-          name?: string | null;
+          name?: string;
           notion_uid?: string;
+          workspace_icon?: string;
+          workspace_id?: string;
+          workspace_name?: string;
         };
         Relationships: [];
       };
