@@ -12,7 +12,6 @@ export class AuthController {
     @Query() query: { code: string; state: string },
     @Res() res: Response,
   ) {
-    Logger.log(query);
     try {
       const result = await this.notionService.authCallbackHandler(query.code);
       if (result.error) {
@@ -22,7 +21,7 @@ export class AuthController {
 
       res.cookie(SESSION_TOKEN_KEY, result.session_token, {
         httpOnly: true,
-        secure: true,
+        secure: process.env.NODE_ENV === 'production',
         sameSite: 'strict',
       });
       return res.redirect(result.redirect_url);

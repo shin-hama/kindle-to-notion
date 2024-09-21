@@ -1,19 +1,13 @@
 import { Injectable } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
 import { Client, isFullPage } from '@notionhq/client';
 import { Highlight, HighlightColor } from '../models/highlight.model';
+import { AuthenticatedUser } from '~/types';
 
 export type CreateHighlightDTO = Omit<Highlight, 'book'>;
 
 @Injectable()
 export class HighlightRepository {
-  private notion: Client;
-
-  constructor(private configService: ConfigService) {
-    this.notion = new Client({
-      auth: this.configService.get<string>('NOTION_TOKEN'),
-    });
-  }
+  constructor() {}
 
   private convertColor(color: HighlightColor) {
     switch (color) {
@@ -31,12 +25,15 @@ export class HighlightRepository {
   }
 
   async exists(
-    databaseId: string,
+    user: AuthenticatedUser,
     highlightId: string,
   ): Promise<Highlight | null> {
     try {
-      const response = await this.notion.databases.query({
-        database_id: databaseId,
+      const notion = new Client({
+        auth: user.NotionSecret.access_token,
+      });
+      const response = await notion.databases.query({
+        database_id: user.NotionPage.highlights_db_id,
         filter: {
           property: 'id',
           rich_text: {
@@ -90,15 +87,18 @@ export class HighlightRepository {
   }
 
   async save(
-    databaseId: string,
+    user: AuthenticatedUser,
     bookId: string,
     highlight: CreateHighlightDTO,
   ): Promise<Highlight> {
     try {
-      const result = await this.notion.pages.create({
+      const notion = new Client({
+        auth: user.NotionSecret.access_token,
+      });
+      const result = await notion.pages.create({
         parent: {
           type: 'database_id',
-          database_id: databaseId,
+          database_id: user.NotionPage.highlights_db_id,
         },
         icon: {
           type: 'emoji',

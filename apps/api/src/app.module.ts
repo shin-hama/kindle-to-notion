@@ -20,6 +20,12 @@ import { UsersService } from './users/users.service';
       driver: ApolloDriver,
       autoSchemaFile: join(process.cwd(), 'src/graphql/schema.gql'),
       sortSchema: true,
+      playground: {
+        settings: {
+          'request.credentials': 'include',
+        },
+      },
+      context: ({ req, res }) => ({ req, res }),
     }),
     BooksModule,
     HighlightsModule,
