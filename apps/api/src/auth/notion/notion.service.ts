@@ -10,25 +10,14 @@ import { UsersService } from '~/users/users.service';
 
 @Injectable()
 export class NotionService {
-  private notion: Client;
   constructor(
     private configService: ConfigService,
     private readonly usersService: UsersService,
-  ) {
-    this.notion = new Client({
-      auth: this.configService.get<string>('NOTION_TOKEN'),
-    });
-  }
+  ) {}
 
   async authCallbackHandler(code: string) {
-    Logger.log({
-      code,
-      grant_type: 'authorization_code',
-      redirect_uri: this.configService.get('NOTION_REDIRECT_URL'),
-      client_id: this.configService.get('NOTION_CLIENT_ID'),
-      client_secret: this.configService.get('NOTION_CLIENT_SECRET'),
-    });
-    const response = await this.notion.oauth.token({
+    const oauthClient = new Client();
+    const response = await oauthClient.oauth.token({
       code,
       grant_type: 'authorization_code',
       redirect_uri: this.configService.get('NOTION_REDIRECT_URL'),
@@ -36,14 +25,12 @@ export class NotionService {
       client_secret: this.configService.get('NOTION_CLIENT_SECRET'),
     });
 
-    Logger.log(response);
     if (response.owner.type !== 'user' || !isFullUser(response.owner.user)) {
       return {
         error: 'Invalid user',
       };
     }
-
-    this.usersService.createUser({
+    await this.usersService.createUser({
       user: {
         id: response.bot_id,
         notion_uid: response.owner.user.id,
@@ -54,27 +41,47 @@ export class NotionService {
         workspace_name: response.workspace_name,
         workspace_icon: response.workspace_icon,
       },
-      page: await this.buildPage(response),
       secret: {
         access_token: response.access_token,
         user_id: response.bot_id,
       },
     });
+    Logger.log('Successfully authenticated user');
 
-    const url = await this.notion.pages
-      .retrieve({
-        page_id: response.duplicated_template_id,
-      })
-      .then((page) => (isFullPage(page) ? page.url : 'https://www.notion.so/'))
-      .catch(() => 'https://www.notion.so/');
+    Logger.log("Start parsing user's page");
 
-    return {
-      session_token: response.bot_id,
-      redirect_url: url,
-    };
+    const userClient = new Client({
+      auth: response.access_token,
+    });
+
+    for (let i = 0; i < 5; i++) {
+      try {
+        await this.usersService.connectUserToPage(
+          await this.buildPage(userClient, response),
+        );
+
+        const url = await userClient.pages
+          .retrieve({
+            page_id: response.duplicated_template_id,
+          })
+          .then((page) =>
+            isFullPage(page) ? page.url : 'https://www.notion.so/',
+          )
+          .catch(() => 'https://www.notion.so/');
+        return {
+          session_token: response.bot_id,
+          redirect_url: url,
+        };
+      } catch (e) {
+        // 作成直後のページを取得できないことがあるためリトライ
+        Logger.warn(e);
+        await new Promise((resolve) => setTimeout(resolve, 1000));
+      }
+    }
   }
 
   private async buildPage(
+    userClient: Client,
     response: OauthTokenResponse,
   ): Promise<Database['public']['Tables']['NotionPage']['Insert']> {
     if (!response.duplicated_template_id) {
@@ -83,7 +90,7 @@ export class NotionService {
       };
     }
 
-    const children = await this.notion.blocks.children.list({
+    const children = await userClient.blocks.children.list({
       block_id: response.duplicated_template_id,
     });
 

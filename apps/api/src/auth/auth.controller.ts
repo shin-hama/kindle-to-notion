@@ -18,13 +18,14 @@ export class AuthController {
       if (result.error) {
         return res.status(500).send(`${result.error}, please try again`);
       }
+      Logger.log("Successfully authenticated user, redirecting to user's page");
 
       res.cookie(SESSION_TOKEN_KEY, result.session_token, {
         httpOnly: true,
         secure: true,
         sameSite: 'strict',
       });
-      return res.send("You're logged in!").redirect(result.redirect_url);
+      return res.redirect(result.redirect_url);
     } catch {
       return res
         .status(500)

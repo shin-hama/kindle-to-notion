@@ -20,22 +20,28 @@ export class UsersService {
     }
   }
 
+  async veryfy(sessionToken: string) {
+    const { data, error } = await this.client
+      .from('NotionUser')
+      .select()
+      .eq('bot_id', sessionToken)
+      .single();
+    if (error) {
+      throw error;
+    }
+    return data;
+  }
+
   async createUser({
     user,
-    page,
     secret,
   }: {
     user: Database['public']['Tables']['NotionUser']['Insert'];
-    page: Database['public']['Tables']['NotionPage']['Insert'];
     secret: Database['public']['Tables']['NotionSecret']['Insert'];
   }) {
     const userResult = await this.client
       .from('NotionUser')
       .insert([user])
-      .select();
-    const pageResult = await this.client
-      .from('NotionPage')
-      .insert([page])
       .select();
 
     const encryptedSecret = encrypt(secret.access_token, this.encryptionKey);
@@ -51,8 +57,18 @@ export class UsersService {
       .select();
     Logger.log({
       userResult,
-      pageResult,
       test: secretResult,
     });
+  }
+
+  async connectUserToPage(
+    page: Database['public']['Tables']['NotionPage']['Insert'],
+  ) {
+    const pageResult = await this.client
+      .from('NotionPage')
+      .insert([page])
+      .select();
+
+    Logger.log({ pageResult });
   }
 }
