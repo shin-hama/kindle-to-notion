@@ -1,27 +1,21 @@
 import { Injectable } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
 import { Client, isFullPage } from '@notionhq/client';
 import { Book } from '../models/book.model';
 import { Logger } from '@nestjs/common';
+import { AuthenticatedUser } from '~/types';
 
 @Injectable()
 export class BookRepository {
-  private notion: Client;
+  constructor() {}
 
-  constructor(private configService: ConfigService) {
+  async exists(user: AuthenticatedUser, bookId: string): Promise<Book | null> {
     try {
-      this.notion = new Client({
-        auth: this.configService.get<string>('NOTION_TOKEN'),
+      const notion = new Client({
+        auth: user.NotionSecret.access_token,
       });
-    } catch (e) {
-      Logger.error(e);
-    }
-  }
 
-  async exists(databaseId: string, bookId: string): Promise<Book | null> {
-    try {
-      const response = await this.notion.databases.query({
-        database_id: databaseId,
+      const response = await notion.databases.query({
+        database_id: user.NotionPage.books_db_id,
         filter: {
           property: 'id',
           rich_text: {
@@ -54,12 +48,16 @@ export class BookRepository {
     }
   }
 
-  async save(databaseId: string, book: Book): Promise<Book> {
+  async save(user: AuthenticatedUser, book: Book): Promise<Book> {
     try {
-      const result = await this.notion.pages.create({
+      const notion = new Client({
+        auth: user.NotionSecret.access_token,
+      });
+
+      const result = await notion.pages.create({
         parent: {
           type: 'database_id',
-          database_id: databaseId,
+          database_id: user.NotionPage.books_db_id,
         },
         icon: {
           type: 'emoji',

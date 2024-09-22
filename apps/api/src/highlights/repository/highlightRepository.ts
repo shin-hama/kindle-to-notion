@@ -153,7 +153,7 @@ export class HighlightRepository {
                 new Date().toISOString(),
             },
           },
-          book: {
+          Book: {
             relation: [
               {
                 id: bookId,

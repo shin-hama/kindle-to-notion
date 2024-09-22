@@ -4,6 +4,7 @@ import { Book } from './models/book.model';
 import { NewBookInput } from './dto/new-book.input';
 import { hash } from '~/utils/hash';
 import { Logger } from '@nestjs/common';
+import { AuthenticatedUser } from '~/types';
 
 @Injectable()
 export class BooksService {
@@ -25,12 +26,9 @@ export class BooksService {
     return [];
   }
 
-  async create(data: NewBookInput): Promise<Book> {
+  async create(user: AuthenticatedUser, data: NewBookInput): Promise<Book> {
     const bookId = hash(data.title);
-    const existsBook = await this.bookRepository.exists(
-      '54977274208942b487b5408a85357e9e',
-      bookId,
-    );
+    const existsBook = await this.bookRepository.exists(user, bookId);
     if (existsBook) {
       Logger.warn('Cannot create new book because it is already existed.');
       return existsBook;
@@ -45,6 +43,6 @@ export class BooksService {
       lastAnnotatedAt: data.lastAnnotatedAt,
       url: data.url,
     };
-    return this.bookRepository.save('54977274208942b487b5408a85357e9e', book);
+    return this.bookRepository.save(user, book);
   }
 }
