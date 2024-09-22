@@ -1,6 +1,6 @@
 import _ from 'lodash'
 
-import type { AmazonAccount, AmazonAccountRegion } from '~/types'
+import type { AmazonAccount, AmazonAccountRegion } from '@/types'
 
 export const AmazonRegions: Record<AmazonAccountRegion, AmazonAccount> = {
   global: {

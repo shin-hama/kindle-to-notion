@@ -1,7 +1,7 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { Client, isFullPage } from '@notionhq/client';
 import { Highlight, HighlightColor } from '../models/highlight.model';
-import { AuthenticatedUser } from '~/types';
+import { AuthenticatedUser } from '@/types';
 
 export type CreateHighlightDTO = Omit<Highlight, 'book'>;
 
@@ -35,7 +35,7 @@ export class HighlightRepository {
       const response = await notion.databases.query({
         database_id: user.NotionPage.highlights_db_id,
         filter: {
-          property: 'id',
+          property: 'Id',
           rich_text: {
             equals: highlightId,
           },
@@ -56,25 +56,25 @@ export class HighlightRepository {
                 ? highlight.properties.Name.title[0].plain_text
                 : '',
             color:
-              highlight.properties.color.type === 'select'
-                ? (highlight.properties.color.select.name as HighlightColor)
+              highlight.properties.Color.type === 'select'
+                ? (highlight.properties.Color.select.name as HighlightColor)
                 : HighlightColor.YELLOW,
             location:
-              highlight.properties.location.type === 'rich_text'
-                ? highlight.properties.location.rich_text[0].plain_text
+              highlight.properties.Location.type === 'rich_text'
+                ? highlight.properties.Location.rich_text[0].plain_text
                 : '',
             page:
-              highlight.properties.page.type === 'rich_text'
-                ? highlight.properties.page.rich_text[0].plain_text
+              highlight.properties.Page.type === 'rich_text'
+                ? highlight.properties.Page.rich_text[0].plain_text
                 : '',
             createdDate:
-              highlight.properties.createdDate.type === 'date'
-                ? new Date(highlight.properties.createdDate.date.start)
+              highlight.properties.CreatedDate.type === 'date'
+                ? new Date(highlight.properties.CreatedDate.date.start)
                 : new Date(),
             book: {
               id:
-                highlight.properties.book.type === 'relation'
-                  ? highlight.properties.book.relation[0].id
+                highlight.properties.Book.type === 'relation'
+                  ? highlight.properties.Book.relation[0]?.id
                   : '',
               title: 'Hello World',
               author: 'John Doe',

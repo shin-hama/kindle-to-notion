@@ -1,5 +1,5 @@
 import { gql } from '@urql/core'
-import { CreateBookMutation, CreateBookMutationVariables } from '~/gql/graphql'
+import { CreateBookMutation, CreateBookMutationVariables } from '@/gql/graphql'
 import { createGqlClient } from './gqlClient'
 
 const mutation = gql`

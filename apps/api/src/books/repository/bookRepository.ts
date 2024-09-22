@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { Client, isFullPage } from '@notionhq/client';
 import { Book } from '../models/book.model';
 import { Logger } from '@nestjs/common';
-import { AuthenticatedUser } from '~/types';
+import { AuthenticatedUser } from '@/types';
 
 @Injectable()
 export class BookRepository {
@@ -17,7 +17,7 @@ export class BookRepository {
       const response = await notion.databases.query({
         database_id: user.NotionPage.books_db_id,
         filter: {
-          property: 'id',
+          property: 'Id',
           rich_text: {
             equals: bookId,
           },
@@ -38,8 +38,8 @@ export class BookRepository {
                 ? book.properties.Name.title[0].plain_text
                 : '',
             author:
-              book.properties.author.type === 'rich_text'
-                ? book.properties.author.rich_text[0].plain_text
+              book.properties.Author.type === 'rich_text'
+                ? book.properties.Author.rich_text[0].plain_text
                 : '',
           }
         : null;

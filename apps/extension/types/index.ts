@@ -1,5 +1,5 @@
 import z from 'zod'
-import { HighlightColor } from '~/gql/graphql'
+import { HighlightColor } from '@/gql/graphql'
 
 export const HighlightColorsSchema = z.nativeEnum(HighlightColor)
 export type HighlightColors = z.infer<typeof HighlightColorsSchema>

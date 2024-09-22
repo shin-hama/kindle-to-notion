@@ -2,10 +2,10 @@ import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { Book } from './models/book.model';
 import { BooksService } from './books.service';
 import { NewBookInput } from './dto/new-book.input';
-import { AuthGuard } from '~/auth/auth.guard';
+import { AuthGuard } from '@/auth/auth.guard';
 import { UseGuards } from '@nestjs/common';
-import { CurrentUser } from '~/auth/auth.decorator';
-import { AuthenticatedUser } from '~/types';
+import { CurrentUser } from '@/auth/auth.decorator';
+import { AuthenticatedUser } from '@/types';
 
 @Resolver(() => Book)
 export class BooksResolver {

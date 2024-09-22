@@ -1,4 +1,4 @@
-import { BookInputSchema, HighlightInputSchema } from '~/types'
+import { BookInputSchema, HighlightInputSchema } from '@/types'
 import z from 'zod'
 
 export const MessageTypes = ['CreateBookWithHighlights', 'CreateHighlights'] as const

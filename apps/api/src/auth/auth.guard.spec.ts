@@ -1,6 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { AuthGuard } from './auth.guard';
-import { UsersService } from '~/users/users.service';
+import { UsersService } from '@/users/users.service';
 import { ConfigService } from '@nestjs/config';
 
 describe('AuthGuard', () => {

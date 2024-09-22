@@ -2,9 +2,9 @@ import { Injectable } from '@nestjs/common';
 import { BookRepository } from './repository/bookRepository';
 import { Book } from './models/book.model';
 import { NewBookInput } from './dto/new-book.input';
-import { hash } from '~/utils/hash';
+import { hash } from '@/utils/hash';
 import { Logger } from '@nestjs/common';
-import { AuthenticatedUser } from '~/types';
+import { AuthenticatedUser } from '@/types';
 
 @Injectable()
 export class BooksService {

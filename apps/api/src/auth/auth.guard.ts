@@ -6,8 +6,8 @@ import {
 } from '@nestjs/common';
 import { GqlExecutionContext } from '@nestjs/graphql';
 import { SESSION_TOKEN_KEY } from '@kino/shared';
-import { UsersService } from '~/users/users.service';
-import { CustomContext } from '~/types';
+import { UsersService } from '@/users/users.service';
+import { CustomContext } from '@/types';
 
 @Injectable()
 export class AuthGuard implements CanActivate {

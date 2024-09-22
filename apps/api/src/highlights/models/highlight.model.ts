@@ -1,5 +1,5 @@
 import { Field, ID, ObjectType, registerEnumType } from '@nestjs/graphql';
-import { Book } from '~/books/models/book.model';
+import { Book } from '@/books/models/book.model';
 
 export enum HighlightColor {
   BLUE = 'blue',

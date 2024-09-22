@@ -1,6 +1,6 @@
 import { gql } from '@urql/core'
-import { CreateHighlightsMutationVariables, NewHighlightInput } from '~/gql/graphql'
-import { HighlightInput } from '~/types'
+import { CreateHighlightsMutationVariables, NewHighlightInput } from '@/gql/graphql'
+import { HighlightInput } from '@/types'
 import { createGqlClient } from './gqlClient'
 
 const mutation = gql`
@@ -21,7 +21,7 @@ export const createHighlights = async (bookId: string, highlights: Array<Highlig
           ({
             bookId,
             ...h,
-          } satisfies NewHighlightInput),
+          }) satisfies NewHighlightInput,
       ),
     } satisfies CreateHighlightsMutationVariables)
     .toPromise()

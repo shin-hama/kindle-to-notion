@@ -3,9 +3,9 @@ import { Highlight } from './models/highlight.model';
 import { HighlightsService } from './highlights.service';
 import { NewHighlightInput } from './dto/new-highlight.input';
 import { UseGuards } from '@nestjs/common';
-import { AuthGuard } from '~/auth/auth.guard';
-import { CurrentUser } from '~/auth/auth.decorator';
-import { AuthenticatedUser } from '~/types';
+import { AuthGuard } from '@/auth/auth.guard';
+import { CurrentUser } from '@/auth/auth.decorator';
+import { AuthenticatedUser } from '@/types';
 
 @Resolver(() => Highlight)
 export class HighlightsResolver {

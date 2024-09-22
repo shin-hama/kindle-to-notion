@@ -1,4 +1,4 @@
-import { isSessionValid } from '~/utils/is-session-valid'
+import { isSessionValid } from '@/utils/is-session-valid'
 import { MessageSchema } from '../types/messaging'
 import { createBook } from './handlers/create-books'
 import { createHighlights } from './handlers/create-highlight'

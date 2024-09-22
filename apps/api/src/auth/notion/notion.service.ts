@@ -5,8 +5,8 @@ import {
   ChildDatabaseBlockObjectResponse,
   OauthTokenResponse,
 } from '@notionhq/client/build/src/api-endpoints';
-import { Database } from '~/types/database.types';
-import { UsersService } from '~/users/users.service';
+import { Database } from '@/types/database.types';
+import { UsersService } from '@/users/users.service';
 
 @Injectable()
 export class NotionService {
