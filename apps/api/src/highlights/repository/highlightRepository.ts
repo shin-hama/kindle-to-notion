@@ -95,6 +95,7 @@ export class HighlightRepository {
       const notion = new Client({
         auth: user.NotionSecret.access_token,
       });
+
       const result = await notion.pages.create({
         parent: {
           type: 'database_id',
@@ -114,7 +115,7 @@ export class HighlightRepository {
               },
             ],
           },
-          id: {
+          Id: {
             rich_text: [
               {
                 text: {
@@ -123,7 +124,7 @@ export class HighlightRepository {
               },
             ],
           },
-          location: {
+          Location: {
             rich_text: [
               {
                 text: {
@@ -132,7 +133,7 @@ export class HighlightRepository {
               },
             ],
           },
-          page: {
+          Page: {
             rich_text: [
               {
                 text: {
@@ -141,12 +142,12 @@ export class HighlightRepository {
               },
             ],
           },
-          color: {
+          Color: {
             select: {
               name: highlight.color,
             },
           },
-          createdDate: {
+          CreatedDate: {
             date: {
               start:
                 highlight.createdDate?.toISOString() ??

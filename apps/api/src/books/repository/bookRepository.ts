@@ -53,7 +53,6 @@ export class BookRepository {
       const notion = new Client({
         auth: user.NotionSecret.access_token,
       });
-
       const result = await notion.pages.create({
         parent: {
           type: 'database_id',
@@ -81,7 +80,7 @@ export class BookRepository {
               },
             ],
           },
-          id: {
+          Id: {
             rich_text: [
               {
                 text: {
@@ -90,7 +89,7 @@ export class BookRepository {
               },
             ],
           },
-          asin: {
+          ASIN: {
             rich_text: [
               {
                 text: {
@@ -99,7 +98,7 @@ export class BookRepository {
               },
             ],
           },
-          author: {
+          Author: {
             rich_text: [
               {
                 text: {
@@ -111,11 +110,14 @@ export class BookRepository {
           URL: {
             url: book.url,
           },
-          lastAnnotatedAt: {
+          LastAnnotatedAt: {
             date: {
               start:
                 book.lastAnnotatedAt?.toISOString() ?? new Date().toISOString(),
             },
+          },
+          KindleLink: {
+            url: `${process.env.API_URL}/kindle/open?asin=${book.asin}`,
           },
         },
       });
