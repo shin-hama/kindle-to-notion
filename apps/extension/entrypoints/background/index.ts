@@ -18,10 +18,13 @@ export default defineBackground(() => {
       if (msg.type === 'CreateBookWithHighlights') {
         try {
           const result = await createBook({ book: msg.data.book })
+          console.log('Book is created, ' + msg.data.book.title)
           await createHighlights(result.id, msg.data.highlights)
+          console.log('Highlights are created: ' + msg.data.highlights.length)
           sendResponse()
           return { success: true }
-        } catch {
+        } catch (e) {
+          console.error('Failed to create book and highlights', e)
           return { error: 'failed to create schema' }
         }
       } else if (msg.type === 'CreateHighlights') {

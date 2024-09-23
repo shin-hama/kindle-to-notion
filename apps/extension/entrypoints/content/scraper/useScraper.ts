@@ -14,36 +14,34 @@ export const useScraper = () => {
       console.log('Start scraping')
       scrapeBooks()
         .then(async (books) => {
-          console.log(books)
+          console.log(`find ${books.length} books`)
           setBooksCount(books.length)
 
-          books.forEach(async (book, i) => {
+          for (const book of books) {
             setBook(book)
-            setCurrentIndex(i + 1)
+            setCurrentIndex((prev) => prev + 1)
 
             const highlights = await scrapeBookHighlights(book)
-            console.log(highlights)
-            try {
-              const result = await browser.runtime.sendMessage({
-                type: 'CreateBookWithHighlights',
-                data: {
-                  book: book,
-                  highlights,
-                },
-              } satisfies CreateBookMessage)
+            console.log(`find ${highlights.length} highlights`)
+            const result = await browser.runtime.sendMessage({
+              type: 'CreateBookWithHighlights',
+              data: {
+                book: book,
+                highlights,
+              },
+            } satisfies CreateBookMessage)
 
-              if (result.error) {
-                throw new Error(result.error)
-              }
-            } catch {
-              console.error('error on parsing')
+            if (result.error) {
+              throw new Error(result.error)
             }
-          })
+          }
         })
         .catch(console.warn)
     } catch (e) {
-      console.log(e)
-      setError('e')
+      if (e instanceof Error) {
+        console.error(e)
+        setError(e.message)
+      }
     }
   }, [])
 
