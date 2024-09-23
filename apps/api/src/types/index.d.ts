@@ -13,6 +13,6 @@ export type AuthenticatedUser =
     >;
     NotionPage: Pick<
       Database['public']['Tables']['NotionPage']['Row'],
-      'books_db_id' | 'highlights_db_id'
+      'books_db_id' | 'highlights_db_id' | 'page_id'
     >;
   };

@@ -3,6 +3,15 @@ import { ConfigService } from '@nestjs/config';
 import { createClient, SupabaseClient } from '@supabase/supabase-js';
 import { Database } from '@/types/database.types';
 import { decrypt, encrypt } from '@/utils/encrypt';
+import { Client, isFullPage } from '@notionhq/client';
+import { AuthenticatedUser } from '@/types';
+
+type NotionUser = {
+  id: string;
+  name: string;
+  avatarUrl: string;
+  pageUrl: string;
+};
 
 @Injectable()
 export class UsersService {
@@ -20,11 +29,29 @@ export class UsersService {
     }
   }
 
+  async me(auth: AuthenticatedUser) {
+    const { NotionSecret, ...user } = auth;
+
+    const notion = new Client({
+      auth: NotionSecret.access_token,
+    });
+    const page = await notion.pages.retrieve({
+      page_id: user.NotionPage.page_id,
+    });
+
+    return {
+      id: user.id,
+      name: user.name,
+      avatarUrl: user.avatar_url,
+      pageUrl: isFullPage(page) ? page.url : null,
+    } satisfies NotionUser;
+  }
+
   async veryfyAdmin(sessionToken: string) {
     const { data, error } = await this.client
       .from('NotionUser')
       .select(
-        '*, NotionSecret(access_token, iv), NotionPage(books_db_id, highlights_db_id)',
+        '*, NotionSecret(access_token, iv), NotionPage(page_id, books_db_id, highlights_db_id)',
       )
       .eq('bot_id', sessionToken)
       .single();
