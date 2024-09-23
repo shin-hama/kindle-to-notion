@@ -1,4 +1,5 @@
 import { BookInputSchema, HighlightInputSchema } from '@/types'
+import { NotionUserSchema } from '@kino/shared'
 import z from 'zod'
 
 export const MessageTypes = ['CreateBookWithHighlights', 'CreateHighlights'] as const
@@ -29,37 +30,16 @@ export const ToBackendMessageSchema = z.union([
   CreateHighlightSchema,
 ])
 
-export const FromBackendMessageTypes = ['ParseBooks', 'ProcessingBook', 'Complete'] as const
+export const FromBackendMessageTypes = ['SessionValid'] as const
 export const FromBackendMessageTypesSchema = z.enum(FromBackendMessageTypes)
 export type FromBackendMessageTypes = z.infer<typeof FromBackendMessageTypesSchema>
 export const FROM_BACKEND_MESSAGE_TYPES = FromBackendMessageTypesSchema.Values
 
 export const ParseBooksSchema = z.object({
-  type: z.literal(FROM_BACKEND_MESSAGE_TYPES.ParseBooks),
-})
-export type ParseBooksMessage = z.infer<typeof ParseBooksSchema>
-
-export const ProcessingBookSchema = z.object({
-  type: z.literal(FROM_BACKEND_MESSAGE_TYPES.ProcessingBook),
+  type: z.literal(FROM_BACKEND_MESSAGE_TYPES.SessionValid),
   data: z.object({
-    book: BookInputSchema,
-    count: z.number(),
-    total: z.number(),
+    user: NotionUserSchema,
   }),
 })
-export type ProcessingBookMessage = z.infer<typeof ProcessingBookSchema>
-
-export const CompleteSchema = z.object({
-  type: z.literal(FROM_BACKEND_MESSAGE_TYPES.Complete),
-  data: z.object({
-    error: z.string().optional(),
-  }),
-})
-export type CompleteMessage = z.infer<typeof CompleteSchema>
-
-export const FromBackendMessageSchema = z.union([
-  ParseBooksSchema,
-  ProcessingBookSchema,
-  CompleteSchema,
-])
+export const FromBackendMessageSchema = z.union([ParseBooksSchema, z.object({ type: z.string() })])
 export type FromBackendMessage = z.infer<typeof FromBackendMessageSchema>
