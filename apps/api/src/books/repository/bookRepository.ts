@@ -41,6 +41,10 @@ export class BookRepository {
               book.properties.Author.type === 'rich_text'
                 ? book.properties.Author.rich_text[0].plain_text
                 : '',
+            asin:
+              book.properties.ASIN.type === 'rich_text'
+                ? book.properties.ASIN.rich_text[0].plain_text
+                : '',
           }
         : null;
     } catch (e) {

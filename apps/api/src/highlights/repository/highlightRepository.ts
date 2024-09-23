@@ -89,6 +89,7 @@ export class HighlightRepository {
   async save(
     user: AuthenticatedUser,
     bookId: string,
+    asin: string,
     highlight: CreateHighlightDTO,
   ): Promise<Highlight> {
     try {
@@ -153,6 +154,9 @@ export class HighlightRepository {
                 highlight.createdDate?.toISOString() ??
                 new Date().toISOString(),
             },
+          },
+          KindleLink: {
+            url: `${process.env.API_URL}/kindle/open?asin=${asin}&location=${highlight.location}`,
           },
           Book: {
             relation: [

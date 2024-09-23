@@ -22,7 +22,7 @@ export class AuthGuard implements CanActivate {
     }
 
     try {
-      const payload = await this.userService.veryfy(sessionToken);
+      const payload = await this.userService.veryfyAdmin(sessionToken);
 
       req.user = payload;
       return true;

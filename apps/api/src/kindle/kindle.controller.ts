@@ -7,10 +7,15 @@ export class KindleController {
 
   @Get('open')
   openKindle(@Req() req: Request, @Res() res: Response) {
-    const { asin } = req.query;
+    const { asin, location } = req.query;
     if (!asin) {
       return res.redirect(`kindle://book?action=open`);
     }
-    return res.redirect(`kindle://book?action=open&asin=${asin}`);
+    const query = new URLSearchParams({ asin: asin as string });
+    if (location) {
+      query.append('location', location as string);
+    }
+
+    return res.redirect(`kindle://book?action=open&${query.toString()}`);
   }
 }

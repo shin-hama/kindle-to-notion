@@ -4,10 +4,15 @@ import { Highlight, HighlightColor } from './models/highlight.model';
 import { hash } from '@/utils/hash';
 import { NewHighlightInput } from './dto/new-highlight.input';
 import { AuthenticatedUser } from '@/types';
+import { BookRepository } from '@/books/repository/bookRepository';
+import { Book } from '@/books/models/book.model';
 
 @Injectable()
 export class HighlightsService {
-  constructor(private highlightRepository: HighlightRepository) {}
+  constructor(
+    private highlightRepository: HighlightRepository,
+    private bookRepository: BookRepository,
+  ) {}
 
   async find(id: string) {
     return {
@@ -26,8 +31,36 @@ export class HighlightsService {
     return [] satisfies Highlight[];
   }
 
-  async create(user: AuthenticatedUser, data: NewHighlightInput) {
-    const id = hash(data.text);
+  async create(user: AuthenticatedUser, highlight: NewHighlightInput) {
+    const book = await this.bookRepository.exists(user, highlight.bookId);
+
+    return await this.createCore(user, highlight, book);
+  }
+
+  async createBulk(
+    user: AuthenticatedUser,
+    highlights: Array<NewHighlightInput>,
+  ): Promise<Array<Highlight>> {
+    const results: Highlight[] = [];
+    for (const group of this.groupByBookId(highlights)) {
+      const book = await this.bookRepository.exists(user, group.bookId);
+
+      for (const highlight of group.highlights) {
+        results.push(await this.createCore(user, highlight, book));
+        // Wait 0.5s to avoid rate limit
+        await new Promise((resolve) => setTimeout(resolve, 500));
+      }
+    }
+
+    return results;
+  }
+
+  private async createCore(
+    user: AuthenticatedUser,
+    highlight: NewHighlightInput,
+    book: Book,
+  ) {
+    const id = hash(highlight.text);
     const existedHighlight = await this.highlightRepository.exists(user, id);
     if (existedHighlight) {
       Logger.warn('Cannot create new highlight because it is already existed.');
@@ -35,20 +68,29 @@ export class HighlightsService {
       return existedHighlight;
     }
 
-    const { bookId, ...highlightData } = data;
-    return this.highlightRepository.save(user, bookId, {
+    const { bookId, ...highlightData } = highlight;
+    return this.highlightRepository.save(user, bookId, book.asin, {
       id: id,
       ...highlightData,
     });
   }
 
-  async createBulk(
-    user: AuthenticatedUser,
-    data: Array<NewHighlightInput>,
-  ): Promise<Array<Highlight>> {
-    const highlightPromises = data.map((highlight) =>
-      this.create(user, highlight),
+  private groupByBookId(highlights: Array<NewHighlightInput>) {
+    const map = highlights.reduce(
+      (acc, highlight) => {
+        if (!acc[highlight.bookId]) {
+          acc[highlight.bookId] = [];
+        }
+        acc[highlight.bookId].push(highlight);
+        return acc;
+      },
+      {} as Record<string, Array<NewHighlightInput>>,
     );
-    return Promise.all(highlightPromises);
+
+    // zip the keys and values
+    return Object.entries(map).map(([bookId, highlights]) => ({
+      bookId,
+      highlights,
+    }));
   }
 }

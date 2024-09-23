@@ -20,7 +20,7 @@ export class UsersService {
     }
   }
 
-  async veryfy(sessionToken: string) {
+  async veryfyAdmin(sessionToken: string) {
     const { data, error } = await this.client
       .from('NotionUser')
       .select(
