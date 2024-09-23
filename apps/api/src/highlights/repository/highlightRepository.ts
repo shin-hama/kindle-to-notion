@@ -1,4 +1,4 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { Client, isFullPage } from '@notionhq/client';
 import { Highlight, HighlightColor } from '../models/highlight.model';
 import { AuthenticatedUser } from '@/types';
