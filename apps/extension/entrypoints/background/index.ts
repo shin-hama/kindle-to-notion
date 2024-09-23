@@ -6,10 +6,6 @@ import { createHighlights } from './handlers/create-highlight'
 export default defineBackground(() => {
   console.log('Hello background!', { id: browser.runtime.id })
 
-  fetch('http://127.0.0.1:3000/').then((res) => {
-    console.log('fetch', res)
-  })
-
   browser.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
     try {
       if ((await isSessionValid()) === false) {

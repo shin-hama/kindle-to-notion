@@ -19,6 +19,8 @@
   "dependencies": {
     "@graphql-typed-document-node/core": "^3.2.0",
     "@kino/shared": "workspace:*",
+    "@radix-ui/react-progress": "^1.1.0",
+    "@radix-ui/react-slot": "^1.1.0",
     "@radix-ui/react-toast": "^1.2.1",
     "@urql/core": "^5.0.6",
     "class-variance-authority": "^0.7.0",

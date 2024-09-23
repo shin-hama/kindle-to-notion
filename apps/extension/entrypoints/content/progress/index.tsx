@@ -1,13 +1,8 @@
-import { Toaster } from '@/components/ui/toaster'
-import ScrapingProgress from './ScrapingProgress'
+import { useScrapingProgress } from './useScrapingProgress'
 
 const Progress = () => {
-  return (
-    <div>
-      <Toaster />
-      <ScrapingProgress />
-    </div>
-  )
+  useScrapingProgress()
+  return <div />
 }
 
 export default Progress

@@ -6,6 +6,12 @@ export default defineConfig({
     permissions: ['cookies', 'webRequest', 'webRequestBlocking', 'storage'],
   },
   modules: ['@wxt-dev/module-react'],
+  dev: {
+    server: {
+      port: 3001,
+    },
+  },
+
   vite: (env) => ({
     build: {
       sourcemap: true,
