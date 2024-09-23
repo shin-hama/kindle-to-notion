@@ -1,21 +1,56 @@
 import ScrapingProgress from './ScrapingProgress'
+import { useScraper } from '../scraper/useScraper'
 
 export const useScrapingProgress = () => {
   const { toast } = useToast()
-  useEffect(() => {
-    // 2 秒後に通知を表示
-    const { id, update } = toast({
-      title: 'Scraping Progress',
-      description: <ScrapingProgress />,
-      duration: 500000,
-    })
+  const [progressToast, setProgressToast] = useState<ReturnType<typeof toast> | null>(null)
+  const { book, booksCount, currentIndex, error } = useScraper()
 
-    // setInterval(() => {
-    //   toast({
-    //     key: (Math.random() * 10000).toString(16),
-    //     title: 'Scraping Progress',
-    //     description: 'Processing...: ' + Math.random(),
-    //   })
-    // }, 2000)
+  useEffect(() => {
+    if (progressToast) {
+      progressToast.update({
+        id: progressToast.id,
+        title: 'Collecting highlights',
+        description: (
+          <ScrapingProgress
+            bookName={book?.title ?? 'unknown'}
+            current={currentIndex}
+            total={booksCount}
+          />
+        ),
+      })
+    } else {
+      setProgressToast(
+        toast({
+          title: 'Collecting highlights',
+          description: (
+            <ScrapingProgress
+              bookName={book?.title ?? 'unknown'}
+              current={currentIndex}
+              total={booksCount}
+            />
+          ),
+          duration: 24 * 60 * 60 * 1000,
+        }),
+      )
+    }
+  }, [booksCount, currentIndex])
+
+  useEffect(() => {
+    toast({
+      title: 'Notification',
+      description: 'Collecting a list of books from your Kindle account. This may take a while.',
+      duration: 60 * 1000,
+    })
   }, [])
+
+  useEffect(() => {
+    if (error) {
+      toast({
+        title: 'Error',
+        description: error,
+        duration: 5 * 1000,
+      })
+    }
+  }, [error])
 }

@@ -1,11 +1,9 @@
 import ReactDOM from 'react-dom/client'
-import { CreateBookMessage } from '../types/messaging'
-import scrapeBookHighlights from './scraper/parseBookHighlight'
-import scrapeBooks from './scraper/parseBooks'
 import App from './App'
+import { contentScriptMatches } from '../../utils/constants'
 
 export default defineContentScript({
-  matches: ['*://read.amazon.co.jp/notebook*', 'http://localhost/*'],
+  matches: contentScriptMatches,
   cssInjectionMode: 'ui',
   async main(ctx) {
     console.log('Hello content script!', { id: browser.runtime.id })
@@ -29,21 +27,5 @@ export default defineContentScript({
 
     // Call mount to add the UI to the DOM
     ui.mount()
-
-    window.addEventListener('load', async () => {
-      console.log('loaded')
-      const books = await scrapeBooks()
-      console.log(books)
-      const highlights = await scrapeBookHighlights(books[0])
-      console.log(highlights)
-
-      browser.runtime.sendMessage({
-        type: 'CreateBookWithHighlights',
-        data: {
-          book: books[0],
-          highlights,
-        },
-      } satisfies CreateBookMessage)
-    })
   },
 })

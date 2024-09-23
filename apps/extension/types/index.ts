@@ -1,5 +1,6 @@
 import z from 'zod'
 import { HighlightColor } from '@/gql/graphql'
+import dayjs from 'dayjs'
 
 export const HighlightColorsSchema = z.nativeEnum(HighlightColor)
 export type HighlightColors = z.infer<typeof HighlightColorsSchema>
@@ -20,7 +21,11 @@ export const BookInputSchema = z.object({
   author: z.string(),
   url: z.string().nullable().optional(),
   imageUrl: z.string().nullable().optional(),
-  lastAnnotatedAt: z.date().nullable().optional(),
+  lastAnnotatedAt: z
+    .string()
+    .transform((str) => dayjs(str).toDate())
+    .nullable()
+    .optional(),
 })
 
 export type BookInput = z.infer<typeof BookInputSchema>
