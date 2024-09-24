@@ -1,32 +1,38 @@
 import { Button } from '@/components/ui/button'
 import { Progress } from '@/components/ui/progress'
-import { useScraper } from '../scraper/useScraper'
+import { useAtom } from 'jotai'
+import { scrapingProgress } from '@/states'
+import { useAuthenticatedUser } from '@/hooks/use-user'
 
 const ScrapingProgress = () => {
-  const { book, booksCount, currentIndex, error } = useScraper()
-
-  if (error) {
-    return <p>{error}</p>
+  const user = useAuthenticatedUser()
+  const [state] = useAtom(scrapingProgress)
+  if (!state.data || !state.error) {
+    return <></>
   }
-  return book ? (
+
+  if (state.error) {
+    return <p>{state.error}</p>
+  }
+
+  const { title, current, total } = state.data
+  return (
     <div className="w-full flex flex-col gap-1">
-      <p>Exporting "{book?.title}"</p>
+      <p>Exporting "{title}"</p>
       <div className="flex space-x-2 w-full">
-        <Progress value={(currentIndex / booksCount) * 100} />
+        <Progress value={(current / total) * 100} />
         <p className="text-nowrap">
-          {currentIndex} / {booksCount}
+          {current} / {total}
         </p>
       </div>
       <div className="flex justify-end">
         <Button asChild className="">
-          <a href="https://notion.so" target="_blank" rel="noreferrer">
+          <a href={user.pageUrl} target="_blank" rel="noreferrer">
             Open Notion
           </a>
         </Button>
       </div>
     </div>
-  ) : (
-    <p>Collecting a list of books from your Kindle account. This may take a while.</p>
   )
 }
 

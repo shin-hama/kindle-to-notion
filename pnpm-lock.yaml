@@ -170,6 +170,9 @@ importers:
       graphql:
         specifier: ^16.9.0
         version: 16.9.0
+      jotai:
+        specifier: ^2.10.0
+        version: 2.10.0(@types/react@18.3.4)(react@18.3.1)
       lodash:
         specifier: ^4.17.21
         version: 4.17.21
@@ -4250,6 +4253,18 @@ packages:
 
   jose@5.8.0:
     resolution: {integrity: sha512-E7CqYpL/t7MMnfGnK/eg416OsFCVUrU/Y3Vwe7QjKhu/BkS1Ms455+2xsqZQVN57/U2MHMBvEb5SrmAZWAIntA==}
+
+  jotai@2.10.0:
+    resolution: {integrity: sha512-8W4u0aRlOIwGlLQ0sqfl/c6+eExl5D8lZgAUolirZLktyaj4WnxO/8a0HEPmtriQAB6X5LMhXzZVmw02X0P0qQ==}
+    engines: {node: '>=12.20.0'}
+    peerDependencies:
+      '@types/react': '>=17.0.0'
+      react: '>=17.0.0'
+    peerDependenciesMeta:
+      '@types/react':
+        optional: true
+      react:
+        optional: true
 
   js-tokens@4.0.0:
     resolution: {integrity: sha512-RdJUflcE3cUzKiMqQgsCu06FPu9UdIJO0beYbPhHN4k6apgJtifcoCtT9bcxOpYBtpD2kCM6Sbzg4CausW/PKQ==}
@@ -10958,6 +10973,11 @@ snapshots:
   jiti@1.21.6: {}
 
   jose@5.8.0: {}
+
+  jotai@2.10.0(@types/react@18.3.4)(react@18.3.1):
+    optionalDependencies:
+      '@types/react': 18.3.4
+      react: 18.3.1
 
   js-tokens@4.0.0: {}
 

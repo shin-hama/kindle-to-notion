@@ -2,6 +2,11 @@ import z from 'zod'
 import { HighlightColor } from '@/gql/graphql'
 import dayjs from 'dayjs'
 
+export type Result<T> = {
+  data?: T | null
+  error?: string | null
+}
+
 export const HighlightColorsSchema = z.nativeEnum(HighlightColor)
 export type HighlightColors = z.infer<typeof HighlightColorsSchema>
 

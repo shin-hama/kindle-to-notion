@@ -27,3 +27,13 @@ export const useUser = () => {
 
   return currentUser
 }
+
+export const useAuthenticatedUser = () => {
+  const currentUser = React.useContext(CurrentUserContext)
+
+  if (!currentUser) {
+    throw new Error('User is not authenticated')
+  }
+
+  return currentUser
+}
