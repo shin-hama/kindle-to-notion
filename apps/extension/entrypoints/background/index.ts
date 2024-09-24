@@ -1,8 +1,7 @@
 import { isSessionValid } from '@/utils/is-session-valid'
 import { ToBackendMessageSchema } from '../types/messaging'
 import { createBook } from './handlers/create-books'
-import { createHighlights } from './handlers/create-highlight'
-import { sendMessageToContent } from './messaging'
+import { createHighlight } from './handlers/create-highlight'
 import { me } from './me'
 
 export default defineBackground(() => {
@@ -16,7 +15,11 @@ export default defineBackground(() => {
         try {
           const result = await createBook({ book: msg.data.book })
           console.log('Book is created, ' + msg.data.book.title)
-          await createHighlights(result.id, msg.data.highlights)
+          for (const highlight of msg.data.highlights) {
+            await createHighlight(result.id, result.asin || '', highlight)
+            // prevent rate limiting
+            await new Promise((r) => setTimeout(r, 400))
+          }
           console.log('Highlights are created: ' + msg.data.highlights.length)
           sendResponse()
           return { success: true }

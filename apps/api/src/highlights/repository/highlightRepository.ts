@@ -3,7 +3,7 @@ import { Client, isFullPage } from '@notionhq/client';
 import { Highlight, HighlightColor } from '../models/highlight.model';
 import { AuthenticatedUser } from '@/types';
 
-export type CreateHighlightDTO = Omit<Highlight, 'book'>;
+export type CreateHighlightDTO = Highlight;
 
 @Injectable()
 export class HighlightRepository {
@@ -71,14 +71,6 @@ export class HighlightRepository {
               highlight.properties.CreatedDate.type === 'date'
                 ? new Date(highlight.properties.CreatedDate.date.start)
                 : new Date(),
-            book: {
-              id:
-                highlight.properties.Book.type === 'relation'
-                  ? highlight.properties.Book.relation[0]?.id
-                  : '',
-              title: 'Hello World',
-              author: 'John Doe',
-            },
           } satisfies Highlight)
         : null;
     } catch (e) {
@@ -198,11 +190,6 @@ export class HighlightRepository {
       return {
         ...highlight,
         id: result.id,
-        book: {
-          id: bookId,
-          title: 'Hello World',
-          author: 'John Doe',
-        },
       };
     } catch (e) {
       console.log(e);

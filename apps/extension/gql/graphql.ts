@@ -33,7 +33,6 @@ export type Book = {
 /** The Highlight model */
 export type Highlight = {
   __typename?: 'Highlight';
-  book: Book;
   color: HighlightColor;
   createdDate?: Maybe<Scalars['DateTime']['output']>;
   id: Scalars['ID']['output'];
@@ -54,7 +53,6 @@ export type Mutation = {
   __typename?: 'Mutation';
   addBook: Book;
   addHighlight: Highlight;
-  addHighlights: Array<Highlight>;
 };
 
 
@@ -64,12 +62,9 @@ export type MutationAddBookArgs = {
 
 
 export type MutationAddHighlightArgs = {
+  bookAsin: Scalars['String']['input'];
+  bookId: Scalars['String']['input'];
   newHighlight: NewHighlightInput;
-};
-
-
-export type MutationAddHighlightsArgs = {
-  newHighlights: Array<NewHighlightInput>;
 };
 
 export type NewBookInput = {
@@ -82,7 +77,6 @@ export type NewBookInput = {
 };
 
 export type NewHighlightInput = {
-  bookId: Scalars['String']['input'];
   color: HighlightColor;
   createdDate?: InputMaybe<Scalars['DateTime']['input']>;
   location?: InputMaybe<Scalars['String']['input']>;
@@ -122,14 +116,16 @@ export type CreateBookMutationVariables = Exact<{
 }>;
 
 
-export type CreateBookMutation = { __typename?: 'Mutation', addBook: { __typename?: 'Book', id: string, title: string, author: string } };
+export type CreateBookMutation = { __typename?: 'Mutation', addBook: { __typename?: 'Book', id: string, title: string, author: string, asin?: string | null } };
 
-export type CreateHighlightsMutationVariables = Exact<{
-  highlights: Array<NewHighlightInput> | NewHighlightInput;
+export type CreateHighlightMutationVariables = Exact<{
+  highlight: NewHighlightInput;
+  bookId: Scalars['String']['input'];
+  asin: Scalars['String']['input'];
 }>;
 
 
-export type CreateHighlightsMutation = { __typename?: 'Mutation', addHighlights: Array<{ __typename?: 'Highlight', id: string }> };
+export type CreateHighlightMutation = { __typename?: 'Mutation', addHighlight: { __typename?: 'Highlight', id: string } };
 
 export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -137,6 +133,6 @@ export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 export type MeQuery = { __typename?: 'Query', me: { __typename?: 'User', id: string, name: string, avatarUrl: string, pageUrl: string } };
 
 
-export const CreateBookDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"CreateBook"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"book"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"NewBookInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"addBook"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"newBookData"},"value":{"kind":"Variable","name":{"kind":"Name","value":"book"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"author"}}]}}]}}]} as unknown as DocumentNode<CreateBookMutation, CreateBookMutationVariables>;
-export const CreateHighlightsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"CreateHighlights"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"highlights"}},"type":{"kind":"NonNullType","type":{"kind":"ListType","type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"NewHighlightInput"}}}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"addHighlights"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"newHighlights"},"value":{"kind":"Variable","name":{"kind":"Name","value":"highlights"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}}]}}]} as unknown as DocumentNode<CreateHighlightsMutation, CreateHighlightsMutationVariables>;
+export const CreateBookDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"CreateBook"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"book"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"NewBookInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"addBook"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"newBookData"},"value":{"kind":"Variable","name":{"kind":"Name","value":"book"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"author"}},{"kind":"Field","name":{"kind":"Name","value":"asin"}}]}}]}}]} as unknown as DocumentNode<CreateBookMutation, CreateBookMutationVariables>;
+export const CreateHighlightDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"CreateHighlight"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"highlight"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"NewHighlightInput"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"bookId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"asin"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"addHighlight"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"newHighlight"},"value":{"kind":"Variable","name":{"kind":"Name","value":"highlight"}}},{"kind":"Argument","name":{"kind":"Name","value":"bookId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"bookId"}}},{"kind":"Argument","name":{"kind":"Name","value":"bookAsin"},"value":{"kind":"Variable","name":{"kind":"Name","value":"asin"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}}]}}]} as unknown as DocumentNode<CreateHighlightMutation, CreateHighlightMutationVariables>;
 export const MeDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"Me"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"me"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"avatarUrl"}},{"kind":"Field","name":{"kind":"Name","value":"pageUrl"}}]}}]}}]} as unknown as DocumentNode<MeQuery, MeQueryVariables>;

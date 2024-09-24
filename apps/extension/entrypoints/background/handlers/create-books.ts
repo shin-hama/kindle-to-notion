@@ -8,6 +8,7 @@ const mutation = gql`
       id
       title
       author
+      asin
     }
   }
 `

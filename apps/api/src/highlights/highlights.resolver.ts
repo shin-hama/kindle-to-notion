@@ -25,20 +25,10 @@ export class HighlightsResolver {
   @UseGuards(AuthGuard)
   async addHighlight(
     @Args('newHighlight') data: NewHighlightInput,
+    @Args('bookId') bookId: string,
+    @Args('bookAsin') asin: string,
     @CurrentUser() user: AuthenticatedUser,
   ): Promise<Highlight> {
-    return this.highlightService.create(user, data);
-  }
-
-  @Mutation(() => [Highlight])
-  @UseGuards(AuthGuard)
-  async addHighlights(
-    @Args('newHighlights', {
-      type: () => [NewHighlightInput],
-    })
-    data: Array<NewHighlightInput>,
-    @CurrentUser() user: AuthenticatedUser,
-  ): Promise<Array<Highlight>> {
-    return this.highlightService.createBulk(user, data);
+    return this.highlightService.create(user, data, bookId, asin);
   }
 }

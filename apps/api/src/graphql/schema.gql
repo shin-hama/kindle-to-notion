@@ -20,7 +20,6 @@ scalar DateTime
 
 """The Highlight model"""
 type Highlight {
-  book: Book!
   color: HighlightColor!
   createdDate: DateTime
   id: ID!
@@ -39,8 +38,7 @@ enum HighlightColor {
 
 type Mutation {
   addBook(newBookData: NewBookInput!): Book!
-  addHighlight(newHighlight: NewHighlightInput!): Highlight!
-  addHighlights(newHighlights: [NewHighlightInput!]!): [Highlight!]!
+  addHighlight(bookAsin: String!, bookId: String!, newHighlight: NewHighlightInput!): Highlight!
 }
 
 input NewBookInput {
@@ -53,7 +51,6 @@ input NewBookInput {
 }
 
 input NewHighlightInput {
-  bookId: String!
   color: HighlightColor!
   createdDate: DateTime = null
   location: String = ""
