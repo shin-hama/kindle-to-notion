@@ -1,6 +1,7 @@
 import ReactDOM from 'react-dom/client'
 import App from './App'
 import { contentScriptMatches } from '../../utils/constants'
+import { CurrentUserProvider } from '@/hooks/use-user'
 
 export default defineContentScript({
   matches: contentScriptMatches,
@@ -15,7 +16,11 @@ export default defineContentScript({
       onMount: (container) => {
         // Create a root on the UI container and render a component
         const root = ReactDOM.createRoot(container)
-        root.render(<App />)
+        root.render(
+          <CurrentUserProvider>
+            <App />
+          </CurrentUserProvider>,
+        )
 
         return root
       },
