@@ -5,13 +5,7 @@ import { Database } from '@/types/database.types';
 import { decrypt, encrypt } from '@/utils/encrypt';
 import { Client, isFullPage } from '@notionhq/client';
 import { AuthenticatedUser } from '@/types';
-
-type NotionUser = {
-  id: string;
-  name: string;
-  avatarUrl: string;
-  pageUrl: string;
-};
+import { User } from './entities/user.entity';
 
 @Injectable()
 export class UsersService {
@@ -44,7 +38,7 @@ export class UsersService {
       name: user.name,
       avatarUrl: user.avatar_url,
       pageUrl: isFullPage(page) ? page.url : null,
-    } satisfies NotionUser;
+    } satisfies User;
   }
 
   async veryfyAdmin(sessionToken: string) {

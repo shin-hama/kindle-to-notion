@@ -66,4 +66,12 @@ type Query {
   book(id: String!): Book!
   books: [Book!]!
   highlight(id: String!): Highlight!
+  me: User!
+}
+
+type User {
+  avatarUrl: String!
+  id: String!
+  name: String!
+  pageUrl: String!
 }

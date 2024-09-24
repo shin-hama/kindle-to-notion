@@ -10,7 +10,7 @@ import { join } from 'path';
 import { AuthModule } from './auth/auth.module';
 import { UsersService } from './users/users.service';
 import { KindleController } from './kindle/kindle.controller';
-import { UsersController } from './users/users.controller';
+import { UsersModule } from './users/users.module';
 
 @Module({
   imports: [
@@ -32,8 +32,9 @@ import { UsersController } from './users/users.controller';
     BooksModule,
     HighlightsModule,
     AuthModule,
+    UsersModule,
   ],
-  controllers: [AppController, KindleController, UsersController],
+  controllers: [AppController, KindleController],
   providers: [AppService, UsersService],
 })
 export class AppModule {}
