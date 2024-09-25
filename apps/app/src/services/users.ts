@@ -1,6 +1,7 @@
 import { createClient, SupabaseClient } from '@supabase/supabase-js'
 import { Database } from '../types/database.types'
-import { encrypt } from '../utils/encrypt'
+import { decrypt, encrypt } from '../utils/encrypt'
+import { AuthenticatedUser } from '../types'
 
 export class UsersService {
   private supabase: SupabaseClient<Database>
@@ -49,5 +50,34 @@ export class UsersService {
 
   createSupabaseClient = (url: string, key: string) => {
     return createClient<Database>(url, key)
+  }
+
+  verifyAdmin = async (sessionToken: string): Promise<AuthenticatedUser | null> => {
+    const { data, error } = await this.supabase
+      .from('NotionUser')
+      .select(
+        '*, NotionSecret(access_token, iv), NotionPage(page_id, books_db_id, highlights_db_id)',
+      )
+      .eq('bot_id', sessionToken)
+      .single()
+    if (error) {
+      throw error
+    }
+    if (!data || !data.NotionSecret || !data.NotionPage) {
+      return null
+    }
+
+    return {
+      ...data,
+      NotionPage: data.NotionPage,
+      NotionSecret: {
+        ...data.NotionSecret,
+        access_token: decrypt(
+          data.NotionSecret.access_token,
+          data.NotionSecret.iv,
+          this.encryptionKey,
+        ),
+      },
+    }
   }
 }

@@ -2,8 +2,9 @@ import dotenv from 'dotenv'
 dotenv.config({ path: '.env' })
 import { serve } from '@hono/node-server'
 import { Hono } from 'hono'
-import { auth } from './routes'
+import { auth } from './auth'
 import { env } from 'hono/adapter'
+import { users } from './users'
 
 const app = new Hono()
 
@@ -29,7 +30,8 @@ app.get('/kindle/open', (c) => {
   return c.redirect(`kindle://book?action=open&${query.toString()}`)
 })
 
-app.route('/auth', auth)
+// app.route('/auth', auth)
+app.route('/users', users)
 
 const port = 3000
 console.log(`Server is running on port ${port}`)

@@ -1,11 +1,11 @@
 import { Client, isFullBlock, isFullPage, isFullUser } from '@notionhq/client'
-import { Result } from '../../types'
-import { UsersService } from '../../services/users'
-import { authEnv } from './auth'
+import { Result } from '../types'
+import { UsersService } from '../services/users'
+import { Env } from '../types'
 
 export const notionHandler = async (
   code: string,
-  env: authEnv,
+  env: Env,
 ): Promise<
   Result<{
     session_token: string

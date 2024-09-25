@@ -1,13 +1,9 @@
-import { Request } from 'express'
 import { Database } from './database.types'
+import { z } from 'zod'
 
 export type Result<T> = {
   data?: T | null
   error?: string | null
-}
-
-export type CustomContext = {
-  req: Request & { user: AuthenticatedUser }
 }
 
 export type AuthenticatedUser = Database['public']['Tables']['NotionUser']['Row'] & {
@@ -17,3 +13,13 @@ export type AuthenticatedUser = Database['public']['Tables']['NotionUser']['Row'
     'books_db_id' | 'highlights_db_id' | 'page_id'
   >
 }
+
+export const EnvSchema = z.object({
+  ENCRYPTION_KEY: z.string(),
+  SUPABASE_URL: z.string(),
+  SUPABASE_SERVICE_ROLE_KEY: z.string(),
+  NOTION_REDIRECT_URL: z.string(),
+  NOTION_CLIENT_ID: z.string(),
+  NOTION_CLIENT_SECRET: z.string(),
+})
+export type Env = z.infer<typeof EnvSchema>

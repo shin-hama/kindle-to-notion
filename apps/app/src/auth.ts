@@ -1,18 +1,8 @@
 import { Hono } from 'hono'
 import { env } from 'hono/adapter'
 import { setCookie } from 'hono/cookie'
-import { notionHandler } from './notion-handler'
-import { z } from 'zod'
-
-const authEnvSchema = z.object({
-  ENCRYPTION_KEY: z.string(),
-  SUPABASE_URL: z.string(),
-  SUPABASE_SERVICE_ROLE_KEY: z.string(),
-  NOTION_REDIRECT_URL: z.string(),
-  NOTION_CLIENT_ID: z.string(),
-  NOTION_CLIENT_SECRET: z.string(),
-})
-export type authEnv = z.infer<typeof authEnvSchema>
+import { notionHandler } from './auth/notion-handler'
+import { EnvSchema, Env } from './types'
 
 const app = new Hono()
 
@@ -24,8 +14,8 @@ app.get('/callback/notion', async (c) => {
     return c.text('Missing code ')
   }
 
-  const honoEnv = env<authEnv>(c)
-  const envResult = authEnvSchema.safeParse(honoEnv)
+  const honoEnv = env<Env>(c)
+  const envResult = EnvSchema.safeParse(honoEnv)
   if (!envResult.success) {
     c.status(500)
     return c.text('Environment variables are not set')
@@ -46,4 +36,4 @@ app.get('/callback/notion', async (c) => {
   return c.redirect(result.data.redirect_url)
 })
 
-export default app
+export { app as auth }
