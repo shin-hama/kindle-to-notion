@@ -35,12 +35,12 @@ export const notionHandler = async (
   await usersService.saveUser({
     id: response.bot_id,
     notion_uid: response.owner.user.id,
-    avatar_url: response.owner.user.avatar_url ?? '',
+    avatar_url: response.owner.user.avatar_url,
     bot_id: response.bot_id,
-    name: response.owner.user.name ?? '',
+    name: response.owner.user.name,
     workspace_id: response.workspace_id,
-    workspace_name: response.workspace_name ?? '',
-    workspace_icon: response.workspace_icon ?? '',
+    workspace_name: response.workspace_name,
+    workspace_icon: response.workspace_icon,
   })
 
   await usersService.saveSecret({
