@@ -11,6 +11,7 @@ export const HighlightColorsSchema = z.nativeEnum(HighlightColor)
 export type HighlightColors = z.infer<typeof HighlightColorsSchema>
 
 export const HighlightInputSchema = z.object({
+  id: z.string(),
   text: z.string(),
   color: HighlightColorsSchema,
   location: z.string().nullable(),

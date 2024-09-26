@@ -54,6 +54,7 @@ const parseHighlights = (doc: Document): HighlightInput[] => {
       const location = highlightEl.querySelector('#kp-annotation-location')?.getAttribute('value')
 
       return {
+        id: highlightEl.getAttribute('id') ?? '',
         text,
         color,
         location: location ?? null,
