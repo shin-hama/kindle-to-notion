@@ -4,9 +4,7 @@ import { setCookie } from 'hono/cookie'
 import { notionHandler } from './auth/notion-handler'
 import { EnvSchema, Env } from './types'
 
-const app = new Hono()
-
-app.get('/callback/notion', async (c) => {
+const app = new Hono().get('/callback/notion', async (c) => {
   const code = c.req.query('code')
 
   if (!code) {

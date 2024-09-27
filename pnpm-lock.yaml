@@ -171,12 +171,18 @@ importers:
       tsx:
         specifier: ^4.7.1
         version: 4.19.1
+      typescript:
+        specifier: ^5.5.4
+        version: 5.5.4
 
   apps/extension:
     dependencies:
       '@graphql-typed-document-node/core':
         specifier: ^3.2.0
         version: 3.2.0(graphql@16.9.0)
+      '@kino/app':
+        specifier: workspace:*
+        version: link:../app
       '@kino/shared':
         specifier: workspace:*
         version: link:../../packages/shared

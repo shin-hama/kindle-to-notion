@@ -18,6 +18,7 @@
   },
   "dependencies": {
     "@graphql-typed-document-node/core": "^3.2.0",
+    "@kino/app": "workspace:*",
     "@kino/shared": "workspace:*",
     "@radix-ui/react-progress": "^1.1.0",
     "@radix-ui/react-slot": "^1.1.0",

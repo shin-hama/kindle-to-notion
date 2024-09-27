@@ -4,9 +4,7 @@ import { parseEnv } from '../libs/parseEnv'
 import { CreateHighlightModel } from './highlights.model'
 import { HighlightsService } from './highlights.service'
 
-const app = new Hono()
-
-app.post('', sessionValidator, async (c) => {
+const app = new Hono().post('', sessionValidator, async (c) => {
   const highlightData = await c.req.json<CreateHighlightModel>()
   const service = new HighlightsService(parseEnv(c))
 

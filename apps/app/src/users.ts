@@ -2,9 +2,7 @@ import { Hono } from 'hono'
 import { sessionValidator } from './middleware/session-validator'
 import { Client, isFullPage } from '@notionhq/client'
 
-const app = new Hono()
-
-app.get('me', sessionValidator, async (c) => {
+const app = new Hono().get('me', sessionValidator, async (c) => {
   const { NotionSecret, ...user } = c.var.user
 
   try {
