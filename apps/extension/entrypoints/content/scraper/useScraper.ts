@@ -13,6 +13,10 @@ export const useScraper = () => {
       .then(async (books) => {
         console.log(`find ${books.length} books`)
         for (const [i, book] of books.entries()) {
+          if (i === 2) {
+            break
+          }
+
           setState({
             data: {
               total: books.length,
@@ -35,6 +39,14 @@ export const useScraper = () => {
             throw new Error(result.error)
           }
         }
+        setState({
+          data: {
+            total: books.length,
+            current: books.length,
+            title: 'Completed',
+            completed: true,
+          },
+        })
       })
       .catch((e) => {
         if (e instanceof Error) {

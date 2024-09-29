@@ -9,7 +9,6 @@ const HighlightColors = ['yellow', 'blue', 'pink', 'orange'] as const
 const HighlightColor = z.enum(HighlightColors)
 const CreateHighlightModelSchema = z.object({
   id: z.string(),
-  annotatedAt: z.string(),
   color: HighlightColor,
   text: z.string(),
   location: z.number(),

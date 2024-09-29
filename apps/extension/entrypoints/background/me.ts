@@ -1,28 +1,15 @@
-import { User, MeQuery, MeQueryVariables } from '@/gql/graphql'
-import { createGqlClient } from '@/entrypoints/background/handlers/gqlClient'
-import { gql } from '@urql/core'
+import { createClient } from './client'
 
-const query = gql`
-  query Me {
-    me {
-      id
-      name
-      avatarUrl
-      pageUrl
-    }
+export const me = async () => {
+  const client = createClient()
+  const result = await client.users.me.$get()
+
+  if (result.status !== 200) {
+    console.error('Failed to get user')
+    return null
   }
-`
 
-export const me = async (): Promise<User | null> => {
-  const client = createGqlClient()
-  const user = await client.query<MeQuery, MeQueryVariables>(query, {}).toPromise()
+  const user = await result.json()
 
-  return (user.data?.me ?? import.meta.env.DEV)
-    ? {
-        id: 'dummy',
-        name: 'dummy',
-        avatarUrl: 'dummy',
-        pageUrl: 'https://notion.so',
-      }
-    : null
+  return user
 }

@@ -7,12 +7,13 @@ import { useAuthenticatedUser } from '@/hooks/use-user'
 const ScrapingProgress = () => {
   const user = useAuthenticatedUser()
   const [state] = useAtom(scrapingProgress)
-  if (!state.data || !state.error) {
-    return <></>
-  }
 
   if (state.error) {
     return <p>{state.error}</p>
+  }
+
+  if (!state.data) {
+    return <p>Collecting a list of books from your Kindle account. This may take a while.</p>
   }
 
   const { title, current, total } = state.data

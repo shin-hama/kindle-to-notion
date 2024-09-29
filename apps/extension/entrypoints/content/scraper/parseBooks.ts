@@ -64,12 +64,12 @@ export const parseBooks = (doc: Document): Array<BookInput> => {
       }
 
       const book: BookInput = {
-        asin: elm.getAttribute('id') ?? undefined,
+        asin: elm.getAttribute('id') ?? '',
         title: title,
         author: parseAuthor(author),
         url: `https://www.amazon.co.jp/dp/${elm.getAttribute('id')}`,
-        imageUrl: elm.querySelector('.kp-notebook-cover-image')?.getAttribute('src') ?? undefined,
-        lastAnnotatedAt: parseToDate(updatedAt, 'japan'),
+        imageUrl: elm.querySelector('.kp-notebook-cover-image')?.getAttribute('src') ?? null,
+        lastAnnotatedAt: parseToDate(updatedAt, 'japan').toISOString(),
       }
       return book
     })

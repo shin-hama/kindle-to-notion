@@ -77,7 +77,6 @@ export type Database = {
       }
       Highlight: {
         Row: {
-          annotatedAt: string
           bookId: string
           color: Database["public"]["Enums"]["HighlightColor"]
           created_at: string
@@ -89,7 +88,6 @@ export type Database = {
           userId: string
         }
         Insert: {
-          annotatedAt: string
           bookId: string
           color: Database["public"]["Enums"]["HighlightColor"]
           created_at?: string
@@ -101,7 +99,6 @@ export type Database = {
           userId: string
         }
         Update: {
-          annotatedAt?: string
           bookId?: string
           color?: Database["public"]["Enums"]["HighlightColor"]
           created_at?: string

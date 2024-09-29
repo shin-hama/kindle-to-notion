@@ -10,7 +10,7 @@ type NextPageState = {
 
 export const mapTextToColor = (highlightClasses: string): HighlightInput['color'] => {
   const matches = /kp-notebook-highlight-(.*)/.exec(highlightClasses)
-  return matches ? HighlightColorsSchema.parse(matches[1].toUpperCase(), {}) : HighlightColor.Yellow
+  return matches ? HighlightColorsSchema.parse(matches[1].toLowerCase(), {}) : 'yellow'
 }
 
 const highlightsUrl = (book: BookInput, state?: NextPageState | null): string => {
@@ -43,7 +43,7 @@ const parseHighlights = (doc: Document): HighlightInput[] => {
       const highlightClasses = highlightEl
         .querySelector('.kp-notebook-highlight')
         ?.getAttribute('class')
-      const color = !!highlightClasses ? mapTextToColor(highlightClasses) : HighlightColor.Yellow
+      const color = !!highlightClasses ? mapTextToColor(highlightClasses) : 'yellow'
 
       const text = highlightEl.querySelector('#highlight')?.textContent?.trim()
       if (!text) {
@@ -57,10 +57,9 @@ const parseHighlights = (doc: Document): HighlightInput[] => {
         id: highlightEl.getAttribute('id') ?? '',
         text,
         color,
-        location: location ?? null,
-        page: pageMatch ? pageMatch[0] : null,
+        location: parseInt(location ?? '0'),
+        page: pageMatch ? parseInt(pageMatch[0]) : null,
         note: !!noteHtml ? br2ln(noteHtml) : null,
-        createdDate: null,
       } satisfies HighlightInput
     })
     .filter((highlight): highlight is HighlightInput => highlight !== null)

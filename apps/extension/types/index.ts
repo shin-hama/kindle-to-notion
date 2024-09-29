@@ -17,7 +17,6 @@ export const HighlightInputSchema = z.object({
   location: z.number(),
   page: z.number().nullable(),
   note: z.string().nullable(),
-  annotatedAt: z.string().default(new Date().toISOString()),
 })
 export type HighlightInput = z.infer<typeof HighlightInputSchema>
 

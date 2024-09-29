@@ -19,13 +19,11 @@ export const CurrentUserProvider: React.FC<PropsWithChildren> = ({ children }) =
       })
   }, [])
 
+  if (!currentUser) {
+    return <></>
+  }
+
   return <CurrentUserContext.Provider value={currentUser}>{children}</CurrentUserContext.Provider>
-}
-
-export const useUser = () => {
-  const currentUser = React.useContext(CurrentUserContext)
-
-  return currentUser
 }
 
 export const useAuthenticatedUser = () => {
