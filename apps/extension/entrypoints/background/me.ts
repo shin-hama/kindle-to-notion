@@ -17,7 +17,7 @@ export const me = async (): Promise<User | null> => {
   const client = createGqlClient()
   const user = await client.query<MeQuery, MeQueryVariables>(query, {}).toPromise()
 
-  return user.data?.me ?? import.meta.env.DEV
+  return (user.data?.me ?? import.meta.env.DEV)
     ? {
         id: 'dummy',
         name: 'dummy',

@@ -1,7 +1,7 @@
 import { createClient, SupabaseClient } from '@supabase/supabase-js'
-import { AuthenticatedUser, Env } from '../types'
+import { AuthenticatedUser, Env } from '../../types'
 import { CreateHighlightModel } from './highlights.model'
-import { Database } from '../types/database.types'
+import { Database } from '../../types/database.types'
 
 export class HighlightsService {
   private supabase: SupabaseClient<Database>
@@ -11,10 +11,10 @@ export class HighlightsService {
 
   async getHighlights() {}
 
-  async createHighlight(newHighlight: CreateHighlightModel, user: AuthenticatedUser) {
+  async createHighlights(newHighlights: Array<CreateHighlightModel>, user: AuthenticatedUser) {
     const { data, error } = await this.supabase
       .from('Highlight')
-      .upsert({ ...newHighlight, userId: user.id })
+      .upsert(newHighlights.map((h) => ({ ...h, userId: user.id })))
       .select()
 
     if (error) {

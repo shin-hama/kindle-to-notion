@@ -7,17 +7,17 @@ export type Result<T> = {
   error?: string | null
 }
 
-export const HighlightColorsSchema = z.nativeEnum(HighlightColor)
+export const HighlightColorsSchema = z.enum(['yellow', 'blue', 'pink', 'orange'])
 export type HighlightColors = z.infer<typeof HighlightColorsSchema>
 
 export const HighlightInputSchema = z.object({
   id: z.string(),
   text: z.string(),
   color: HighlightColorsSchema,
-  location: z.string().nullable(),
-  page: z.string().nullable(),
+  location: z.number(),
+  page: z.number().nullable(),
   note: z.string().nullable(),
-  createdDate: z.date().nullable(),
+  annotatedAt: z.string().default(new Date().toISOString()),
 })
 export type HighlightInput = z.infer<typeof HighlightInputSchema>
 

@@ -1,9 +1,7 @@
 import { isSessionValid } from '@/utils/is-session-valid'
 import { ToBackendMessageSchema } from '../types/messaging'
-import { createBook, createBook2 } from './handlers/create-books'
-import { createHighlight } from './handlers/create-highlight'
 import { me } from './me'
-import { createClient } from './handlers/client'
+import { createClient } from './client'
 
 export default defineBackground(() => {
   console.log('Hello background!', { id: browser.runtime.id })
@@ -27,11 +25,15 @@ export default defineBackground(() => {
           const { book } = await result.json()
 
           console.log('Book is created, ' + msg.data.book.title)
-          for (const highlight of msg.data.highlights) {
-            await createHighlight(book.id, book.asin, highlight)
-            // prevent rate limiting
-            await new Promise((r) => setTimeout(r, 400))
-          }
+
+          await client.highlights.$post({
+            json: {
+              bookId: book.id,
+              asin: book.asin,
+              highlights: msg.data.highlights,
+            },
+          })
+
           console.log('Highlights are created: ' + msg.data.highlights.length)
           sendResponse()
           return { success: true }

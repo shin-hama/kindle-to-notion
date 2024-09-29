@@ -1,11 +1,11 @@
 import dotenv from 'dotenv'
 dotenv.config({ path: '.env' })
 import { serve } from '@hono/node-server'
-import { Hono, Env as HonoEnv } from 'hono'
+import { Hono } from 'hono'
 import { auth } from './auth'
 import { users } from './users'
-import { books } from './routes/books/books'
-import { highlights } from './highlights/highlights.route'
+import { books } from './routes/books/books.route'
+import { highlights } from './routes/highlights/highlights.route'
 
 const app = new Hono()
   .route('/auth', auth)
