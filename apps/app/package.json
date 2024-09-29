@@ -16,6 +16,7 @@
   },
   "dependencies": {
     "@hono/node-server": "^1.13.1",
+    "@hono/zod-validator": "^0.3.0",
     "@kino/shared": "workspace:*",
     "@node-rs/xxhash": "^1.7.3",
     "@notionhq/client": "^2.2.15",

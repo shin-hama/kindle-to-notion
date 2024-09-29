@@ -1,8 +1,9 @@
 import { isSessionValid } from '@/utils/is-session-valid'
 import { ToBackendMessageSchema } from '../types/messaging'
-import { createBook } from './handlers/create-books'
+import { createBook, createBook2 } from './handlers/create-books'
 import { createHighlight } from './handlers/create-highlight'
 import { me } from './me'
+import { createClient } from './handlers/client'
 
 export default defineBackground(() => {
   console.log('Hello background!', { id: browser.runtime.id })
@@ -13,10 +14,21 @@ export default defineBackground(() => {
       const msg = ToBackendMessageSchema.parse(message)
       if (msg.type === 'CreateBookWithHighlights') {
         try {
-          const result = await createBook({ book: msg.data.book })
+          const client = createClient()
+
+          const result = await client.books.$post({
+            json: msg.data.book,
+          })
+
+          if (result.status !== 201) {
+            console.error('Failed to create book', result)
+            return { error: 'failed to create book' }
+          }
+          const { book } = await result.json()
+
           console.log('Book is created, ' + msg.data.book.title)
           for (const highlight of msg.data.highlights) {
-            await createHighlight(result.id, result.asin || '', highlight)
+            await createHighlight(book.id, book.asin, highlight)
             // prevent rate limiting
             await new Promise((r) => setTimeout(r, 400))
           }

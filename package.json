@@ -12,7 +12,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev:api": "pnpm -F api start:dev",
     "dev:ext": "pnpm -F extension dev",
-    "build": "pnpm -F shared build"
+    "build": "pnpm -F shared build && pnpm -F app build"
   },
   "keywords": [],
   "author": "",

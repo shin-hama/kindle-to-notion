@@ -22,16 +22,12 @@ export const HighlightInputSchema = z.object({
 export type HighlightInput = z.infer<typeof HighlightInputSchema>
 
 export const BookInputSchema = z.object({
-  asin: z.string().optional(),
+  asin: z.string(),
   title: z.string(),
   author: z.string(),
-  url: z.string().nullable().optional(),
-  imageUrl: z.string().nullable().optional(),
-  lastAnnotatedAt: z
-    .string()
-    .transform((str) => dayjs(str).toDate())
-    .nullable()
-    .optional(),
+  url: z.string().nullable().optional().default(null),
+  imageUrl: z.string().nullable().optional().default(null),
+  lastAnnotatedAt: z.string().default(new Date().toISOString()),
 })
 
 export type BookInput = z.infer<typeof BookInputSchema>

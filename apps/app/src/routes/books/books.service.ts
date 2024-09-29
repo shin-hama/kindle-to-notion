@@ -24,19 +24,18 @@ export class BooksService {
     if (error) {
       throw error
     }
+    const book = books[0]
 
-    const { error: relationError } = await this.supabase.from('Books_NotionUsers').upsert(
-      books.map((book) => ({
-        userId: user.id,
-        bookId: book.id,
-        lastAnnotatedAt: lastAnnotatedAt,
-      })),
-    )
+    const { error: relationError } = await this.supabase.from('Books_NotionUsers').upsert({
+      userId: user.id,
+      bookId: book.id,
+      lastAnnotatedAt: lastAnnotatedAt,
+    })
 
     if (relationError) {
       throw relationError
     }
 
-    return books
+    return book
   }
 }

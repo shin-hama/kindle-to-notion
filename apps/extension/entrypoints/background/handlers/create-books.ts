@@ -1,7 +1,8 @@
 import { gql } from '@urql/core'
 import { CreateBookMutation, CreateBookMutationVariables } from '@/gql/graphql'
 import { createGqlClient } from './gqlClient'
-import { hcWithType } from '@kino/app/hc'
+import { Client, hcWithType } from '@kino/app/hc'
+import { createClient } from './client'
 
 const mutation = gql`
   mutation CreateBook($book: NewBookInput!) {
@@ -33,14 +34,10 @@ export const createBook = async (
     })
 }
 
-export const createBook2 = async () => {
-  const client = hcWithType(`${import.meta.env.VITE_API_SERVER_URL}/`, {
-    fetch: (req: RequestInfo | URL, init?: RequestInit) =>
-      fetch(req, {
-        ...init,
-        credentials: 'include',
-      }),
-  })
+export const createBook2 = async (newBook: Parameters<Client['books']['$post']>[0]['json']) => {
+  const client = createClient()
 
-  await client.books.$post({})
+  return await client.books.$post({
+    json: newBook,
+  })
 }
