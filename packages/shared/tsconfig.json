@@ -2,9 +2,9 @@
   "exclude": ["node_modules", "dist"],
   "include": ["src/**/*"],
   "compilerOptions": {
-    "target": "es2018",
-    "module": "commonjs",
-    "lib": ["es2018", "dom"],
+    "target": "ESNext",
+    "module": "ESNext",
+    "lib": ["ESNext", "dom"],
     "moduleResolution": "node",
     "baseUrl": "./src",
     "paths": {

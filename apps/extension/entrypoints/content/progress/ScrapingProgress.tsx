@@ -28,7 +28,7 @@ const ScrapingProgress = () => {
       </div>
       <div className="flex justify-end">
         <Button asChild className="">
-          <a href={user.pageUrl} target="_blank" rel="noreferrer">
+          <a href={user.pageUrl ?? 'https://notion.so'} target="_blank" rel="noreferrer">
             Open Notion
           </a>
         </Button>

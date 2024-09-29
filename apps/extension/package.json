@@ -13,21 +13,17 @@
     "zip": "wxt zip",
     "zip:firefox": "wxt zip -b firefox",
     "compile": "tsc --noEmit",
-    "postinstall": "wxt prepare",
-    "codegen": "graphql-codegen"
+    "postinstall": "wxt prepare"
   },
   "dependencies": {
-    "@graphql-typed-document-node/core": "^3.2.0",
     "@kino/app": "workspace:*",
     "@kino/shared": "workspace:*",
     "@radix-ui/react-progress": "^1.1.0",
     "@radix-ui/react-slot": "^1.1.0",
     "@radix-ui/react-toast": "^1.2.1",
-    "@urql/core": "^5.0.6",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
     "dayjs": "^1.11.13",
-    "graphql": "^16.9.0",
     "jotai": "^2.10.0",
     "lodash": "^4.17.21",
     "lucide-react": "^0.445.0",
@@ -38,8 +34,6 @@
     "zod": "^3.23.8"
   },
   "devDependencies": {
-    "@graphql-codegen/cli": "^5.0.2",
-    "@graphql-codegen/client-preset": "^4.3.3",
     "@types/jest": "^29.5.2",
     "@types/lodash": "^4.17.7",
     "@types/react": "^18.3.3",

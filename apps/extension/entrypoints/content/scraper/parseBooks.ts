@@ -1,4 +1,4 @@
-import { currentAmazonRegion } from '@/entrypoints/content/scraper/amazon/region'
+import { currentAmazonRegion } from './amazon/region'
 import { AmazonAccountRegion, BookInput } from '@/types'
 import dayjs from 'dayjs'
 import customParseFormat from 'dayjs/plugin/customParseFormat'

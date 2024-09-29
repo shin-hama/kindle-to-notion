@@ -1,5 +1,4 @@
 import { currentAmazonRegion } from '@/entrypoints/content/scraper/amazon/region'
-import { HighlightColor } from '@/gql/graphql'
 import { HighlightColorsSchema, type BookInput, type HighlightInput } from '@/types'
 import { br2ln } from '@/utils/br2ln'
 

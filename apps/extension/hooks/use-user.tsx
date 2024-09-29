@@ -1,5 +1,4 @@
-import { SessionValidMessageSchema } from '@/entrypoints/types/messaging'
-import { User } from '@/gql/graphql'
+import { User } from '@kino/shared'
 import React, { PropsWithChildren } from 'react'
 
 const CurrentUserContext = React.createContext<User | null>(null)

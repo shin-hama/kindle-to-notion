@@ -1,4 +1,4 @@
-import { User } from '@/gql/graphql'
+import { User } from '@kino/shared'
 import { BookInputSchema, HighlightInputSchema } from '@/types'
 import z from 'zod'
 

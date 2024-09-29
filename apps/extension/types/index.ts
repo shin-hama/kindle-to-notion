@@ -1,6 +1,4 @@
 import z from 'zod'
-import { HighlightColor } from '@/gql/graphql'
-import dayjs from 'dayjs'
 
 export type Result<T> = {
   data?: T | null

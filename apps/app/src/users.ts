@@ -1,6 +1,7 @@
 import { Hono } from 'hono'
 import { sessionValidator } from './middleware/session-validator'
 import { Client, isFullPage } from '@notionhq/client'
+import { User } from '@kino/shared'
 
 const app = new Hono().get('me', sessionValidator, async (c) => {
   const { NotionSecret, ...user } = c.var.user
@@ -18,7 +19,7 @@ const app = new Hono().get('me', sessionValidator, async (c) => {
       name: user.name,
       avatarUrl: user.avatar_url,
       pageUrl: isFullPage(page) ? page.url : null,
-    })
+    } satisfies User)
   } catch (error) {
     c.status(500)
     console.error(error)
