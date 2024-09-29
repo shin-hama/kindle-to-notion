@@ -8,6 +8,7 @@ export default defineContentScript({
   cssInjectionMode: 'ui',
   async main(ctx) {
     console.log('Hello content script!', { id: browser.runtime.id })
+
     const ui = await createShadowRootUi(ctx, {
       name: 'tailwind-shadow-root-example',
       position: 'inline',

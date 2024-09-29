@@ -6,20 +6,27 @@ import { scrapingProgress } from '@/states'
 
 export const useScraper = () => {
   const [, setState] = useAtom(scrapingProgress)
+  const lastUpdated = useLastUpdated()
 
   useEffect(() => {
     console.log('Start scraping')
     scrapeBooks()
-      .then(async (books) => {
-        console.log(`find ${books.length} books`)
-        for (const [i, book] of books.entries()) {
+      .then(async (allBooks) => {
+        const lastUpdatedAt = await lastUpdated.get()
+        console.log({ lastUpdatedAt })
+        console.log(`lastUpdatedAt: ${lastUpdatedAt}`)
+        const updatedBooks = allBooks.filter((book) => {
+          return new Date(book.lastAnnotatedAt) > new Date(lastUpdatedAt)
+        })
+        console.log(`find ${updatedBooks.length} books`)
+        for (const [i, book] of updatedBooks.entries()) {
           if (i === 2) {
             break
           }
 
           setState({
             data: {
-              total: books.length,
+              total: updatedBooks.length,
               current: i + 1,
               title: book.title,
             },
@@ -39,10 +46,12 @@ export const useScraper = () => {
             throw new Error(result.error)
           }
         }
+        lastUpdated.set(new Date())
+
         setState({
           data: {
-            total: books.length,
-            current: books.length,
+            total: updatedBooks.length,
+            current: updatedBooks.length,
             title: 'Completed',
             completed: true,
           },
