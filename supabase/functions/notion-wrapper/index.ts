@@ -5,10 +5,12 @@
 // Setup type definitions for built-in Supabase Runtime APIs
 import { Hono } from "jsr:@hono/hono";
 import { env } from "jsr:@hono/hono/adapter";
+import { setCookie } from "jsr:@hono/hono/cookie";
 import { createClient } from "jsr:@supabase/supabase-js@2";
-import { BooksNotionUsersModel } from "./types/index.ts";
+import { BooksNotionUsersModel, EnvSchema } from "./types/index.ts";
 import { Database } from "./types/database.types.ts";
 import { saveBook } from "./notion/books.ts";
+import { notionHandler } from "./notion/auth.ts";
 
 // change this to your function name
 const app = new Hono().basePath("notion-wrapper");
@@ -69,6 +71,35 @@ app.post("/books", async (c) => {
     user: user.data,
     book: book.data,
   });
+});
+
+app.get("/callback/notion", async (c) => {
+  const code = c.req.query("code");
+
+  if (!code) {
+    c.status(400);
+    return c.text("Missing code ");
+  }
+
+  const envResult = EnvSchema.safeParse(env(c));
+  if (!envResult.success) {
+    c.status(500);
+    return c.text("Environment variables are not set");
+  }
+
+  const result = await notionHandler(code, envResult.data);
+  if (result.error || !result.data) {
+    c.status(500);
+    return c.text(`${result.error}, please try again`);
+  }
+
+  setCookie(c, "SESSION_TOKEN_KEY", result.data.session_token, {
+    httpOnly: true,
+    secure: true,
+    sameSite: "strict",
+  });
+
+  return c.redirect(result.data.redirect_url);
 });
 
 Deno.serve(app.fetch);

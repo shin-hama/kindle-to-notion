@@ -1,4 +1,10 @@
 import { Database } from "./database.types.ts";
+import { z } from "https://deno.land/x/zod/mod.ts";
+
+export type Result<T> = {
+  data?: T | null;
+  error?: string | null;
+};
 
 export type AuthenticatedUser =
   & Database["public"]["Tables"]["NotionUser"]["Row"]
@@ -18,3 +24,13 @@ export type BooksNotionUsersModel =
 export type CreateBookDTO = Database["public"]["Tables"]["Book"]["Insert"] & {
   lastAnnotatedAt: string;
 };
+
+export const EnvSchema = z.object({
+  ENCRYPTION_KEY: z.string(),
+  SUPABASE_URL: z.string(),
+  SUPABASE_SERVICE_ROLE_KEY: z.string(),
+  NOTION_REDIRECT_URL: z.string(),
+  NOTION_CLIENT_ID: z.string(),
+  NOTION_CLIENT_SECRET: z.string(),
+});
+export type Env = z.infer<typeof EnvSchema>;
