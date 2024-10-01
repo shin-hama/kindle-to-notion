@@ -13,4 +13,8 @@ export type AuthenticatedUser =
     >;
   };
 
-export type CreateBookDTO = Database["public"]["Tables"]["Book"]["Insert"];
+export type BooksNotionUsersModel =
+  Database["public"]["Tables"]["Books_NotionUsers"]["Row"];
+export type CreateBookDTO = Database["public"]["Tables"]["Book"]["Insert"] & {
+  lastAnnotatedAt: string;
+};
