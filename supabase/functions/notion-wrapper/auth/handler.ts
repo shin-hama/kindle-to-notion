@@ -5,8 +5,7 @@ import {
   isFullUser,
 } from "npm:@notionhq/client";
 import { Env, Result } from "../types/index.ts";
-import { createClient } from "jsr:@supabase/supabase-js@2";
-import { encrypt } from "../libs/encrypt.ts";
+import { UsersService } from "../users/users.service.ts";
 
 export const notionHandler = async (
   code: string,
@@ -18,6 +17,7 @@ export const notionHandler = async (
   }>
 > => {
   const oauthClient = new Client();
+  console.log(env);
   const response = await oauthClient.oauth.token({
     code,
     grant_type: "authorization_code",
@@ -25,6 +25,7 @@ export const notionHandler = async (
     client_id: env.NOTION_CLIENT_ID,
     client_secret: env.NOTION_CLIENT_SECRET,
   });
+  console.log(response);
 
   if (response.owner.type !== "user" || !isFullUser(response.owner.user)) {
     return {
@@ -32,12 +33,8 @@ export const notionHandler = async (
     };
   }
 
-  const supabase = createClient(
-    env.SUPABASE_URL,
-    env.SUPABASE_SERVICE_ROLE_KEY,
-  );
-
-  const { error: userError } = await supabase.from("NotionUser").upsert({
+  const usersService = new UsersService(env);
+  await usersService.saveUser({
     id: response.bot_id,
     notion_uid: response.owner.user.id,
     avatar_url: response.owner.user.avatar_url,
@@ -47,24 +44,12 @@ export const notionHandler = async (
     workspace_name: response.workspace_name,
     workspace_icon: response.workspace_icon,
   });
-  if (userError) {
-    throw userError;
-  }
 
-  const encrypted = encrypt(response.access_token, env.ENCRYPTION_KEY);
-  const { error: secretError } = await supabase
-    .from("NotionSecret")
-    .upsert([
-      {
-        access_token: encrypted.encryptedData,
-        iv: encrypted.iv,
-        user_id: response.bot_id,
-      },
-    ])
-    .select();
-  if (secretError) {
-    throw secretError;
-  }
+  await usersService.saveSecret({
+    access_token: response.access_token,
+    user_id: response.bot_id,
+  });
+
   console.log("Successfully authenticated user");
 
   console.log("Start parsing user's page");
@@ -85,7 +70,7 @@ export const notionHandler = async (
         userClient,
         response.duplicated_template_id,
       );
-      await supabase.from("NotionPage").upsert({
+      await usersService.savePage({
         user_id: response.bot_id,
         page_id: response.duplicated_template_id,
         books_db_id: databases.books,

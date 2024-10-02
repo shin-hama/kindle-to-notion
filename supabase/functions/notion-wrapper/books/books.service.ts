@@ -64,7 +64,7 @@ export const saveBook = async (
           ],
         },
         URL: {
-          url: book.url ?? "",
+          url: book.url ?? null,
         },
         LastAnnotatedAt: {
           date: {

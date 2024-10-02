@@ -11,7 +11,7 @@ export type AuthenticatedUser =
   & {
     NotionSecret: Pick<
       Database["public"]["Tables"]["NotionSecret"]["Row"],
-      "access_token" | "iv"
+      "access_token"
     >;
     NotionPage: Pick<
       Database["public"]["Tables"]["NotionPage"]["Row"],
