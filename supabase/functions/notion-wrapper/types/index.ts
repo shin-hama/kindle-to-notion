@@ -34,3 +34,5 @@ export const EnvSchema = z.object({
   NOTION_CLIENT_SECRET: z.string(),
 });
 export type Env = z.infer<typeof EnvSchema>;
+
+export type HighlightModel = Database["public"]["Tables"]["Highlight"]["Row"];

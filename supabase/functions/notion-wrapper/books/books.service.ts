@@ -78,10 +78,11 @@ export const saveBook = async (
     });
 
     return {
-      ...book,
-      id: result.id,
+      book,
+      notionPageId: result.id,
     };
   } catch (e) {
     console.error(e);
+    throw e;
   }
 };

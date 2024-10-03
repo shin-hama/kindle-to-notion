@@ -6,16 +6,18 @@
 import { Hono } from "jsr:@hono/hono";
 import { auth } from "./auth/auth.route.ts";
 import { books } from "./books/books.route.ts";
+import { highlights } from "./highlights/highlights.route.ts";
 
 // change this to your function name
 const app = new Hono().basePath("notion-wrapper");
 
 app.get("/", (c) => {
-  return c.text("Hello from hono-server!");
+  return c.json({ message: "Hello, world!" });
 });
 
 app.route("auth", auth);
 app.route("books", books);
+app.route("highlights", highlights);
 
 Deno.serve(app.fetch);
 

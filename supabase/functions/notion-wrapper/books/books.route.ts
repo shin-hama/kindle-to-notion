@@ -1,6 +1,6 @@
 import { Hono } from "jsr:@hono/hono";
 import { env } from "jsr:@hono/hono/adapter";
-import { createClient } from "jsr:@supabase/supabase-js@2";
+import { createClient } from "jsr:@supabase/supabase-js";
 import { BooksNotionUsersModel, EnvSchema } from "../types/index.ts";
 import { Database } from "../types/database.types.ts";
 import { saveBook } from "./books.service.ts";
@@ -29,10 +29,15 @@ app.post("/", async (c) => {
   }
 
   try {
-    await saveBook(user, {
+    const { notionPageId } = await saveBook(user, {
       ...book.data,
       lastAnnotatedAt: relation.lastAnnotatedAt,
     });
+
+    await client.from("Books_NotionUsers")
+      .update({ notionPageId })
+      .eq("userId", relation.userId)
+      .eq("bookId", relation.bookId);
   } catch (e) {
     console.error(e);
   }

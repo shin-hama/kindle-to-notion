@@ -1,4 +1,4 @@
-import { createClient, SupabaseClient } from "jsr:@supabase/supabase-js";
+import { createClient, SupabaseClient } from "jsr:@supabase/supabase-js@2";
 import { Database } from "../types/database.types.ts";
 import { decrypt, encrypt } from "../libs/encrypt.ts";
 import { AuthenticatedUser, Env } from "../types/index.ts";

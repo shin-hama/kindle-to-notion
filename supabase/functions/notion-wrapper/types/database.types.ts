@@ -44,18 +44,21 @@ export type Database = {
           bookId: string;
           createdAt: string;
           lastAnnotatedAt: string;
+          notionPageId: string | null;
           userId: string;
         };
         Insert: {
           bookId: string;
           createdAt?: string;
           lastAnnotatedAt: string;
+          notionPageId?: string | null;
           userId: string;
         };
         Update: {
           bookId?: string;
           createdAt?: string;
           lastAnnotatedAt?: string;
+          notionPageId?: string | null;
           userId?: string;
         };
         Relationships: [
