@@ -12,7 +12,6 @@ import { UsersService } from "../users/users.service.ts";
 
 const app = new Hono();
 app.post("/", async (c) => {
-  console.log("notion-wrapper/books/books.route.ts");
   const { record: relation } = await c.req.json() as SupabaseDBTriggerdEvent<
     BooksNotionUsersModel
   >;

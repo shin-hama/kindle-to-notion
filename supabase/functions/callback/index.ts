@@ -4,18 +4,16 @@
 
 // Setup type definitions for built-in Supabase Runtime APIs
 import { Hono } from "jsr:@hono/hono";
-import { books } from "./books/books.route.ts";
-import { highlights } from "./highlights/highlights.route.ts";
+import { notionCallback } from "./auth/auth.route.ts";
 
 // change this to your function name
-const app = new Hono().basePath("notion-wrapper");
+const app = new Hono().basePath("callback");
 
 app.get("/", (c) => {
-  return c.json({ message: "Hello, world!" });
+  return c.json({ message: "Hello, Callback!" });
 });
 
-app.route("books", books);
-app.route("highlights", highlights);
+app.route("notion", notionCallback);
 
 Deno.serve(app.fetch);
 

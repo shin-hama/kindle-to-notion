@@ -6,7 +6,7 @@ import { notionHandler } from "./handler.ts";
 
 const app = new Hono();
 
-app.get("/callback/notion", async (c) => {
+app.get("/", async (c) => {
   const code = c.req.query("code");
 
   if (!code) {
@@ -35,4 +35,4 @@ app.get("/callback/notion", async (c) => {
   return c.redirect(result.data.redirect_url);
 });
 
-export { app as auth };
+export { app as notionCallback };
