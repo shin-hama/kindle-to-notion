@@ -3,15 +3,17 @@
 // This enables autocomplete, go to definition, etc.
 
 // Setup type definitions for built-in Supabase Runtime APIs
-import { Hono } from "jsr:@hono/hono";
+import { Hono } from "npm:hono";
+import { api } from "./app.ts";
 
 // change this to your function name
-const functionName = "test";
+const functionName = "api";
 const app = new Hono().basePath(`/${functionName}`);
 
+app.route("", api);
 app.get("/hello", (c) => c.text("Hello from hono-server!"));
-
 Deno.serve(app.fetch);
+
 /* To invoke locally:
 
   1. Run `supabase start` (see: https://supabase.com/docs/reference/cli/supabase-start)

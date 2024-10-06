@@ -1,7 +1,11 @@
 import { Hono } from "jsr:@hono/hono";
 import { env } from "jsr:@hono/hono/adapter";
 import { createClient } from "jsr:@supabase/supabase-js";
-import { EnvSchema, HighlightModel } from "../types/index.ts";
+import {
+  EnvSchema,
+  HighlightModel,
+  SupabaseDBTriggerdEvent,
+} from "../types/index.ts";
 import { Database } from "../types/database.types.ts";
 import { UsersService } from "../users/users.service.ts";
 import { saveHighlight } from "./highlights.notion.ts";
@@ -11,7 +15,10 @@ const app = new Hono();
 app.post(
   "/",
   async (c) => {
-    const highlight = await c.req.json() as HighlightModel;
+    const { record: highlight } = await c.req.json() as SupabaseDBTriggerdEvent<
+      HighlightModel
+    >;
+    console.log(highlight);
     const envResult = EnvSchema.safeParse(env(c));
     if (!envResult.success) {
       c.status(500);

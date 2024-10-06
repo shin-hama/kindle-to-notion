@@ -1,14 +1,22 @@
 import { Hono } from "jsr:@hono/hono";
 import { env } from "jsr:@hono/hono/adapter";
 import { createClient } from "jsr:@supabase/supabase-js";
-import { BooksNotionUsersModel, EnvSchema } from "../types/index.ts";
+import {
+  BooksNotionUsersModel,
+  EnvSchema,
+  SupabaseDBTriggerdEvent,
+} from "../types/index.ts";
 import { Database } from "../types/database.types.ts";
 import { saveBook } from "./books.service.ts";
 import { UsersService } from "../users/users.service.ts";
 
 const app = new Hono();
 app.post("/", async (c) => {
-  const relation = await c.req.json() as BooksNotionUsersModel;
+  console.log("notion-wrapper/books/books.route.ts");
+  const { record: relation } = await c.req.json() as SupabaseDBTriggerdEvent<
+    BooksNotionUsersModel
+  >;
+  console.log(relation);
   const client = createClient<Database>(
     Deno.env.get("SUPABASE_URL") ?? "",
     Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "",
@@ -25,7 +33,7 @@ app.post("/", async (c) => {
     .single();
 
   if (!user || book.error) {
-    return c.text("");
+    return c.text("User or book not found");
   }
 
   try {
