@@ -1,4 +1,7 @@
-import { decodeHex, encodeHex } from "https://deno.land/std/encoding/hex.ts";
+import {
+  decodeHex,
+  encodeHex,
+} from "https://deno.land/std@0.224.0/encoding/hex.ts";
 
 const SALT_LENGTH = 16;
 const IV_LENGTH = 12;

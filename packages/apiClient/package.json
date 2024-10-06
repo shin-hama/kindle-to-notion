@@ -1,0 +1,30 @@
+{
+  "name": "@kino/api-client",
+  "version": "0.1.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/shin-hama/kindle-to-notion.git"
+  },
+  "module": "./esm/client.js",
+  "exports": {
+    ".": {
+      "import": "./esm/client.js"
+    }
+  },
+  "dependencies": {
+    "@hono/zod-validator": "*",
+    "@supabase/auth-js": "2.65.0",
+    "@supabase/functions-js": "2.4.1",
+    "@supabase/node-fetch": "2.6.15",
+    "@supabase/postgrest-js": "1.16.1",
+    "@supabase/realtime-js": "2.10.2",
+    "@supabase/storage-js": "2.7.0",
+    "hono": "*",
+    "zod": "*",
+    "@deno/shim-deno": "~0.18.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.9.0"
+  },
+  "_generatedBy": "dnt@dev"
+}

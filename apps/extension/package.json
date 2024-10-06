@@ -16,7 +16,7 @@
     "postinstall": "wxt prepare"
   },
   "dependencies": {
-    "@kino/app": "workspace:*",
+    "@kino/api-client": "workspace:*",
     "@kino/shared": "workspace:*",
     "@radix-ui/react-progress": "^1.1.0",
     "@radix-ui/react-slot": "^1.1.0",
