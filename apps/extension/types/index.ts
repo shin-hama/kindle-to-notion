@@ -1,12 +1,17 @@
-import z from 'zod'
+import z from "zod";
 
 export type Result<T> = {
-  data?: T | null
-  error?: string | null
-}
+  data?: T | null;
+  error?: string | null;
+};
 
-export const HighlightColorsSchema = z.enum(['yellow', 'blue', 'pink', 'orange'])
-export type HighlightColors = z.infer<typeof HighlightColorsSchema>
+export const HighlightColorsSchema = z.enum([
+  "yellow",
+  "blue",
+  "pink",
+  "orange",
+]);
+export type HighlightColors = z.infer<typeof HighlightColorsSchema>;
 
 export const HighlightInputSchema = z.object({
   id: z.string(),
@@ -15,8 +20,8 @@ export const HighlightInputSchema = z.object({
   location: z.number(),
   page: z.number().nullable(),
   note: z.string().nullable(),
-})
-export type HighlightInput = z.infer<typeof HighlightInputSchema>
+});
+export type HighlightInput = z.infer<typeof HighlightInputSchema>;
 
 export const BookInputSchema = z.object({
   asin: z.string(),
@@ -25,23 +30,23 @@ export const BookInputSchema = z.object({
   url: z.string().nullable().optional().default(null),
   imageUrl: z.string().nullable().optional().default(null),
   lastAnnotatedAt: z.string().default(new Date().toISOString()),
-})
+});
 
-export type BookInput = z.infer<typeof BookInputSchema>
+export type BookInput = z.infer<typeof BookInputSchema>;
 
 export type AmazonAccountRegion =
-  | 'global'
-  | 'india'
-  | 'japan'
-  | 'spain'
-  | 'germany'
-  | 'italy'
-  | 'UK'
-  | 'france'
+  | "global"
+  | "india"
+  | "japan"
+  | "spain"
+  | "germany"
+  | "italy"
+  | "UK"
+  | "france";
 
 export type AmazonAccount = {
-  name: string
-  hostname: string
-  kindleReaderUrl: string
-  notebookUrl: string
-}
+  name: string;
+  hostname: string;
+  kindleReaderUrl: string;
+  notebookUrl: string;
+};

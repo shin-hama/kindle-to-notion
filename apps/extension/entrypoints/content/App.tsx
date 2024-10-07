@@ -1,6 +1,6 @@
-import Progress from './progress'
-import { Toaster } from '@/components/ui/toaster'
-import '../../assets/global.css'
+import Progress from "./progress";
+import { Toaster } from "@/components/ui/toaster";
+import "../../assets/global.css";
 
 export default function App() {
   return (
@@ -8,5 +8,5 @@ export default function App() {
       <Toaster />
       <Progress />
     </>
-  )
+  );
 }

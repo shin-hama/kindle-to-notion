@@ -1,3 +1,4 @@
+import { GetUserMessageResponse, GetUserMessageResponseSchema } from '@/entrypoints/types/messaging'
 import { User } from '@kino/shared'
 import React, { PropsWithChildren } from 'react'
 
@@ -9,9 +10,17 @@ export const CurrentUserProvider: React.FC<PropsWithChildren> = ({ children }) =
   useEffect(() => {
     browser.runtime
       .sendMessage({ type: 'GetUser' })
-      .then((user) => {
-        console.log('User is fetched, ', user)
-        setCurrentUser(user)
+      .then((result: GetUserMessageResponse) => {
+        const parseResult = GetUserMessageResponseSchema.safeParse(result)
+        if (!parseResult.success) {
+          console.error('Failed to parse user response', parseResult.error)
+          return
+        } else if (!result.user) {
+          console.error('This client is not authenticated')
+          return
+        }
+        console.log('User: ', result.user)
+        setCurrentUser(result.user)
       })
       .catch((e) => {
         console.error('Failed to fetch user', e)
