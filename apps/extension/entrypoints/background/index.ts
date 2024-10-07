@@ -48,11 +48,8 @@ export default defineBackground(() => {
             return { error: "failed to create schema" };
           }
         } else if (msg.type === "GetUser") {
-          if ((await isSessionValid()) === false) {
-            console.warn("Session is invalid");
-            return null;
-          }
-          return { user: await me() } satisfies GetUserMessageResponse;
+          const user = (await isSessionValid()) ? await me() : null;
+          return { user } satisfies GetUserMessageResponse;
         } else {
           throw new Error(`Not implemented message type: ${msg}`);
         }
