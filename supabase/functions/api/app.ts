@@ -7,7 +7,7 @@ const app = new Hono()
   .route("/books", books)
   .route("/highlights", highlights)
   .route("/users", users)
-  .get("/test", (c) => {
+  .get("/health", (c) => {
     console.log("Hello Hono!");
     return c.text("Hello Hono!");
   })

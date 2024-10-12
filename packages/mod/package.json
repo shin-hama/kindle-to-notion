@@ -1,0 +1,13 @@
+{
+  "name": "@kino/client-builder",
+  "version": "0.1.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/shin-hama/kindle-to-notion.git"
+  },
+  "scripts": {
+    "build": "deno run -A build_npm.ts 0.1.0"
+  },
+  "dependencies": {},
+  "devDependencies": {}
+}
