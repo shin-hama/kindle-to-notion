@@ -11,22 +11,18 @@ import { cors } from "npm:hono/cors";
 const functionName = "api";
 const app = new Hono().basePath(`/${functionName}`);
 
-app.route("/", api);
-app.get("/hello", (c) => c.text("Hello from hono-server!"));
 app.use(
   cors({
-    origin: (origin) => {
-      console.log(origin);
-      // return "chrome-extension://kdachoglhcpepdgcpgbjomogllpclfkf";
-      return origin;
-    },
-    allowHeaders: ["X-Custom-Header", "Upgrade-Insecure-Requests"],
+    origin: [
+      "chrome-extension://kdachoglhcpepdgcpgbjomogllpclfkf",
+    ],
     allowMethods: ["POST", "GET", "OPTIONS"],
-    exposeHeaders: ["Content-Length", "X-Kuma-Revision"],
     maxAge: 600,
     credentials: true,
   }),
 );
+app.route("/", api);
+app.get("/hello", (c) => c.text("Hello from hono-server!"));
 
 Deno.serve(app.fetch);
 
