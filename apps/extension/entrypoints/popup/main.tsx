@@ -1,15 +1,15 @@
-import React from "react";
-import ReactDOM from "react-dom/client";
-import App from "./App.js";
-import "./style.css";
-import { Toaster } from "@/components/ui/toaster";
-import { CurrentUserProvider } from "@/hooks/use-user.js";
+import React from 'react'
+import ReactDOM from 'react-dom/client'
+import App from './App.js'
+import { CurrentUserProvider } from '@/hooks/use-user.js'
+import '../../assets/global.css'
 
-ReactDOM.createRoot(document.getElementById("root")!).render(
+ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <CurrentUserProvider>
-      <App />
+      <div className="w-80">
+        <App />
+      </div>
     </CurrentUserProvider>
-    <Toaster />
   </React.StrictMode>,
-);
+)

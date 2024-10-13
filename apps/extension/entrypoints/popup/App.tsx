@@ -1,40 +1,40 @@
-import { useState } from "react";
-import reactLogo from "@/assets/react.svg";
-import wxtLogo from "/wxt.svg";
-import "./App.css";
-import "../../assets/global.css";
+import notionLogo from '@/assets/notion-logo.svg'
+import { Button } from '@/components/ui/button'
 
 function App() {
-  const [count, setCount] = useState(0);
+  const user = useAuthenticatedUser()
 
   return (
-    <>
-      <div>
-        <a href="https://wxt.dev" target="_blank">
-          <img src={wxtLogo} className="logo" alt="WXT logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>WXT + React</h1>
-      <div className="card">
-        <button onClick={() => null}>Click me</button>
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <a href="https://api.notion.com/v1/oauth/authorize?client_id=f61e350d-3e1d-4ffa-a100-41c318a7c36f&response_type=code&owner=user&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2Fauth%2Fcallback%2Fnotion">
-          Login with Notion
-        </a>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the WXT and React logos to learn more
-      </p>
-    </>
-  );
+    <div className="flex justify-center py-16">
+      {user ? (
+        <div>
+          <h1 className="text-2xl font-bold text-center">Welcome, {user.name}</h1>
+          <p className="text-center">You are now authenticated with Notion</p>
+        </div>
+      ) : (
+        <div>
+          <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]">
+            <div className="flex flex-col text-center space-y-4">
+              <div>
+                <h1 className="text-2xl font-bold">Kino</h1>
+                <p className="text-sm text-muted-foreground">Your kindle notes export to Notion</p>
+              </div>
+              <Button asChild>
+                <a
+                  href={import.meta.env.VITE_NOTION_AUTH_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <img src={notionLogo} alt="Notion logo" className="h-6 w-6 mr-2" />
+                  Login with Notion
+                </a>
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  )
 }
 
-export default App;
+export default App
