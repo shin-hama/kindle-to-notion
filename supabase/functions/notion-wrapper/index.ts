@@ -10,8 +10,8 @@ import { highlights } from "./highlights/highlights.route.ts";
 // change this to your function name
 const app = new Hono().basePath("notion-wrapper");
 
-app.get("/", (c) => {
-  return c.json({ message: "Hello, world!" });
+app.get("/health", (c) => {
+  return c.json({ message: "Hello, Notion Wrapper functions!" });
 });
 
 app.route("books", books);

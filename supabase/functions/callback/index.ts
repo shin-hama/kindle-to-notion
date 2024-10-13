@@ -9,7 +9,7 @@ import { notionCallback } from "./auth/auth.route.ts";
 // change this to your function name
 const app = new Hono().basePath("callback");
 
-app.get("/", (c) => {
+app.get("/health", (c) => {
   return c.json({ message: "Hello, Callback!" });
 });
 
