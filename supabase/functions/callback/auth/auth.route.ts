@@ -26,7 +26,7 @@ app.get("/", async (c) => {
     return c.text(`${result.error}, please try again`);
   }
 
-  setCookie(c, "SESSION_TOKEN_KEY", result.data.session_token, {
+  setCookie(c, "session_token", result.data.session_token, {
     httpOnly: true,
     secure: true,
     sameSite: "strict",

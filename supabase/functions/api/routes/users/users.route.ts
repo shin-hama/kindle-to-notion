@@ -10,6 +10,7 @@ type User = {
 };
 
 const app = new Hono().get("me", sessionValidator, async (c) => {
+  console.log("test");
   const { NotionSecret, ...user } = c.var.user;
 
   try {

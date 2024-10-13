@@ -10,6 +10,7 @@ export const sessionValidator = createMiddleware<{
   };
 }>(async (c, next) => {
   const session = getCookie(c, "session_token");
+  console.log(session);
   if (!session) {
     c.status(401);
     return c.text("Unauthorized");

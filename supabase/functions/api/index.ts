@@ -5,13 +5,29 @@
 // Setup type definitions for built-in Supabase Runtime APIs
 import { Hono } from "npm:hono";
 import { api } from "./app.ts";
+import { cors } from "npm:hono/cors";
 
 // change this to your function name
 const functionName = "api";
 const app = new Hono().basePath(`/${functionName}`);
 
-app.route("", api);
+app.route("/", api);
 app.get("/hello", (c) => c.text("Hello from hono-server!"));
+app.use(
+  cors({
+    origin: (origin) => {
+      console.log(origin);
+      // return "chrome-extension://kdachoglhcpepdgcpgbjomogllpclfkf";
+      return origin;
+    },
+    allowHeaders: ["X-Custom-Header", "Upgrade-Insecure-Requests"],
+    allowMethods: ["POST", "GET", "OPTIONS"],
+    exposeHeaders: ["Content-Length", "X-Kuma-Revision"],
+    maxAge: 600,
+    credentials: true,
+  }),
+);
+
 Deno.serve(app.fetch);
 
 /* To invoke locally:
