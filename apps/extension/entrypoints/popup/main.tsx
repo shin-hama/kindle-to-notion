@@ -6,10 +6,10 @@ import '../../assets/global.css'
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
-    <CurrentUserProvider>
-      <div className="w-80">
+    <div className="w-80">
+      <CurrentUserProvider>
         <App />
-      </div>
-    </CurrentUserProvider>
+      </CurrentUserProvider>
+    </div>
   </React.StrictMode>,
 )
