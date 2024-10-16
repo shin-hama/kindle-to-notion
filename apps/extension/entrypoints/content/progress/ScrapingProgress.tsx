@@ -1,27 +1,26 @@
-import { Button } from "@/components/ui/button";
-import { Progress } from "@/components/ui/progress";
-import { useAtom } from "jotai";
-import { scrapingProgress } from "@/states";
-import { useAuthenticatedUser } from "@/hooks/use-user";
+import { Button } from '@/components/ui/button'
+import { Progress } from '@/components/ui/progress'
+import { useAtom } from 'jotai'
+import { scrapingProgress } from '@/states'
+import { useAuthenticatedUser } from '@/hooks/use-user'
 
 const ScrapingProgress = () => {
-  const user = useAuthenticatedUser();
-  const [state] = useAtom(scrapingProgress);
+  const user = useAuthenticatedUser()
+  const [state] = useAtom(scrapingProgress)
+
+  if (!user) {
+    return <p>Not signed in</p>
+  }
 
   if (state.error) {
-    return <p>{state.error}</p>;
+    return <p>{state.error}</p>
   }
 
   if (!state.data) {
-    return (
-      <p>
-        Collecting a list of books from your Kindle account. This may take a
-        while.
-      </p>
-    );
+    return <p>Collecting a list of books from your Kindle account. This may take a while.</p>
   }
 
-  const { title, current, total } = state.data;
+  const { title, current, total } = state.data
   return (
     <div className="w-full flex flex-col gap-1">
       <p>Exporting "{title}"</p>
@@ -33,17 +32,13 @@ const ScrapingProgress = () => {
       </div>
       <div className="flex justify-end">
         <Button asChild className="">
-          <a
-            href={user.pageUrl ?? "https://notion.so"}
-            target="_blank"
-            rel="noreferrer"
-          >
+          <a href={user.pageUrl ?? 'https://notion.so'} target="_blank" rel="noreferrer">
             Open Notion
           </a>
         </Button>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default ScrapingProgress;
+export default ScrapingProgress
