@@ -20,8 +20,8 @@ export const useScrapingProgress = () => {
     } else if (state.data) {
       if (state.data.completed) {
         toast({
-          title: 'Exporting',
-          description: 'Exporting is completed.',
+          title: state.data.title,
+          description: state.data.message || 'Exporting completed',
           duration: 10 * 1000,
         })
         setToastId(null)

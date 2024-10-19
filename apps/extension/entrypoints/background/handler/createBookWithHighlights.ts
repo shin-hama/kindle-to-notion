@@ -15,12 +15,27 @@ const handler = async ({ book, highlights }: CreateBookMessage["data"]) => {
     }
     const { book: createdBook } = await result.json();
 
-    await client.highlights.$post({
-      json: {
-        bookId: createdBook.id,
-        asin: book.asin,
-        highlights: highlights,
-      },
+    // split every 10 highlights to avoid rate limit
+    const chunkedHighlights = highlights.reduce((acc, highlight, i) => {
+      const index = Math.floor(i / 10);
+      acc[index] = acc[index] || [];
+      acc[index].push(highlight);
+      return acc;
+    }, [] as typeof highlights[]);
+
+    chunkedHighlights.forEach(async (_highlights, index) => {
+      await client.highlights.$post({
+        json: {
+          bookId: createdBook.id,
+          asin: book.asin,
+          highlights: _highlights,
+        },
+      });
+
+      // wait for 2 second every requests to avoid rate limit
+      if (index !== chunkedHighlights.length - 1) {
+        await new Promise((resolve) => setTimeout(resolve, 2000));
+      }
     });
 
     return { book: createdBook };

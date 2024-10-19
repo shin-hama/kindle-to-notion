@@ -9,21 +9,27 @@ export const useScraper = () => {
   const lastUpdated = useLastUpdated();
 
   useEffect(() => {
-    console.log("Start scraping");
     scrapeBooks()
       .then(async (allBooks) => {
         const lastUpdatedAt = await lastUpdated.get();
-        console.log({ lastUpdatedAt });
-        console.log(`lastUpdatedAt: ${lastUpdatedAt}`);
         const updatedBooks = allBooks.filter((book) => {
           return new Date(book.lastAnnotatedAt) > new Date(lastUpdatedAt);
         });
-        console.log(`find ${updatedBooks.length} books`);
-        for (const [i, book] of updatedBooks.entries()) {
-          if (i === 2) {
-            break;
-          }
 
+        if (updatedBooks.length === 0) {
+          setState({
+            data: {
+              total: 0,
+              current: 0,
+              title: "No new books",
+              completed: true,
+              message: "No new highlights to export since last run",
+            },
+          });
+          return;
+        }
+
+        for (const [i, book] of updatedBooks.entries()) {
           setState({
             data: {
               total: updatedBooks.length,
@@ -33,7 +39,6 @@ export const useScraper = () => {
           });
 
           const highlights = await scrapeBookHighlights(book);
-          console.log(`find ${highlights.length} highlights`);
           const result = await browser.runtime.sendMessage(
             {
               type: "CreateBookWithHighlights",
@@ -56,6 +61,7 @@ export const useScraper = () => {
             current: updatedBooks.length,
             title: "Completed",
             completed: true,
+            message: `Completed exporting ${updatedBooks.length} books`,
           },
         });
       })

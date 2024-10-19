@@ -7,5 +7,6 @@ export const scrapingProgress = atom<
     current: number;
     title: string;
     completed?: boolean;
+    message?: string;
   }>
 >({ data: null, error: null });
