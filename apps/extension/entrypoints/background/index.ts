@@ -9,7 +9,6 @@ import { handler as createBookWithHighlights } from "./handler/createBookWithHig
 export default defineBackground(() => {
   browser.runtime.onMessage.addListener(
     async (message, sender, sendResponse) => {
-      console.log(message);
       const parsedResult = ToBackendMessageSchema.safeParse(message);
 
       if (!parsedResult.success) {

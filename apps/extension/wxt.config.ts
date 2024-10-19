@@ -1,4 +1,5 @@
 import { defineConfig } from "wxt";
+import { cookiesPermissions } from "./utils/constants";
 
 // See https://wxt.dev/api/config.html
 export default defineConfig({
@@ -9,13 +10,7 @@ export default defineConfig({
       "webRequestBlocking",
       "storage",
     ],
-    host_permissions: [
-      "*://127.0.0.1:54321/",
-      "*://127.0.0.1:54321/*",
-      "*://localhost:54321/",
-      "*://localhost:54321/*",
-      "*://*.127.0.0.1:54321/",
-    ],
+    host_permissions: cookiesPermissions,
   },
   modules: ["@wxt-dev/module-react"],
   dev: {

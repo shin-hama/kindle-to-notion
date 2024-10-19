@@ -11,8 +11,9 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev:ext": "pnpm -F extension dev",
-    "build": "pnpm -F shared build && pnpm build:api && pnpm -F app build",
-    "build:api": "pnpm -F client-builder build"
+    "build": "pnpm -F shared build && pnpm build:api && pnpm build:ext",
+    "build:api": "pnpm -F client-builder build",
+    "build:ext": "pnpm -F extension build"
   },
   "keywords": [],
   "author": "",
