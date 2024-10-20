@@ -6,8 +6,6 @@ export default defineConfig({
   manifest: {
     permissions: [
       "cookies",
-      "webRequest",
-      "webRequestBlocking",
       "storage",
     ],
     host_permissions: cookiesPermissions,

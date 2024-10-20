@@ -13,7 +13,7 @@
     "dev:ext": "pnpm -F extension dev",
     "build": "pnpm -F shared build && pnpm build:api && pnpm build:ext",
     "build:api": "pnpm -F client-builder build",
-    "build:ext": "pnpm -F extension build"
+    "build:ext": "pnpm -F extension zip"
   },
   "keywords": [],
   "author": "",
