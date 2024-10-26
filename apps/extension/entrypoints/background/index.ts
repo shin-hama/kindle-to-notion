@@ -31,4 +31,14 @@ export default defineBackground(() => {
       }
     },
   );
+
+  browser.runtime.onInstalled.addListener(async (details) => {
+    if (details.reason === "install") {
+      const user = (await isSessionValid()) ? await me() : null;
+
+      browser.tabs.create({
+        url: user?.pageUrl ?? import.meta.env.VITE_NOTION_AUTH_URL,
+      });
+    }
+  });
 });
