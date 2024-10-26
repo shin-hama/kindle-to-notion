@@ -1,4 +1,4 @@
-import { AmazonRegions } from "@/entrypoints/content/scraper/amazon/region";
+import { AmazonRegions } from "@/utils/region";
 
 export const useCurrentRegion = () => {
   const getCurrentRegion = useCallback(() => {

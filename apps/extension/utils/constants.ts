@@ -1,4 +1,4 @@
-import { AmazonRegions } from "@/entrypoints/content/scraper/amazon/region";
+import { AmazonRegions } from "./region";
 
 export const contentScriptMatches = import.meta.env.DEV
   ? ["*://read.amazon.co.jp/notebook*", "http://localhost/*"]
