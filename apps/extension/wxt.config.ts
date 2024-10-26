@@ -4,6 +4,9 @@ import { cookiesPermissions } from "./utils/constants";
 // See https://wxt.dev/api/config.html
 export default defineConfig({
   manifest: {
+    name: "Kino",
+    description: "__MSG_extDescription__",
+    default_locale: "en",
     permissions: [
       "cookies",
       "storage",
