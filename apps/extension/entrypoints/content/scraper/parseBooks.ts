@@ -1,5 +1,4 @@
-import { currentAmazonRegion } from "./amazon/region";
-import { AmazonAccountRegion, BookInput } from "@/types";
+import { AmazonAccount, AmazonAccountRegion, BookInput } from "@/types";
 import dayjs from "dayjs";
 import customParseFormat from "dayjs/plugin/customParseFormat";
 import "dayjs/locale/fr";
@@ -10,8 +9,10 @@ type NextPageState = {
   token: string;
 };
 
-const booksUrl = (state?: NextPageState | null): string => {
-  const region = currentAmazonRegion();
+const booksUrl = (
+  region: AmazonAccount,
+  state?: NextPageState | null,
+): string => {
   return `${region.notebookUrl}?library=list&token=${state?.token ?? ""}`;
 };
 
@@ -55,7 +56,10 @@ export const parseAuthor = (scrapedAuthor: string): string => {
   return scrapedAuthor.replace(/.*: /, "")?.trim();
 };
 
-export const parseBooks = (doc: Document): Array<BookInput> => {
+export const parseBooks = (
+  region: AmazonAccount,
+  doc: Document,
+): Array<BookInput> => {
   const booksElm = doc.querySelectorAll(".kp-notebook-library-each-book");
 
   return Array.from(booksElm.values())
@@ -76,7 +80,7 @@ export const parseBooks = (doc: Document): Array<BookInput> => {
         asin: elm.getAttribute("id") ?? "",
         title: title,
         author: parseAuthor(author),
-        url: `https://www.amazon.co.jp/dp/${elm.getAttribute("id")}`,
+        url: `https://www.${region.hostname}/dp/${elm.getAttribute("id")}`,
         imageUrl:
           elm.querySelector(".kp-notebook-cover-image")?.getAttribute("src") ??
             null,
@@ -87,7 +91,10 @@ export const parseBooks = (doc: Document): Array<BookInput> => {
     .filter((book): book is BookInput => book !== null);
 };
 
-const loadAndScrapeBooks = async (url: string): Promise<Array<BookInput>> => {
+const loadAndScrapeBooks = async (
+  region: AmazonAccount,
+  url: string,
+): Promise<Array<BookInput>> => {
   // Load the highlights page and parse it
   const text = await (await fetch(url)).text();
   const doc = new DOMParser().parseFromString(text, "text/html");
@@ -95,16 +102,20 @@ const loadAndScrapeBooks = async (url: string): Promise<Array<BookInput>> => {
   const nextPageState = parseNextPageState(doc);
 
   if (!nextPageState) {
-    return parseBooks(doc);
+    return parseBooks(region, doc);
   } else {
-    const books = parseBooks(doc);
-    return books.concat(await loadAndScrapeBooks(booksUrl(nextPageState)));
+    const books = parseBooks(region, doc);
+    return books.concat(
+      await loadAndScrapeBooks(region, booksUrl(region, nextPageState)),
+    );
   }
 };
 
-const scrapeBooks = async (): Promise<Array<BookInput>> => {
-  const url = booksUrl();
-  return loadAndScrapeBooks(url);
+const scrapeBooks = async (
+  region: AmazonAccount,
+): Promise<Array<BookInput>> => {
+  const url = booksUrl(region);
+  return loadAndScrapeBooks(region, url);
 };
 
 export default scrapeBooks;

@@ -52,19 +52,3 @@ export const AmazonRegions: Record<AmazonAccountRegion, AmazonAccount> = {
     notebookUrl: "https://lire.amazon.fr/notebook",
   },
 };
-
-export const currentAmazonRegion = (): AmazonAccount => {
-  // TODO: Create settings and get the selected region from there
-  const selectedRegion = "japan";
-  return AmazonRegions[selectedRegion];
-};
-
-export const orderedAmazonRegions = (): AmazonAccountRegion[] => {
-  const keys = Object.keys(AmazonRegions) as AmazonAccountRegion[];
-
-  // Remove 'global' as we will add it manually again top of the list
-  _.remove(keys, (key) => key === "global");
-
-  const orderedKeys = _.orderBy(keys, (key) => key.toLowerCase(), "asc");
-  return ["global", ...orderedKeys];
-};

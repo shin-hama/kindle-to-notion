@@ -3,13 +3,15 @@ import scrapeBookHighlights from "./parseBookHighlight";
 import scrapeBooks from "./parseBooks";
 import { useAtom } from "jotai";
 import { scrapingProgress } from "@/states";
+import { useCurrentRegion } from "@/hooks/use-i18n";
 
 export const useScraper = () => {
   const [, setState] = useAtom(scrapingProgress);
   const lastUpdated = useLastUpdated();
+  const region = useCurrentRegion();
 
   useEffect(() => {
-    scrapeBooks()
+    scrapeBooks(region)
       .then(async (allBooks) => {
         const lastUpdatedAt = await lastUpdated.get();
         const updatedBooks = allBooks.filter((book) => {
@@ -38,7 +40,7 @@ export const useScraper = () => {
             },
           });
 
-          const highlights = await scrapeBookHighlights(book);
+          const highlights = await scrapeBookHighlights(region, book);
           const result = await browser.runtime.sendMessage(
             {
               type: "CreateBookWithHighlights",

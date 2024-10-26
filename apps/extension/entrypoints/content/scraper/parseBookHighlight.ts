@@ -1,5 +1,5 @@
-import { currentAmazonRegion } from "@/entrypoints/content/scraper/amazon/region";
 import {
+  AmazonAccount,
   type BookInput,
   HighlightColorsSchema,
   type HighlightInput,
@@ -21,10 +21,10 @@ export const mapTextToColor = (
 };
 
 const highlightsUrl = (
+  region: AmazonAccount,
   book: BookInput,
   state?: NextPageState | null,
 ): string => {
-  const region = currentAmazonRegion();
   return `${region.notebookUrl}?asin=${book.asin}&contentLimitState=${
     state?.contentLimitState ?? ""
   }&token=${state?.token ?? ""}`;
@@ -82,6 +82,7 @@ const parseHighlights = (doc: Document): HighlightInput[] => {
 };
 
 const loadAndScrapeHighlights = async (
+  region: AmazonAccount,
   book: BookInput,
   url: string,
 ): Promise<HighlightInput[]> => {
@@ -97,16 +98,21 @@ const loadAndScrapeHighlights = async (
     const highlights = parseHighlights(htmlDocument);
 
     return highlights.concat(
-      await loadAndScrapeHighlights(book, highlightsUrl(book, nextPageState)),
+      await loadAndScrapeHighlights(
+        region,
+        book,
+        highlightsUrl(region, book, nextPageState),
+      ),
     );
   }
 };
 
 const scrapeBookHighlights = async (
+  region: AmazonAccount,
   book: BookInput,
 ): Promise<HighlightInput[]> => {
-  const url = highlightsUrl(book);
-  return loadAndScrapeHighlights(book, url);
+  const url = highlightsUrl(region, book);
+  return loadAndScrapeHighlights(region, book, url);
 };
 
 export default scrapeBookHighlights;
