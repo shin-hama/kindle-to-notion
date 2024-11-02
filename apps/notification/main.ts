@@ -1,8 +1,34 @@
 import { getRandomeNote } from "./db/get-random.ts";
 import { getAllUsers } from "./db/get-users.ts";
+import { getPageUrl } from "./notion/get-page.ts";
 import { NotificationService } from "./services/notify.ts";
 
 const SENDGRID_API_KEY = Deno.env.get("SENDGRID_API_KEY");
+
+const buildBody = (
+  bookTitle: string,
+  highlight: string,
+  note: string,
+  pageUrl: string,
+) => {
+  return `
+📚 今日の一冊
+
+${bookTitle}
+
+💭 印象的な一節:
+
+${highlight}
+
+🤔 あなたの考察:
+
+${note}
+
+📖 Kino を使ってあなたの読書記録を振り返りましょう
+
+${pageUrl}
+          `.trim();
+};
 
 async function sendDailyNotification() {
   const notificationService = new NotificationService(SENDGRID_API_KEY ?? "");
@@ -17,27 +43,35 @@ async function sendDailyNotification() {
 
   await Promise.all(users.map(async (user) => {
     try {
-      const randomNote = await getRandomeNote(user.id);
-
-      if (!randomNote) {
-        console.log("No notes found in the database");
+      if (!user.NotionSecret || !user.NotionPage) {
+        console.log("No Notion secret or page found for user");
         return;
       }
 
-      //       const emailContent = `
-      // 今日のハイライト
+      const pageUrl = await getPageUrl(
+        user.NotionSecret.access_token,
+        user.NotionPage.page_id,
+      );
 
-      // 書籍：${randomNote.book_title}
-      // メモ：${randomNote.content}
-      //     `.trim();
+      if (!pageUrl) {
+        console.log("No page URL found for user");
+        return;
+      }
 
-      //       await notificationService.sendEmail(
-      //         randomNote.email,
-      //         "今日の読書ハイライト",
-      //         emailContent,
-      //       );
+      const randomNote = await getRandomeNote(user.id);
 
-      //       console.log(`Notification sent to ${randomNote.email}`);
+      if (
+        !randomNote || !randomNote.title || !randomNote.text || !randomNote.note
+      ) {
+        console.log("No notes found in the database");
+        return;
+      }
+      const body = buildBody(
+        randomNote.title,
+        randomNote.text,
+        randomNote.note,
+        pageUrl,
+      );
     } catch (error) {
       console.error("Error sending notification:", error);
     }
