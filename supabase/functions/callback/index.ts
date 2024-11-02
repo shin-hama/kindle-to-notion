@@ -5,6 +5,7 @@
 // Setup type definitions for built-in Supabase Runtime APIs
 import { Hono } from "jsr:@hono/hono";
 import { notionCallback } from "./auth/auth.route.ts";
+import { slackCallback } from "./slack/slack.route.ts";
 
 // change this to your function name
 const app = new Hono().basePath("callback");
@@ -14,6 +15,7 @@ app.get("/health", (c) => {
 });
 
 app.route("notion", notionCallback);
+app.route("slack", slackCallback);
 
 Deno.serve(app.fetch);
 
