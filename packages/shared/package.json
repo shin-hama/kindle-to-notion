@@ -7,7 +7,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "tsc",
-    "preinstall": "pnpm build"
+    "preinstall": "pnpm build",
+    "generate": "supabase gen types --lang=typescript --project-id weeyyhchehgnmmhblgxy --schema public > src/types/database.types.ts"
   },
   "keywords": [],
   "author": "",
