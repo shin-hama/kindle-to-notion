@@ -1,4 +1,4 @@
-import { Database } from "../../types/database.types.ts";
+import { Database } from "../../../../../packages/shared/mod.ts";
 
 export type CreateBookModel =
   & Omit<Database["public"]["Tables"]["Book"]["Insert"], "id">

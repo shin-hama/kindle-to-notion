@@ -1,4 +1,4 @@
-import { Database } from "./database.types.ts";
+import { Database } from "../../../../packages/shared/mod.ts";
 import { z } from "npm:zod";
 
 export type Result<T> = {

@@ -1,4 +1,4 @@
-import { Database } from "./database.types.ts";
+import { Database } from "../../../../packages/shared/src/types/database.types.ts";
 import { z } from "https://deno.land/x/zod/mod.ts";
 
 export type Result<T> = {
@@ -32,6 +32,7 @@ export const EnvSchema = z.object({
   NOTION_REDIRECT_URL: z.string(),
   NOTION_CLIENT_ID: z.string(),
   NOTION_CLIENT_SECRET: z.string(),
+  API_URL: z.string(),
 });
 export type Env = z.infer<typeof EnvSchema>;
 

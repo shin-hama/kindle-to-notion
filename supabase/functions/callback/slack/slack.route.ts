@@ -1,12 +1,22 @@
+import { env } from "jsr:@hono/hono/adapter";
 import { Hono } from "jsr:@hono/hono";
+import { EnvSchema } from "../types/index.ts";
 
 const app = new Hono();
 
 app.post("/notify", async (c) => {
-  const { channel_id } = await c.req.parseBody();
+  const envResult = EnvSchema.safeParse(env(c));
+  if (!envResult.success) {
+    c.status(500);
+    return c.text("Environment variables are not set");
+  }
+
+  const { channel_id, channel_name } = await c.req.parseBody();
   console.log(channel_id);
 
   return c.text(
-    `Access here to register: https:localhost:54321/functions/v1/api/notification/slack?channel_id=${channel_id}`,
+    `Access here to register: ${envResult.data.API_URL}/notification/slack?channel_id=${channel_id}&channel_name=${channel_name}`,
   );
 });
+
+export { app as slackCallback };
