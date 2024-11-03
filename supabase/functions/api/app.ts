@@ -2,11 +2,13 @@ import { Hono } from "npm:hono";
 import { books } from "./routes/books/books.route.ts";
 import { highlights } from "./routes/highlights/highlights.route.ts";
 import { users } from "./routes/users/users.route.ts";
+import { notifications } from "./routes/notifications/notifications.route.ts";
 
 const app = new Hono()
   .route("/books", books)
   .route("/highlights", highlights)
   .route("/users", users)
+  .route("/notifications", notifications)
   .get("/health", (c) => {
     console.log("Hello Hono!");
     return c.text("Hello Hono!");
