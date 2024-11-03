@@ -1,5 +1,5 @@
 import { Database } from "./database.types.ts";
-import { z } from "https://deno.land/x/zod/mod.ts";
+import { z } from "npm:zod";
 
 export type Result<T> = {
   data?: T | null;

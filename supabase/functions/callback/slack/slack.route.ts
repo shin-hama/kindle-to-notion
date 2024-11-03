@@ -1,5 +1,5 @@
-import { env } from "jsr:@hono/hono/adapter";
-import { Hono } from "jsr:@hono/hono";
+import { env } from "npm:hono/adapter";
+import { Hono } from "npm:hono";
 import { EnvSchema } from "../../types/index.ts";
 
 const app = new Hono();

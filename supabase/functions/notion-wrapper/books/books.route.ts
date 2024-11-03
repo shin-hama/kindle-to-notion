@@ -1,5 +1,5 @@
-import { Hono } from "jsr:@hono/hono";
-import { env } from "jsr:@hono/hono/adapter";
+import { Hono } from "npm:hono";
+import { env } from "npm:hono/adapter";
 import { createClient } from "jsr:@supabase/supabase-js";
 import {
   BooksNotionUsersModel,

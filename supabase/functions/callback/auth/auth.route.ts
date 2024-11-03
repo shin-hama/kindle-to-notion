@@ -1,6 +1,6 @@
-import { Hono } from "jsr:@hono/hono";
-import { env } from "jsr:@hono/hono/adapter";
-import { setCookie } from "jsr:@hono/hono/cookie";
+import { Hono } from "npm:hono";
+import { env } from "npm:hono/adapter";
+import { setCookie } from "npm:hono/cookie";
 import { EnvSchema } from "../../types/index.ts";
 import { notionHandler } from "./handler.ts";
 

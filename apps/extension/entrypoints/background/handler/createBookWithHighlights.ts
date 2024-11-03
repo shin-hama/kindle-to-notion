@@ -33,7 +33,9 @@ const handler = async ({ book, highlights }: CreateBookMessage["data"]) => {
       });
 
       // wait for a few second every requests to avoid rate limit
-      await new Promise((resolve) => setTimeout(resolve, 5000));
+      await new Promise((resolve) =>
+        setTimeout(resolve, _highlights.length * 500)
+      );
     });
 
     return { book: createdBook };

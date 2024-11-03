@@ -5,10 +5,10 @@
     "type": "git",
     "url": "git+https://github.com/shin-hama/kindle-to-notion.git"
   },
-  "module": "./esm/client.js",
+  "module": "./esm/api/client.js",
   "exports": {
     ".": {
-      "import": "./esm/client.js"
+      "import": "./esm/api/client.js"
     }
   },
   "dependencies": {

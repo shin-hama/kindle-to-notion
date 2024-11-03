@@ -3,7 +3,7 @@
 // This enables autocomplete, go to definition, etc.
 
 // Setup type definitions for built-in Supabase Runtime APIs
-import { Hono } from "jsr:@hono/hono";
+import { Hono } from "npm:hono";
 import { books } from "./books/books.route.ts";
 import { highlights } from "./highlights/highlights.route.ts";
 

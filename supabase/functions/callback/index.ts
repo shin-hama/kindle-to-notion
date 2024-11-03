@@ -3,7 +3,7 @@
 // This enables autocomplete, go to definition, etc.
 
 // Setup type definitions for built-in Supabase Runtime APIs
-import { Hono } from "jsr:@hono/hono";
+import { Hono } from "npm:hono";
 import { notionCallback } from "./auth/auth.route.ts";
 import { slackCallback } from "./slack/slack.route.ts";
 

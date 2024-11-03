@@ -1,4 +1,4 @@
-import { Client, isFullPage } from "npm:@notionhq/client";
+import { Client } from "npm:@notionhq/client";
 import { AuthenticatedUser, HighlightModel } from "../../types/index.ts";
 
 export type CreateHighlightDTO = HighlightModel;
@@ -15,59 +15,6 @@ function convertColor(color: HighlightModel["color"]) {
       return "pink_background";
     default:
       return "default";
-  }
-}
-
-async function exists(
-  user: AuthenticatedUser,
-  highlightId: string,
-) {
-  try {
-    const notion = new Client({
-      auth: user.NotionSecret.access_token,
-    });
-    const response = await notion.databases.query({
-      database_id: user.NotionPage.highlights_db_id,
-      filter: {
-        property: "Id",
-        rich_text: {
-          equals: highlightId,
-        },
-      },
-    });
-    if (response.results.length === 0) {
-      return null;
-    }
-
-    const highlight = response.results[0];
-
-    // Check if it is a full page, if it is, it means a highlight is already saved
-    return isFullPage(highlight)
-      ? ({
-        id: highlight.id,
-        text: highlight.properties.Name.type === "title"
-          ? highlight.properties.Name.title[0].plain_text
-          : "",
-        color: highlight.properties.Color.type === "select"
-          ? (highlight.properties.Color.select?.name as HighlightModel["color"])
-          : "yellow",
-        location: highlight.properties.Location.type === "rich_text"
-          ? parseInt(highlight.properties.Location.rich_text[0].plain_text)
-          : 0,
-        page: highlight.properties.Page.type === "rich_text"
-          ? parseInt(highlight.properties.Page.rich_text[0].plain_text)
-          : 0,
-        created_at: highlight.properties.CreatedDate.type === "date"
-          ? new Date(highlight.properties.CreatedDate.date?.start ?? new Date())
-            .toISOString()
-          : new Date().toISOString(),
-        bookId: "",
-        userId: "",
-        note: "",
-      } satisfies HighlightModel)
-      : null;
-  } catch (e) {
-    console.log(e);
   }
 }
 
