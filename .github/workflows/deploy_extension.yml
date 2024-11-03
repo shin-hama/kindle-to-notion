@@ -29,9 +29,10 @@ jobs:
         run: pnpm build:ext
 
       - name: Submit to stores
+        working-directory: apps/extension
         run: |
           pnpm submit \
-            --chrome-zip apps/extension/.output/*-chrome.zip \
+            --chrome-zip .output/*-chrome.zip \
         env:
           CHROME_EXTENSION_ID: ${{ vars.CHROME_EXTENSION_ID }}
           CHROME_CLIENT_ID: ${{ secrets.CHROME_CLIENT_ID }}
