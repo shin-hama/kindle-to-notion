@@ -6,7 +6,7 @@ await build({
   entryPoints: ["../../supabase/functions/api/client.ts"],
   outDir: "../apiClient",
   packageManager: "pnpm",
-  skipNpmInstall: false,
+  skipNpmInstall: true,
   shims: {
     deno: true,
   },
