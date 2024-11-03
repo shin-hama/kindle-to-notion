@@ -6,7 +6,7 @@ await build({
   entryPoints: ["../../supabase/functions/api/client.ts"],
   outDir: "../apiClient",
   packageManager: "pnpm",
-  skipNpmInstall: true,
+  skipNpmInstall: false,
   shims: {
     deno: true,
   },
@@ -23,6 +23,7 @@ await build({
     },
     peerDependencies: {
       "@hono/zod-validator": "^0.4.1",
+      "@notionhq/client": "^2.2.15",
       hono: "^4.6.8",
       zod: "^3.23.8",
     },
