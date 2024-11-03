@@ -6,7 +6,7 @@ await build({
   entryPoints: ["../../supabase/functions/api/client.ts"],
   outDir: "../apiClient",
   packageManager: "pnpm",
-  skipNpmInstall: Deno.env.get("CI") === "true",
+  skipNpmInstall: false,
   shims: {
     deno: true,
   },

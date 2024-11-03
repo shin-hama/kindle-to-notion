@@ -21,9 +21,6 @@ jobs:
         # uses: denoland/setup-deno@4606d5cc6fb3f673efd4f594850e3f4b3e9d29cd
         uses: denoland/setup-deno@v2.0.0
 
-      - name: deno api client to node module
-        run: pnpm build:api
-
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
