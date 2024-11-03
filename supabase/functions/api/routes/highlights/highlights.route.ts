@@ -29,6 +29,7 @@ const app = new Hono().post(
   ),
   async (c) => {
     const { bookId, highlights } = c.req.valid("json");
+    console.log({ bookId, highlights, user: c.var.user });
     const service = new HighlightsService(parseEnv(c));
 
     const highlight = await service.createHighlights(

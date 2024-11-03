@@ -20,8 +20,9 @@ const app = new Hono().post(
   zValidator("json", CreateBookModel),
   async (c) => {
     const bookData = c.req.valid("json");
+    console.log({ bookData, user: c.var.user });
+
     const service = new BooksService(parseEnv(c));
-    console.log(bookData);
 
     const book = await service.createBook(bookData, c.var.user);
 

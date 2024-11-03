@@ -23,6 +23,7 @@ app.post("/", async (c) => {
 
   const envResult = EnvSchema.safeParse(env(c));
   if (!envResult.success) {
+    console.error("Environment variables are not set");
     c.status(500);
     return c.text("Environment variables are not set");
   }
@@ -32,6 +33,7 @@ app.post("/", async (c) => {
     .single();
 
   if (!user || book.error) {
+    console.warn({ message: "User or book not found", user, book });
     return c.text("User or book not found");
   }
 
@@ -46,7 +48,11 @@ app.post("/", async (c) => {
       .eq("userId", relation.userId)
       .eq("bookId", relation.bookId);
   } catch (e) {
-    console.error(e);
+    console.error({
+      message: "Failed to save book to notion",
+      error: e,
+      input: { user, book: book.data },
+    });
   }
 
   return c.json({

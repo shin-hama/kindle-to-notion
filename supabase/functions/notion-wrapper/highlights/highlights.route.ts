@@ -41,6 +41,7 @@ app.post(
     ).single();
 
     if (!user || bookUser.error || book.error) {
+      console.warn({ message: "User or book not found", user, bookUser, book });
       return c.json({
         message: "User or book not found",
         user,
@@ -50,6 +51,11 @@ app.post(
     }
 
     if (!bookUser.data.notionPageId) {
+      console.warn({
+        message: "Notion page has been not created yet",
+        bookUser,
+      });
+
       return c.text("Notion page has been not created yet", 400);
     }
 
@@ -69,6 +75,16 @@ app.post(
         201,
       );
     } catch (e) {
+      console.error({
+        message: "Error creating highlight",
+        error: e,
+        input: {
+          user,
+          bookUser,
+          book,
+          highlight,
+        },
+      });
       return c.json({ message: "Error creating highlight", error: e }, 500);
     }
   },

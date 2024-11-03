@@ -15,7 +15,7 @@ app.post("/notify", async (c) => {
   console.log(channel_id);
 
   return c.text(
-    `Access here to register: ${envResult.data.API_URL}/notification/slack?channel_id=${channel_id}&channel_name=${channel_name}`,
+    `Access here to register: ${envResult.data.API_URL}/notifications/slack?channel_id=${channel_id}&channel_name=${channel_name}`,
   );
 });
 
