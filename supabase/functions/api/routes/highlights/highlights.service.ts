@@ -1,7 +1,7 @@
 import { createClient, SupabaseClient } from "jsr:@supabase/supabase-js";
-import { AuthenticatedUser, Env } from "../../types/index.ts";
+import { AuthenticatedUser, Env } from "../../../types/index.ts";
 import { CreateHighlightModel } from "./highlights.model.ts";
-import { Database } from "../../types/database.types.ts";
+import { Database } from "../../../types/database.types.ts";
 
 export class HighlightsService {
   private supabase: SupabaseClient<Database>;

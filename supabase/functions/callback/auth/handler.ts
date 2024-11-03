@@ -4,7 +4,7 @@ import {
   isFullPage,
   isFullUser,
 } from "npm:@notionhq/client";
-import { Env, Result } from "../types/index.ts";
+import { Env, Result } from "../../types/index.ts";
 import { UsersService } from "../users/users.service.ts";
 
 export const notionHandler = async (

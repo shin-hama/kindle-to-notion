@@ -2,7 +2,7 @@ import { createMiddleware } from "npm:hono/factory";
 import { getCookie } from "npm:hono/cookie";
 import { env } from "npm:hono/adapter";
 import { UsersService } from "../services/users.ts";
-import { AuthenticatedUser, EnvSchema } from "../types/index.ts";
+import { AuthenticatedUser, EnvSchema } from "../../types/index.ts";
 
 export const sessionValidator = createMiddleware<{
   Variables: {

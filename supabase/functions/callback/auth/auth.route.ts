@@ -1,7 +1,7 @@
 import { Hono } from "jsr:@hono/hono";
 import { env } from "jsr:@hono/hono/adapter";
 import { setCookie } from "jsr:@hono/hono/cookie";
-import { EnvSchema } from "../types/index.ts";
+import { EnvSchema } from "../../types/index.ts";
 import { notionHandler } from "./handler.ts";
 
 const app = new Hono();

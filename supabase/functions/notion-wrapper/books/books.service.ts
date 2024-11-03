@@ -1,5 +1,5 @@
 import { Client } from "npm:@notionhq/client";
-import { AuthenticatedUser, CreateBookDTO } from "../types/index.ts";
+import { AuthenticatedUser, CreateBookDTO } from "../../types/index.ts";
 
 export const saveBook = async (
   user: AuthenticatedUser,

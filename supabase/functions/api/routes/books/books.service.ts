@@ -1,6 +1,6 @@
 import { createClient, SupabaseClient } from "jsr:@supabase/supabase-js";
-import { Database } from "../../types/database.types.ts";
-import { AuthenticatedUser, Env } from "../../types/index.ts";
+import { Database } from "../../../types/database.types.ts";
+import { AuthenticatedUser, Env } from "../../../types/index.ts";
 import { CreateBookModel } from "./books.dto.ts";
 import { hash } from "../../libs/hash.ts";
 

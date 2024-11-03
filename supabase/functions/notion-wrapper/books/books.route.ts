@@ -5,8 +5,8 @@ import {
   BooksNotionUsersModel,
   EnvSchema,
   SupabaseDBTriggerdEvent,
-} from "../types/index.ts";
-import { Database } from "../types/database.types.ts";
+} from "../../types/index.ts";
+import { Database } from "../../types/database.types.ts";
 import { saveBook } from "./books.service.ts";
 import { UsersService } from "../users/users.service.ts";
 

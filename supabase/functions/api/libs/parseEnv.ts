@@ -1,5 +1,5 @@
 import { Context } from "npm:hono";
-import { Env, EnvSchema } from "../types/index.ts";
+import { Env, EnvSchema } from "../../types/index.ts";
 import { env } from "npm:hono/adapter";
 
 export const parseEnv = (c: Context): Env => {

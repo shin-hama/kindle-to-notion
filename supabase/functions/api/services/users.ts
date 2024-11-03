@@ -1,7 +1,7 @@
 import { createClient, SupabaseClient } from "jsr:@supabase/supabase-js";
-import { Database } from "../../../../packages/shared/mod.ts";
+import { Database } from "../../types/database.types.ts";
 import { decrypt } from "../libs/encrypt.ts";
-import { AuthenticatedUser } from "../types/index.ts";
+import { AuthenticatedUser } from "../../types/index.ts";
 
 export class UsersService {
   private supabase: SupabaseClient<Database>;

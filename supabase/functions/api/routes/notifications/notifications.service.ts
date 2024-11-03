@@ -1,6 +1,6 @@
 import { createClient, SupabaseClient } from "jsr:@supabase/supabase-js";
-import { AuthenticatedUser, Env } from "../../types/index.ts";
-import { Database } from "../../../../../packages/shared/mod.ts";
+import { AuthenticatedUser, Env } from "../../../types/index.ts";
+import { Database } from "../../../types/database.types.ts";
 import { NotificationSettings } from "./notifications.model.ts";
 
 export class NotificationsService {

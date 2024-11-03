@@ -129,6 +129,41 @@ export type Database = {
           },
         ];
       };
+      Notifications: {
+        Row: {
+          created_at: string;
+          id: string;
+          is_active: boolean;
+          settings: Json;
+          updated_at: string;
+          user_id: string;
+        };
+        Insert: {
+          created_at?: string;
+          id?: string;
+          is_active?: boolean;
+          settings: Json;
+          updated_at?: string;
+          user_id: string;
+        };
+        Update: {
+          created_at?: string;
+          id?: string;
+          is_active?: boolean;
+          settings?: Json;
+          updated_at?: string;
+          user_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "Notifications_userId_fkey";
+            columns: ["user_id"];
+            isOneToOne: true;
+            referencedRelation: "NotionUser";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
       NotionPage: {
         Row: {
           books_db_id: string;
@@ -225,7 +260,23 @@ export type Database = {
       };
     };
     Views: {
-      [_ in never]: never;
+      random_highlights: {
+        Row: {
+          note: string | null;
+          text: string | null;
+          title: string | null;
+          userId: string | null;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "Highlight_userId_fkey";
+            columns: ["userId"];
+            isOneToOne: false;
+            referencedRelation: "NotionUser";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
     };
     Functions: {
       [_ in never]: never;
