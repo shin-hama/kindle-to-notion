@@ -12,6 +12,7 @@
     "test": "jest",
     "zip": "wxt zip",
     "zip:firefox": "wxt zip -b firefox",
+    "submit": "wxt submit",
     "compile": "tsc --noEmit",
     "postinstall": "wxt prepare"
   },
