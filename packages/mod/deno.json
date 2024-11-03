@@ -1,8 +1,5 @@
 {
   "imports": {
-    "@deno/dnt": "jsr:@deno/dnt@^0.41.3",
-    "@hono/zod-validator": "npm:@hono/zod-validator@^0.4.1",
-    "hono": "npm:hono@^4.6.3",
-    "zod": "npm:zod@^3.23.8"
+    "@deno/dnt": "jsr:@deno/dnt@^0.41.3"
   }
 }

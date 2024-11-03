@@ -1,4 +1,4 @@
-import { build, emptyDir } from "@deno/dnt";
+import { build, emptyDir } from "jsr:@deno/dnt";
 
 await emptyDir("../apiClient");
 
@@ -6,6 +6,7 @@ await build({
   entryPoints: ["../../supabase/functions/api/client.ts"],
   outDir: "../apiClient",
   packageManager: "pnpm",
+  skipNpmInstall: false,
   shims: {
     deno: true,
   },
@@ -19,6 +20,11 @@ await build({
     repository: {
       type: "git",
       url: "git+https://github.com/shin-hama/kindle-to-notion.git",
+    },
+    peerDependencies: {
+      "@hono/zod-validator": "^0.4.1",
+      hono: "^4.6.8",
+      zod: "^3.23.8",
     },
   },
   postBuild() {

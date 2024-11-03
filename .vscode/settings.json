@@ -1,5 +1,5 @@
 {
-  "deno.enablePaths": ["supabase/functions", "apps/notification"],
+  "deno.enablePaths": ["supabase/functions", "apps/notification", "packages/mod"],
   "deno.lint": true,
   "deno.unstable": [
     "bare-node-builtins",
