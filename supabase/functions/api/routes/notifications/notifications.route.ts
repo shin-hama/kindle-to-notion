@@ -27,7 +27,25 @@ const app = new Hono().get(
       },
     }, 5);
 
-    return c.redirect(`${env.API_URL}/notifications/handler?token=${token}`);
+    return c.html(`
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Redirecting...</title>
+  <script>
+    function redirectWithCookies() {
+      window.location.href = "${env.API_URL}/notifications/handler?token=${token}";
+    }
+
+    // ページ読み込み時にチェック
+    window.addEventListener("DOMContentLoaded", redirectWithCookies);
+  </script>
+</head>
+<body>
+  Checking authentication...
+</body>
+</html>
+      `);
   },
 ).get("handler", sessionValidator, async (c) => {
   const token = c.req.query("token");
