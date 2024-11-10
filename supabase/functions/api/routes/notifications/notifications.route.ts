@@ -1,4 +1,5 @@
 import { Hono } from "npm:hono";
+import { html } from "npm:hono/html";
 import { sessionValidator } from "../../middleware/session-validator.ts";
 import { parseEnv } from "../../libs/parseEnv.ts";
 import { NotificationsService } from "./notifications.service.ts";
@@ -27,7 +28,7 @@ const app = new Hono().get(
       },
     }, 5);
 
-    return c.html(`
+    return c.html(html`
 <!DOCTYPE html>
 <html>
 <head>
@@ -37,7 +38,6 @@ const app = new Hono().get(
       window.location.href = "${env.API_URL}/notifications/handler?token=${token}";
     }
 
-    // ページ読み込み時にチェック
     window.addEventListener("DOMContentLoaded", redirectWithCookies);
   </script>
 </head>
@@ -45,7 +45,7 @@ const app = new Hono().get(
   Checking authentication...
 </body>
 </html>
-      `);
+`);
   },
 ).get("handler", sessionValidator, async (c) => {
   const token = c.req.query("token");
