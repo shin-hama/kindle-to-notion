@@ -29,7 +29,7 @@ app.get("/", async (c) => {
   setCookie(c, "session_token", result.data.session_token, {
     httpOnly: true,
     secure: true,
-    sameSite: "strict",
+    sameSite: "Lax",
   });
 
   return c.redirect(result.data.redirect_url);
