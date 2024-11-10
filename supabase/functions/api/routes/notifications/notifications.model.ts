@@ -1,4 +1,5 @@
 import { z } from "npm:zod";
+import { BaseTokenPayload } from "../../../types/index.ts";
 
 export const ProvidersEnum = z.enum(["email", "slack"] as const);
 export type Providers = z.infer<typeof ProvidersEnum>;
@@ -12,6 +13,7 @@ export type SlackSettings = z.infer<typeof SlackSettingsSchema>;
 export const EmailSettingsSchema = z.object({
   email: z.string().email(),
 });
+export type EmailSettings = z.infer<typeof EmailSettingsSchema>;
 
 export const NotificationSettingsSchema = z.union([
   z.object({
@@ -24,3 +26,7 @@ export const NotificationSettingsSchema = z.union([
   }),
 ]);
 export type NotificationSettings = z.infer<typeof NotificationSettingsSchema>;
+
+export type NotificationTokenPayload =
+  & BaseTokenPayload
+  & NotificationSettings;

@@ -12,7 +12,10 @@ app.post("/notify", async (c) => {
   }
 
   const { channel_id, channel_name } = await c.req.parseBody();
-  console.log(channel_id);
+  if (typeof channel_id !== "string" || typeof channel_name !== "string") {
+    c.status(400);
+    return c.text("Channel ID and Name is required");
+  }
 
   return c.text(
     `Access here to register: ${envResult.data.API_URL}/notifications/slack?channel_id=${channel_id}&channel_name=${channel_name}`,
