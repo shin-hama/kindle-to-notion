@@ -28,8 +28,7 @@ const app = new Hono().get(
       },
     }, 5);
 
-    return c.html(html`
-<!DOCTYPE html>
+    return c.html(html`<!DOCTYPE html>
 <html>
 <head>
   <title>Redirecting...</title>
@@ -44,8 +43,7 @@ const app = new Hono().get(
 <body>
   Checking authentication...
 </body>
-</html>
-`);
+</html>`);
   },
 ).get("handler", sessionValidator, async (c) => {
   const token = c.req.query("token");
