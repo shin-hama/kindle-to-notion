@@ -1,6 +1,6 @@
 import { Hono } from "npm:hono";
 import { sessionValidator } from "../../middleware/session-validator.ts";
-import { parseEnv } from "../../libs/parseEnv.ts";
+import { parseEnv } from "../../../lib/parseEnv.ts";
 import { HighlightsService } from "./highlights.service.ts";
 import { zValidator } from "npm:@hono/zod-validator";
 import { z } from "npm:zod";

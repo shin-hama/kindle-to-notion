@@ -1,9 +1,10 @@
+import { NotificationSettingsSchema } from "../api/routes/notifications/notifications.model.ts";
+import { parseEnv } from "../lib/parseEnv.ts";
 import { getRandomeNote } from "./db/get-random.ts";
 import { getAllUsers } from "./db/get-users.ts";
+import { getNotificationSettings } from "./db/notifications.ts";
 import { getPageUrl } from "./notion/get-page.ts";
 import { NotificationService } from "./services/notify.ts";
-
-const SENDGRID_API_KEY = Deno.env.get("SENDGRID_API_KEY");
 
 const buildBody = (
   bookTitle: string,
@@ -30,15 +31,24 @@ ${pageUrl}
           `.trim();
 };
 
-async function sendDailyNotification() {
-  const notificationService = new NotificationService(SENDGRID_API_KEY ?? "");
+import { Hono } from "npm:hono";
+
+// change this to your function name
+const app = new Hono().basePath("callback");
+
+app.get("/health", (c) => {
+  return c.json({ message: "Hello, Callback!" });
+});
+
+app.post("notify", async (c) => {
+  const notificationService = new NotificationService(parseEnv(c));
 
   const users = await getAllUsers();
   console.log(users);
 
   if (!users) {
     console.log("No users found in the database");
-    return;
+    return c.text("No users found in the database");
   }
 
   await Promise.all(users.map(async (user) => {
@@ -72,19 +82,22 @@ async function sendDailyNotification() {
         randomNote.note,
         pageUrl,
       );
+
+      const notification = await getNotificationSettings(user.id);
+      const settings = NotificationSettingsSchema.safeParse(
+        notification?.settings,
+      );
+      if (!settings.success) {
+        console.log("No notification settings found for user");
+        return;
+      }
+      await notificationService.send(body, settings.data);
     } catch (error) {
       console.error("Error sending notification:", error);
     }
   }));
-}
 
-// Learn more at https://docs.deno.com/runtime/manual/examples/module_metadata#concepts
-// Deno Schedulerを使って毎朝9時に実行
-if (import.meta.main) {
-  sendDailyNotification();
-  // const NINE_AM = "0 9 * * *"; // 毎朝9時
+  return c.text("All notifications sent successfully");
+});
 
-  // Deno.cron("Daily Note Notification", NINE_AM, () => {
-  //   sendDailyNotification();
-  // });
-}
+Deno.serve(app.fetch);

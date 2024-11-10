@@ -1,6 +1,6 @@
 import { Hono } from "npm:hono";
 import { sessionValidator } from "../../middleware/session-validator.ts";
-import { parseEnv } from "../../libs/parseEnv.ts";
+import { parseEnv } from "../../../lib/parseEnv.ts";
 import { NotificationsService } from "./notifications.service.ts";
 
 const app = new Hono().get(

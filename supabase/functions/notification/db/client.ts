@@ -2,7 +2,7 @@ import {
   createClient as createSupabaseClient,
   SupabaseClient,
 } from "jsr:@supabase/supabase-js";
-import { Database } from "../../../packages/shared/mod.ts";
+import { Database } from "../../types/database.types.ts";
 
 export const createClient = (): SupabaseClient<Database> => {
   const client = createSupabaseClient<Database>(
