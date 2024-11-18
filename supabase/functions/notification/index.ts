@@ -41,10 +41,22 @@ app.get("/health", (c) => {
 });
 
 app.post("", async (c) => {
-  const notificationService = new NotificationService(parseEnv(c));
+  try {
+    const notificationService = new NotificationService(parseEnv(c));
+  }
+  catch (e) {
+    console.error("Failed to init", e);
+    return c.text("Failed to init");
+  }
 
-  const users = await getAllUsers();
-  console.log(users);
+  try {
+    const users = await getAllUsers();
+    console.log(users);
+  } 
+  catch (e) {
+    console.error("Failed to get user", e);
+    return c.text("No user");
+  }
 
   if (!users) {
     console.log("No users found in the database");
