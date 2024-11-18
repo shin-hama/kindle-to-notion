@@ -34,13 +34,13 @@ ${pageUrl}
 import { Hono } from "npm:hono";
 
 // change this to your function name
-const app = new Hono().basePath("callback");
+const app = new Hono().basePath("notification");
 
 app.get("/health", (c) => {
   return c.json({ message: "Hello, Callback!" });
 });
 
-app.post("notify", async (c) => {
+app.post("", async (c) => {
   const notificationService = new NotificationService(parseEnv(c));
 
   const users = await getAllUsers();
