@@ -5,6 +5,7 @@ import { env } from "npm:hono/adapter";
 export const parseEnv = (c: Context): Env => {
   const result = EnvSchema.safeParse(env(c));
   if (!result.success) {
+    console.error("Environment variables are not valid", result.error);
     throw new Error("Environment variables are not valid", result.error);
   }
 
