@@ -9,8 +9,8 @@ export const createClient = (): SupabaseClient<Database> => {
     Deno.env.get("SUPABASE_URL") ?? (() => {
       throw new Error("SUPABASE_URL is required");
     })(),
-    Deno.env.get("SUPABASE_KEY") ?? (() => {
-      throw new Error("SUPABASE_KEY is required");
+    Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? (() => {
+      throw new Error("SUPABASE_SERVICE_ROLE_KEY is required");
     })(),
   );
 
