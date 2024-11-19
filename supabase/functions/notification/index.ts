@@ -71,16 +71,14 @@ app.post("", async (c) => {
 
       const randomNote = await getRandomeNote(user.id);
 
-      if (
-        !randomNote || !randomNote.title || !randomNote.text || !randomNote.note
-      ) {
+      if (!randomNote) {
         console.log("No notes found in the database");
         return;
       }
       const body = buildBody(
-        randomNote.title,
-        randomNote.text,
-        randomNote.note,
+        randomNote.title ?? "",
+        randomNote.text ?? "",
+        randomNote.note ?? "",
         pageUrl,
       );
 
