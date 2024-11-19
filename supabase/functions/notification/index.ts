@@ -41,9 +41,10 @@ app.get("/health", (c) => {
 });
 
 app.post("", async (c) => {
-  const notificationService = new NotificationService(parseEnv(c));
+  const e = parseEnv(c);
+  const notificationService = new NotificationService(e);
 
-  const users = await getAllUsers();
+  const users = await getAllUsers(e);
 
   if (!users) {
     console.log("No users found in the database");
