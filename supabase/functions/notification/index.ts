@@ -52,6 +52,7 @@ app.post("", async (c) => {
 
   await Promise.all(users.map(async (user) => {
     try {
+      console.log(user);
       if (!user.NotionSecret || !user.NotionPage) {
         console.log("No Notion secret or page found for user");
         return;
