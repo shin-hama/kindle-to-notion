@@ -15,7 +15,7 @@ export class HighlightsService {
     const { data, error } = await this.supabase
       .from("Highlight")
       .upsert(newHighlights.map((h) => ({ ...h, userId: user.id })))
-      .select();
+      .select("*, Book(*)");
 
     if (error) {
       throw new Error("Error creating highlight");

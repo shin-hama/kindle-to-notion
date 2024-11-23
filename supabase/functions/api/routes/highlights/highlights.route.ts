@@ -42,62 +42,72 @@ const app = new Hono().post(
 
     const service = new HighlightsService(client);
 
-    const highlights = await service.createHighlights(
-      highlightsInput.map((h) => ({
-        ...h,
-        bookId,
-      })),
-      c.var.user,
-    );
+    try {
+      const highlights = await service.createHighlights(
+        highlightsInput.map((h) => ({
+          ...h,
+          bookId,
+        })),
+        c.var.user,
+      );
 
-    await Promise.all(highlights.map(async (highlight) => {
       const bookUser = await client.from("Books_NotionUsers")
         .select("*")
-        .eq("userId", highlight.userId)
-        .eq("bookId", highlight.bookId)
+        .eq("userId", c.var.user.id)
+        .eq("bookId", bookId)
         .single();
-      const book = await client.from("Book").select("*").eq(
-        "id",
-        highlight.bookId,
-      ).single();
-
-      if (bookUser.error || book.error) {
+      if (bookUser.error) {
         console.warn({
           message: "Book not found",
           bookUser,
-          book,
         });
-        return;
-      }
 
+        return c.json({
+          message: "Book not found",
+        }, 500);
+      }
       if (!bookUser.data.notionPageId) {
         console.warn({
           message: "Notion page has been not created yet",
           bookUser,
         });
 
-        return;
+        return c.json({
+          message: "Notion page has been not created yet",
+        }, 500);
       }
 
-      const notionHighlight = await saveHighlight(
-        c.var.user,
-        bookUser.data.notionPageId,
-        book.data.asin,
-        highlight,
+      await Promise.all(highlights.map(async (highlight) => {
+        if (!highlight.Book) {
+          return;
+        }
+        try {
+          const notionHighlight = await saveHighlight(
+            c.var.user,
+            bookUser.data.notionPageId!,
+            highlight.Book.asin,
+            highlight,
+          );
+
+          await client.from("Highlight")
+            .update({ notionPageId: notionHighlight.id })
+            .eq("id", highlight.id);
+        } catch {
+          console.error(`Error saving highlight to Notion: ${highlight.id}`);
+        }
+      }));
+
+      return c.json(
+        {
+          message: "highlight created",
+          highlight: highlights,
+        },
+        201,
       );
-
-      await client.from("Highlight")
-        .update({ notionPageId: notionHighlight.id })
-        .eq("id", highlight.id);
-    }));
-
-    return c.json(
-      {
-        message: "highlight created",
-        highlight: highlights,
-      },
-      201,
-    );
+    } catch (error) {
+      console.error(error);
+      return c.json({ message: "Error creating highlight" }, 500);
+    }
   },
 );
 
