@@ -7,7 +7,7 @@ import {
   SupabaseDBTriggerdEvent,
 } from "../../types/index.ts";
 import { Database } from "../../types/database.types.ts";
-import { saveBook } from "./books.service.ts";
+import { saveBook } from "../../api/routes/books/books.notion.ts";
 import { UsersService } from "../users/users.service.ts";
 
 const app = new Hono();
