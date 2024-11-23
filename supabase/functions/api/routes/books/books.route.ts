@@ -25,33 +25,38 @@ const app = new Hono().post(
     const bookData = c.req.valid("json");
     console.log({ bookData, user: c.var.user });
 
-    const env = parseEnv(c);
-    const client = createClient<Database>(
-      env.SUPABASE_URL,
-      env.SUPABASE_SERVICE_ROLE_KEY,
-    );
+    try {
+      const env = parseEnv(c);
+      const client = createClient<Database>(
+        env.SUPABASE_URL,
+        env.SUPABASE_SERVICE_ROLE_KEY,
+      );
 
-    const service = new BooksService(client);
+      const service = new BooksService(client);
 
-    const { book, bookUser } = await service.createBook(bookData, c.var.user);
+      const { book, bookUser } = await service.createBook(bookData, c.var.user);
 
-    const { notionPageId } = await saveBook(c.var.user, {
-      ...book,
-      lastAnnotatedAt: bookUser.lastAnnotatedAt,
-    });
+      const { notionPageId } = await saveBook(c.var.user, {
+        ...book,
+        lastAnnotatedAt: bookUser.lastAnnotatedAt,
+      });
 
-    await client.from("Books_NotionUsers")
-      .update({ notionPageId })
-      .eq("userId", bookUser.userId)
-      .eq("bookId", bookUser.bookId);
+      await client.from("Books_NotionUsers")
+        .update({ notionPageId })
+        .eq("userId", bookUser.userId)
+        .eq("bookId", bookUser.bookId);
 
-    return c.json(
-      {
-        message: "Book created",
-        book: book,
-      },
-      201,
-    );
+      return c.json(
+        {
+          message: "Book created",
+          book: book,
+        },
+        201,
+      );
+    } catch (error) {
+      console.error(error);
+      return c.json({ message: "Error creating book" }, 500);
+    }
   },
 );
 

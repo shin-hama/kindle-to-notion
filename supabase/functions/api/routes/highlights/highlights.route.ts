@@ -34,15 +34,15 @@ const app = new Hono().post(
     const { bookId, highlights: highlightsInput } = c.req.valid("json");
     console.log({ bookId, highlights: highlightsInput, user: c.var.user });
 
-    const env = parseEnv(c);
-    const client = createClient<Database>(
-      env.SUPABASE_URL,
-      env.SUPABASE_SERVICE_ROLE_KEY,
-    );
-
-    const service = new HighlightsService(client);
-
     try {
+      const env = parseEnv(c);
+      const client = createClient<Database>(
+        env.SUPABASE_URL,
+        env.SUPABASE_SERVICE_ROLE_KEY,
+      );
+
+      const service = new HighlightsService(client);
+
       const highlights = await service.createHighlights(
         highlightsInput.map((h) => ({
           ...h,
