@@ -1,5 +1,5 @@
 import { Client } from "npm:@notionhq/client";
-import { AuthenticatedUser, HighlightModel } from "../../types/index.ts";
+import { AuthenticatedUser, HighlightModel } from "../../../types/index.ts";
 
 export type CreateHighlightDTO = HighlightModel;
 

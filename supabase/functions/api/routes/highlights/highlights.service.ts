@@ -1,16 +1,10 @@
-import { createClient, SupabaseClient } from "jsr:@supabase/supabase-js";
-import { AuthenticatedUser, Env } from "../../../types/index.ts";
+import { SupabaseClient } from "jsr:@supabase/supabase-js";
+import { AuthenticatedUser } from "../../../types/index.ts";
 import { CreateHighlightModel } from "./highlights.model.ts";
 import { Database } from "../../../types/database.types.ts";
 
 export class HighlightsService {
-  private supabase: SupabaseClient<Database>;
-  constructor(env: Env) {
-    this.supabase = createClient<Database>(
-      env.SUPABASE_URL,
-      env.SUPABASE_SERVICE_ROLE_KEY,
-    );
-  }
+  constructor(private supabase: SupabaseClient<Database>) {}
 
   async getHighlights() {}
 
