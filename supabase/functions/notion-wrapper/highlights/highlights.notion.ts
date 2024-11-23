@@ -129,7 +129,6 @@ export async function saveHighlight(
     });
 
     return {
-      ...highlight,
       id: result.id,
     };
   } catch (e) {

@@ -67,6 +67,10 @@ app.post(
         highlight,
       );
 
+      await client.from("Highlight")
+        .update({ notionPageId: notionHighlight.id })
+        .eq("id", highlight.id);
+
       return c.json(
         {
           message: "highlight created",
