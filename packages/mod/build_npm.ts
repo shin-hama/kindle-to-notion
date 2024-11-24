@@ -31,5 +31,6 @@ await build({
   postBuild() {
     // steps to run after building and before running the tests
     Deno.copyFileSync("README.md", "../apiClient/README.md");
+    Deno.copyFileSync(".gitignore", "../apiClient/.gitignore");
   },
 });
