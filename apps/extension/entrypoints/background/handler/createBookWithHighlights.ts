@@ -9,7 +9,7 @@ const handler = async ({ book, highlights }: CreateBookMessage["data"]) => {
       json: book,
     });
 
-    if (result.status !== 201) {
+    if (result.ok === false) {
       console.error("Failed to create book", result);
       return { error: "failed to create book" };
     }
