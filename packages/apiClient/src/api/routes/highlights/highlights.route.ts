@@ -77,14 +77,14 @@ const app = new Hono().post(
         }, 500);
       }
 
-      await Promise.all(highlights.map(async (highlight) => {
+      for (const highlight of highlights) {
         if (!highlight.Book) {
           return;
         }
         try {
           const notionHighlight = await saveHighlight(
             c.var.user,
-            bookUser.data.notionPageId!,
+            bookUser.data.notionPageId,
             highlight.Book.asin,
             highlight,
           );
@@ -92,10 +92,12 @@ const app = new Hono().post(
           await client.from("Highlight")
             .update({ notionPageId: notionHighlight.id })
             .eq("id", highlight.id);
+
+          await new Promise((resolve) => setTimeout(resolve, 100));
         } catch {
           console.error(`Error saving highlight to Notion: ${highlight.id}`);
         }
-      }));
+      }
 
       return c.json(
         {

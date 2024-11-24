@@ -54,7 +54,7 @@ const app = new Hono().post("", sessionValidator, zValidator("json", z.object({
                 message: "Notion page has been not created yet",
             }, 500);
         }
-        await Promise.all(highlights.map(async (highlight) => {
+        for (const highlight of highlights) {
             if (!highlight.Book) {
                 return;
             }
@@ -63,11 +63,12 @@ const app = new Hono().post("", sessionValidator, zValidator("json", z.object({
                 await client.from("Highlight")
                     .update({ notionPageId: notionHighlight.id })
                     .eq("id", highlight.id);
+                await new Promise((resolve) => setTimeout(resolve, 100));
             }
             catch {
                 console.error(`Error saving highlight to Notion: ${highlight.id}`);
             }
-        }));
+        }
         return c.json({
             message: "highlight created",
             highlight: highlights,
