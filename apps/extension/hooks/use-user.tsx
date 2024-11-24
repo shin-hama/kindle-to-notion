@@ -1,7 +1,7 @@
 import { GetUserMessageResponse, GetUserMessageResponseSchema } from '@/entrypoints/types/messaging'
 import { User } from '@kino/shared'
 import { Loader2 } from 'lucide-react'
-import React, { PropsWithChildren } from 'react'
+import React, { PropsWithChildren, useEffect } from 'react'
 
 const CurrentUserContext = React.createContext<User | null>(null)
 
