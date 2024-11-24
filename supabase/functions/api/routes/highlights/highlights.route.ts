@@ -78,8 +78,8 @@ const app = new Hono().post(
       }
 
       for (const highlight of highlights) {
-        if (!highlight.Book) {
-          return;
+        if (!highlight.Book || highlight.notionPageId !== null) {
+          continue;
         }
         try {
           const notionHighlight = await saveHighlight(

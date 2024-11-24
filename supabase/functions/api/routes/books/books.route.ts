@@ -36,6 +36,16 @@ const app = new Hono().post(
 
       const { book, bookUser } = await service.createBook(bookData, c.var.user);
 
+      if (bookUser.notionPageId) {
+        return c.json(
+          {
+            message: "Book already exists",
+            book: book,
+          },
+          200,
+        );
+      }
+
       const { notionPageId } = await saveBook(c.var.user, {
         ...book,
         lastAnnotatedAt: bookUser.lastAnnotatedAt,
