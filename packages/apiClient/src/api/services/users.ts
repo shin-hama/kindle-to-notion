@@ -1,6 +1,6 @@
 import { createClient, SupabaseClient } from "../../deps/jsr.io/@supabase/supabase-js/2.45.4/src/index.js";
 import { Database } from "../../types/database.types.js";
-import { decrypt } from "../libs/encrypt.js";
+import { decrypt } from "../../lib/encrypt.js";
 import { AuthenticatedUser } from "../../types/index.js";
 
 export class UsersService {

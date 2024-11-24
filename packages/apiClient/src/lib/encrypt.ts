@@ -1,7 +1,7 @@
 import {
   decodeHex,
   encodeHex,
-} from "../../deps/deno.land/std@0.224.0/encoding/hex.js";
+} from "../deps/deno.land/std@0.224.0/encoding/hex.js";
 
 const SALT_LENGTH = 16;
 const IV_LENGTH = 12;

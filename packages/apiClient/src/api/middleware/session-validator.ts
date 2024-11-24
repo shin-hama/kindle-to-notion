@@ -12,7 +12,7 @@ export const sessionValidator = createMiddleware<{
   const session = getCookie(c, "session_token");
   if (!session) {
     c.status(401);
-    return c.text("Unauthorized");
+    return c.text("Unauthorized: No session token provided");
   }
   const parsedEnv = EnvSchema.safeParse(env(c));
   if (!parsedEnv.success) {
@@ -30,7 +30,7 @@ export const sessionValidator = createMiddleware<{
     const user = await usersService.verifyAdmin(session);
     if (!user) {
       c.status(401);
-      return c.text("Unauthorized");
+      return c.text("Unauthorized: Invalid session token");
     }
 
     c.set("user", user);

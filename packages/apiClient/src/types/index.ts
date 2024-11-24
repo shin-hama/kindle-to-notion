@@ -1,5 +1,6 @@
 import { Database } from "./database.types.js";
 import { z } from "zod";
+import type { Payload } from "../deps/deno.land/x/djwt@v3.0.2/mod.js";
 
 export type Result<T> = {
   data?: T | null;
@@ -33,6 +34,8 @@ export const EnvSchema = z.object({
   NOTION_CLIENT_ID: z.string(),
   NOTION_CLIENT_SECRET: z.string(),
   API_URL: z.string(),
+  SLACK_BOT_TOKEN: z.string(),
+  TOKEN_SECRET: z.string(),
 });
 export type Env = z.infer<typeof EnvSchema>;
 
@@ -45,3 +48,7 @@ export type SupabaseDBTriggerdEvent<T> = {
   schema: "public";
   old_record: T | null;
 };
+
+export interface BaseTokenPayload extends Payload {
+  exp?: number;
+}

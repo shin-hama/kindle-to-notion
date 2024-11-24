@@ -1,4 +1,4 @@
-import { decodeHex, encodeHex, } from "../../deps/deno.land/std@0.224.0/encoding/hex.js";
+import { decodeHex, encodeHex, } from "../deps/deno.land/std@0.224.0/encoding/hex.js";
 const SALT_LENGTH = 16;
 const IV_LENGTH = 12;
 async function generateKey(password, salt) {

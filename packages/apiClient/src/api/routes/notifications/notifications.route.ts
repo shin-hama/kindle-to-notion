@@ -1,27 +1,28 @@
 import { Hono } from "hono";
 import { sessionValidator } from "../../middleware/session-validator.js";
-import { parseEnv } from "../../libs/parseEnv.js";
+import { parseEnv } from "../../../lib/parseEnv.js";
 import { NotificationsService } from "./notifications.service.js";
 
 const app = new Hono().get(
   "slack",
   sessionValidator,
   async (c) => {
-    const channelId = c.req.param("channel_id");
-    const channelName = c.req.param("channel_name");
+    const channelId = c.req.query("channel_id");
+    const channelName = c.req.query("channel_name");
 
     if (!channelId || !channelName) {
       return c.text("Channel ID and Name is required", 400);
     }
 
-    const service = new NotificationsService(parseEnv(c));
+    const env = parseEnv(c);
+    const service = new NotificationsService(env);
 
     await service.saveSettings(
       {
         platform: "slack",
         settings: {
-          channelId: channelId,
-          channelName: channelName,
+          channelId,
+          channelName,
         },
       },
       c.var.user,

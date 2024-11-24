@@ -81,6 +81,7 @@ export declare class UsersService {
                     id: string;
                     location: number;
                     note: string | null;
+                    notionPageId: string | null;
                     page: number | null;
                     text: string;
                     userId: string;
@@ -92,6 +93,7 @@ export declare class UsersService {
                     id: string;
                     location?: number;
                     note?: string | null;
+                    notionPageId?: string | null;
                     page?: number | null;
                     text: string;
                     userId: string;
@@ -103,6 +105,7 @@ export declare class UsersService {
                     id?: string;
                     location?: number;
                     note?: string | null;
+                    notionPageId?: string | null;
                     page?: number | null;
                     text?: string;
                     userId?: string;

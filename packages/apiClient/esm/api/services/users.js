@@ -1,5 +1,5 @@
 import { createClient } from "../../deps/jsr.io/@supabase/supabase-js/2.45.4/src/index.js";
-import { decrypt } from "../libs/encrypt.js";
+import { decrypt } from "../../lib/encrypt.js";
 export class UsersService {
     constructor(url, key, encryptionKey) {
         Object.defineProperty(this, "supabase", {
