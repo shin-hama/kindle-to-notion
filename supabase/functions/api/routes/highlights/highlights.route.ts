@@ -92,8 +92,6 @@ const app = new Hono().post(
           await client.from("Highlight")
             .update({ notionPageId: notionHighlight.id })
             .eq("id", highlight.id);
-
-          await new Promise((resolve) => setTimeout(resolve, 100));
         } catch {
           console.error(`Error saving highlight to Notion: ${highlight.id}`);
         }

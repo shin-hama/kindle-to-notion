@@ -23,7 +23,7 @@ const handler = async ({ book, highlights }: CreateBookMessage["data"]) => {
       return acc;
     }, [] as typeof highlights[]);
 
-    chunkedHighlights.forEach(async (_highlights) => {
+    for (const _highlights of chunkedHighlights) {
       await client.highlights.$post({
         json: {
           bookId: createdBook.id,
@@ -34,9 +34,9 @@ const handler = async ({ book, highlights }: CreateBookMessage["data"]) => {
 
       // wait for a few second every requests to avoid rate limit
       await new Promise((resolve) =>
-        setTimeout(resolve, _highlights.length * 1000)
+        setTimeout(resolve, _highlights.length * 500)
       );
-    });
+    }
 
     return { book: createdBook };
   } catch (e) {
