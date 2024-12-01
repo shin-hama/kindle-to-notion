@@ -36,6 +36,8 @@ export const EnvSchema = z.object({
   API_URL: z.string(),
   SLACK_BOT_TOKEN: z.string(),
   TOKEN_SECRET: z.string(),
+  SLACK_CLIENT_ID: z.string(),
+  SLACK_CLIENT_SECRET: z.string(),
 });
 export type Env = z.infer<typeof EnvSchema>;
 

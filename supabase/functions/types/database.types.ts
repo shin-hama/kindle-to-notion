@@ -261,6 +261,41 @@ export type Database = {
         };
         Relationships: [];
       };
+      SlackSecret: {
+        Row: {
+          accessToken: string;
+          bodId: string;
+          created_at: string;
+          others: Json;
+          scope: string;
+          userId: string;
+        };
+        Insert: {
+          accessToken: string;
+          bodId: string;
+          created_at?: string;
+          others: Json;
+          scope: string;
+          userId: string;
+        };
+        Update: {
+          accessToken?: string;
+          bodId?: string;
+          created_at?: string;
+          others?: Json;
+          scope?: string;
+          userId?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "SlackSecret_userId_fkey";
+            columns: ["userId"];
+            isOneToOne: true;
+            referencedRelation: "NotionUser";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
     };
     Views: {
       random_highlights: {
@@ -373,23 +408,4 @@ export type Enums<
   ? Database[PublicEnumNameOrOptions["schema"]]["Enums"][EnumName]
   : PublicEnumNameOrOptions extends keyof PublicSchema["Enums"]
     ? PublicSchema["Enums"][PublicEnumNameOrOptions]
-  : never;
-
-export type CompositeTypes<
-  PublicCompositeTypeNameOrOptions extends
-    | keyof PublicSchema["CompositeTypes"]
-    | { schema: keyof Database },
-  CompositeTypeName extends PublicCompositeTypeNameOrOptions extends {
-    schema: keyof Database;
-  } ? keyof Database[PublicCompositeTypeNameOrOptions["schema"]][
-      "CompositeTypes"
-    ]
-    : never = never,
-> = PublicCompositeTypeNameOrOptions extends { schema: keyof Database }
-  ? Database[PublicCompositeTypeNameOrOptions["schema"]]["CompositeTypes"][
-    CompositeTypeName
-  ]
-  : PublicCompositeTypeNameOrOptions extends
-    keyof PublicSchema["CompositeTypes"]
-    ? PublicSchema["CompositeTypes"][PublicCompositeTypeNameOrOptions]
   : never;

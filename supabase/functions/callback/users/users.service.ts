@@ -1,6 +1,6 @@
 import { createClient, SupabaseClient } from "jsr:@supabase/supabase-js@2";
 import { Database } from "../../types/database.types.ts";
-import { decrypt } from "../../lib/encrypt.ts";
+import { decrypt, encrypt } from "../../lib/encrypt.ts";
 import { AuthenticatedUser, Env } from "../../types/index.ts";
 
 export class UsersService {
@@ -71,7 +71,8 @@ export class UsersService {
       .eq("id", id)
       .single();
     if (error) {
-      throw error;
+      console.log(error);
+      return null;
     }
     if (!data || !data.NotionSecret || !data.NotionPage) {
       return null;
