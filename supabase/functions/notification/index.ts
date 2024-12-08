@@ -1,5 +1,6 @@
 import { NotificationSettingsSchema } from "../api/routes/notifications/notifications.model.ts";
 import { parseEnv } from "../lib/parseEnv.ts";
+import { SlackRepository } from "../repository/slack.repository.ts";
 import { getRandomeNote } from "./db/get-random.ts";
 import { getAllUsers } from "./db/get-users.ts";
 import { getNotificationSettings } from "./db/notifications.ts";
@@ -42,7 +43,6 @@ app.get("/health", (c) => {
 
 app.post("", async (c) => {
   const e = parseEnv(c);
-  const notificationService = new NotificationService(e);
 
   const users = await getAllUsers(e);
 
@@ -90,6 +90,16 @@ app.post("", async (c) => {
         console.log("No notification settings found for user");
         return;
       }
+
+      const slackSecret = await new SlackRepository(e).getSlackSecret(user.id);
+      if (!slackSecret.data) {
+        console.log("No slack secret found for user", slackSecret.error);
+        return;
+      }
+
+      const notificationService = new NotificationService(
+        slackSecret.data.accessToken,
+      );
       await notificationService.send(body, settings.data);
     } catch (error) {
       console.error("Error sending notification:", error);

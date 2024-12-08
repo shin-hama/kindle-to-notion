@@ -1,5 +1,4 @@
 import { WebClient } from "npm:@slack/web-api";
-import { Env } from "../../types/index.ts";
 import {
   NotificationSettings,
   SlackSettings,
@@ -8,8 +7,8 @@ import {
 export class NotificationService {
   private client: WebClient;
 
-  constructor(e: Env) {
-    this.client = new WebClient(e.SLACK_BOT_TOKEN);
+  constructor(token: string) {
+    this.client = new WebClient(token);
   }
 
   async send(message: string, settings: NotificationSettings) {

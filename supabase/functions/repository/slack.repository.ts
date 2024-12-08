@@ -1,8 +1,8 @@
 import { createClient, SupabaseClient } from "jsr:@supabase/supabase-js@2";
-import { Database } from "../../types/database.types.ts";
-import { Env } from "../../types/index.ts";
+import { Database } from "../types/database.types.ts";
+import { Env } from "../types/index.ts";
 import { OAuthV2Response } from "npm:@slack/oauth";
-import { encrypt } from "../../lib/encrypt.ts";
+import { decrypt, encrypt } from "../lib/encrypt.ts";
 
 export class SlackRepository {
   private client: SupabaseClient<Database>;
@@ -30,9 +30,29 @@ export class SlackRepository {
       });
 
     if (error) {
-      return { error: "Error saving slack token" };
+      console.error(error);
+      return { error: `Error saving slack token` };
     }
 
     return { data: data };
+  }
+
+  async getSlackSecret(userId: string) {
+    const { data, error } = await this.client
+      .from("SlackSecret")
+      .select("*")
+      .eq("userId", userId)
+      .single();
+
+    if (error) {
+      return { error: "Error getting slack token" };
+    }
+
+    return {
+      data: {
+        ...data,
+        accessToken: await decrypt(data.accessToken, this.encriptionKey),
+      },
+    };
   }
 }

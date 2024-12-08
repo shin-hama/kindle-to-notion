@@ -3,7 +3,7 @@ import { Hono } from "npm:hono";
 import { EnvSchema } from "../../types/index.ts";
 import { OAuthV2Response } from "npm:@slack/oauth";
 import { UsersService } from "../users/users.service.ts";
-import { SlackRepository } from "./slack.repository.ts";
+import { SlackRepository } from "../../repository/slack.repository.ts";
 
 const app = new Hono();
 
