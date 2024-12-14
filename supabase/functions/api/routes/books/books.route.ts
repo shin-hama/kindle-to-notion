@@ -62,7 +62,7 @@ const app = new Hono().post(
       const { notionPageId } = await saveBook(c.var.user, {
         ...book,
         lastAnnotatedAt: bookUser.lastAnnotatedAt,
-      });
+      }, genres);
 
       await client.from("Books_NotionUsers")
         .update({ notionPageId })

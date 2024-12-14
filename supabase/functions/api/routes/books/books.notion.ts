@@ -4,6 +4,7 @@ import { AuthenticatedUser, CreateBookDTO } from "../../../types/index.ts";
 export const saveBook = async (
   user: AuthenticatedUser,
   book: CreateBookDTO,
+  genres: string[],
 ) => {
   try {
     const notion = new Client({
@@ -62,6 +63,11 @@ export const saveBook = async (
               },
             },
           ],
+        },
+        Category: {
+          multi_select: genres.map((genre) => ({
+            name: genre,
+          })),
         },
         URL: {
           url: book.url || null,
