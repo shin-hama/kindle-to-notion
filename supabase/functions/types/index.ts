@@ -34,7 +34,6 @@ export const EnvSchema = z.object({
   NOTION_CLIENT_ID: z.string(),
   NOTION_CLIENT_SECRET: z.string(),
   API_URL: z.string(),
-  SLACK_BOT_TOKEN: z.string(),
   TOKEN_SECRET: z.string(),
   SLACK_CLIENT_ID: z.string(),
   SLACK_CLIENT_SECRET: z.string(),

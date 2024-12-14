@@ -7,6 +7,8 @@ import { z } from "npm:zod";
 import { saveBook } from "./books.notion.ts";
 import { Database } from "../../../types/database.types.ts";
 import { createClient } from "jsr:@supabase/supabase-js@2";
+import { parse } from "./genre-parser/genre-parser.ts";
+import { GenresService } from "./genres.service.ts";
 
 const CreateBookModel = z.object({
   asin: z.string(),
@@ -32,9 +34,20 @@ const app = new Hono().post(
         env.SUPABASE_SERVICE_ROLE_KEY,
       );
 
+      const genres = await parse(bookData.title);
+
+      const genresService = new GenresService(client);
+      const genresRecords = await Promise.all(
+        genres.map((genre) => genresService.findOrCreate(genre)),
+      );
+
       const service = new BooksService(client);
 
-      const { book, bookUser } = await service.createBook(bookData, c.var.user);
+      const { book, bookUser } = await service.createBook(
+        bookData,
+        c.var.user,
+        genresRecords.map((g) => g.genre.id),
+      );
 
       if (bookUser.notionPageId) {
         return c.json(

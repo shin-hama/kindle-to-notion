@@ -39,6 +39,39 @@ export type Database = {
         };
         Relationships: [];
       };
+      Books_Genres: {
+        Row: {
+          book_id: string;
+          created_at: string;
+          genre_id: string;
+        };
+        Insert: {
+          book_id: string;
+          created_at?: string;
+          genre_id: string;
+        };
+        Update: {
+          book_id?: string;
+          created_at?: string;
+          genre_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "Books_Genres_book_id_fkey";
+            columns: ["book_id"];
+            isOneToOne: false;
+            referencedRelation: "Book";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "Books_Genres_genre_id_fkey";
+            columns: ["genre_id"];
+            isOneToOne: false;
+            referencedRelation: "Genres";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
       Books_NotionUsers: {
         Row: {
           bookId: string;
@@ -77,6 +110,24 @@ export type Database = {
             referencedColumns: ["id"];
           },
         ];
+      };
+      Genres: {
+        Row: {
+          created_at: string;
+          id: string;
+          name: string;
+        };
+        Insert: {
+          created_at?: string;
+          id?: string;
+          name: string;
+        };
+        Update: {
+          created_at?: string;
+          id?: string;
+          name?: string;
+        };
+        Relationships: [];
       };
       Highlight: {
         Row: {
@@ -261,6 +312,41 @@ export type Database = {
         };
         Relationships: [];
       };
+      SlackSecret: {
+        Row: {
+          accessToken: string;
+          bodId: string;
+          created_at: string;
+          others: Json;
+          scope: string;
+          userId: string;
+        };
+        Insert: {
+          accessToken: string;
+          bodId: string;
+          created_at?: string;
+          others: Json;
+          scope: string;
+          userId: string;
+        };
+        Update: {
+          accessToken?: string;
+          bodId?: string;
+          created_at?: string;
+          others?: Json;
+          scope?: string;
+          userId?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "SlackSecret_userId_fkey";
+            columns: ["userId"];
+            isOneToOne: true;
+            referencedRelation: "NotionUser";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
     };
     Views: {
       random_highlights: {
@@ -381,8 +467,7 @@ export type CompositeTypes<
     | { schema: keyof Database },
   CompositeTypeName extends PublicCompositeTypeNameOrOptions extends {
     schema: keyof Database;
-  }
-    ? keyof Database[PublicCompositeTypeNameOrOptions["schema"]][
+  } ? keyof Database[PublicCompositeTypeNameOrOptions["schema"]][
       "CompositeTypes"
     ]
     : never = never,
